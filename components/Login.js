@@ -1,67 +1,86 @@
-import React, { useState } from "react";
+import { validateLoginInfo } from "@/pages/validateInfo";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const [isLoggingIn, setIsLoggingIn] = useState(true);
+  const router = useRouter();
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isEroare, setIsEroare] = useState(false);
+  const { login, currentUser } = useAuth();
 
-  const { login, signup, currentUser } = useAuth();
-  console.log(currentUser);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  };
 
-  async function submitHandler() {
-    if (!email || !password) {
-      setError("Please enter email and password");
-      return;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setErrors(validateLoginInfo(values));
+    setIsSubmitting(true);
+  };
+
+  useEffect(() => {
+    if (Object.keys(errors).length === 0 && isSubmitting) {
+      const forsign = async () => {
+        await login(values.email, values.password).catch(function (error) {
+          let errorCode = error.code;
+          console.log("errorCode", errorCode);
+          setIsEroare(true);
+        });
+
+        if (!isEroare) {
+          setIsSubmitting(false);
+          router.push("/");
+        }
+      };
+      forsign();
+    } else {
+      console.log("errors", errors);
     }
-    if (isLoggingIn) {
-      try {
-        await login(email, password);
-      } catch (err) {
-        setError("Incorrect email or password");
-      }
-      return;
-    }
-    await signup(email, password);
-  }
+  }, [errors, isSubmitting]);
 
   return (
-    <div className="flex-1 text-xs sm:text-sm flex flex-col justify-center items-center gap-2 sm:gap-4">
-      <h1 className="font-extrabold select-none text-2xl sm:text-4xl uppercase">
-        {isLoggingIn ? "Login" : "register"}
-      </h1>
-      {error && (
-        <div className="w-full max-w-[40ch] border-rose-400 border text-center border-solid text-rose-400 py-2">
-          {error}
-        </div>
-      )}
+    <div className="w-full flex flex-col items-center px-8">
+      <h1 className="mt-10 text-2xl">Login</h1>
       <input
         type="text"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email Address"
-        className="outline-none duration-300 border-b-2 border-solid border-white focus:border-cyan-300 text-slate-900 p-2 w-full max-w-[40ch]"
+        name="email"
+        value={values.email}
+        onChange={handleChange}
+        placeholder="Adresa de email"
+        className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c4 border-c5 text-slate-900 p-2 w-full max-w-[40ch]"
       />
+      {errors.email && (
+        <p className="mb-4 text-base text-c5 w-full p-2">{errors.email}</p>
+      )}
       <input
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        name="password"
+        value={values.password}
+        onChange={handleChange}
         type="password"
-        placeholder="Password"
-        className="outline-none text-slate-900 p-2 w-full max-w-[40ch] duration-300 border-b-2 border-solid border-white focus:border-cyan-300"
+        placeholder="Parola"
+        className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c4 border-c5 text-slate-900 p-2 w-full max-w-[40ch]"
       />
+      {errors.password && (
+        <p className="mb-4 text-base text-c5 w-full p-2">{errors.password}</p>
+      )}
       <button
-        onClick={submitHandler}
-        className="w-full max-w-[40ch] border border-white border-solid uppercase py-2 duration-300 relative after:absolute after:top-0 after:right-full after:bg-white after:z-10 after:w-full after:h-full overflow-hidden hover:after:translate-x-full after:duration-300 hover:text-slate-900"
+        className="text-center bg-c5 text-white font-medium py-3 rounded-lg mt-20 w-5/6 mb-5"
+        onClick={handleSubmit}
       >
-        <h2 className="relative z-20">SUBMIT</h2>
+        Submit
       </button>
-      <h2
-        className="duration-300 hover:scale-110 cursor-pointer"
-        onClick={() => setIsLoggingIn(!isLoggingIn)}
-      >
-        {!isLoggingIn ? "Login" : "Register"}
-      </h2>
+      <Link href="/register">Nu ai cont? Signup aici</Link>
     </div>
   );
 }

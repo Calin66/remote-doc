@@ -6,8 +6,12 @@ import { doc, setDoc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuid } from "uuid";
+import Image from "next/image";
+import { useRouter } from "next/router";
 
 function index() {
+  const router = useRouter();
+
   const [pas, setPas] = useState(1);
   const [values, setValues] = useState({
     nume: "",
@@ -15,15 +19,17 @@ function index() {
     password: "",
     dovada: "",
   });
-  const [errors, setErrors] = useState(validateInfo(values));
+  const [selectedImage, setSelectedImage] = useState();
+
+  const [next, setNext] = useState();
+  const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEroare, setIsEroare] = useState(false);
   const { signup } = useAuth();
 
   const handleNext = (nr) => {
-    if (!errors.nume && !errors.password && !errors.email) {
-      setPas(nr);
-    }
+    setErrors(validateInfo(values));
+    setNext(nr);
   };
 
   const handleChange = (e) => {
@@ -47,7 +53,6 @@ function index() {
     setErrors(validateInfo(values));
     setIsSubmitting(true);
   };
-  const handleNext = (e) => {};
   const log = async () => {
     // aici ar trebui sa vina datele aditionale despre utilizator. foloseste uid
     const auth = getAuth();
@@ -72,7 +77,6 @@ function index() {
     }
   };
 
-  console.log(values.dovada);
   useEffect(() => {
     if (Object.keys(errors).length === 0 && isSubmitting) {
       const forsign = async () => {
@@ -82,7 +86,7 @@ function index() {
             alert("Email deja inregistrat");
             setIsEroare(true);
           }
-          console.log(errorCode);
+          console.log("errorCode", errorCode);
         });
         //pt imagine si date extra
         if (!isEroare) {
@@ -99,21 +103,31 @@ function index() {
           };
           await forImage();
           setIsSubmitting(false);
+          router.push("/");
         }
       };
       forsign();
     } else {
-      console.log(errors);
+      console.log("errors", errors);
     }
   }, [errors]);
 
   useEffect(() => {
-    setErrors(validateInfo(values));
-    console.log("errors", errors);
-  }, [values]);
+    if (!errors.nume && !errors.email && !errors.password && next) {
+      setPas(next);
+    }
+  }, [errors]);
 
+  useEffect(() => {
+    if (values.dovada) {
+      const objectUrl = URL.createObjectURL(values.dovada);
+      setSelectedImage(objectUrl);
+
+      return () => URL.revokeObjectURL(objectUrl);
+    }
+  }, [values.dovada]);
   return (
-    <>
+    <div className="px-8">
       {pas === 1 && (
         <div className="flex flex-col justify-center items-center mt-20 text-xl px-2 text-black">
           <input
@@ -122,18 +136,22 @@ function index() {
             value={values.nume}
             onChange={handleChange}
             placeholder="Nume complet"
-            className="mb-10 outline-none duration-300 border-b-2 border-solid border-white focus:border-c5 text-slate-900 p-2 w-full max-w-[40ch]"
+            className=" mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c4 border-c5 text-slate-900 p-2 w-full max-w-[40ch]"
           />
-          {errors.nume && <p>{errors.nume}</p>}
+          {errors.nume && (
+            <p className="mb-4 text-base text-c5 w-full p-2">{errors.nume}</p>
+          )}
           <input
             name="email"
             type="text"
             value={values.email}
             onChange={handleChange}
             placeholder="Adresa email"
-            className="mb-10 outline-none duration-300 border-b-2 border-solid border-white focus:border-c5 text-slate-900 p-2 w-full max-w-[40ch]"
+            className=" mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c4 border-c5 text-slate-900 p-2 w-full max-w-[40ch]"
           />
-          {errors.email && <p>{errors.email}</p>}
+          {errors.email && (
+            <p className="mb-4 text-base text-c5 w-full p-2">{errors.email}</p>
+          )}
 
           <input
             name="password"
@@ -141,12 +159,16 @@ function index() {
             onChange={handleChange}
             type="password"
             placeholder="Password"
-            className="mb-10 outline-none text-slate-900 p-2 w-full max-w-[40ch] duration-300 border-b-2 border-solid border-white focus:border-c5"
+            className="mt-10 outline-none text-slate-900 p-2 w-full max-w-[40ch] duration-300 border-b-2 border-solid focus:border-c4 border-c5"
           />
-          {errors.password && <p>{errors.password}</p>}
+          {errors.password && (
+            <p className="mb-4 text-base text-c5 w-full p-2">
+              {errors.password}
+            </p>
+          )}
 
           <button
-            className="text-center bg-c5 text-white font-medium px-10 py-3 rounded-lg mt-10 w-4/6"
+            className="text-center bg-c5 text-white font-medium py-3 rounded-lg mt-20 w-5/6"
             onClick={() => handleNext(2)}
           >
             Următorul pas
@@ -154,15 +176,42 @@ function index() {
         </div>
       )}
       {pas === 2 && (
-        <div>
-          <div>
-            <input name="dovada" type="file" onChange={handleImageChange} />
-          </div>
-          <button onClick={handleSubmit}>Submit</button>
+        <div className="flex flex-col bg-c5 rounded-lg text-white p-6">
+          <label className="block text-lg relative">
+            Adaugă dovada că ești medic
+            <input
+              id="dovada"
+              name="dovada"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="mt-2 block w-full text-base rounded-sm cursor-pointer text-white bg-c5 border-c5"
+            />
+          </label>
+
+          {selectedImage && (
+            <div className="relative h-40 w-3/4 mt-10 rounded-lg overflow-hidden self-center">
+              <Image
+                src={selectedImage}
+                alt="HATz"
+                fill
+                className=" object-cover"
+              />
+            </div>
+          )}
+          <button
+            className="text-center bg-white text-c5 font-medium px-10 py-3 rounded-lg mt-10 w-4/6 self-center"
+            onClick={handleSubmit}
+          >
+            Submit
+          </button>
+          {errors.dovada && (
+            <p className="mt-4 text-base w-full text-center">{errors.dovada}</p>
+          )}
         </div>
       )}
       {pas === 3 && <div></div>}
-    </>
+    </div>
   );
 }
 
