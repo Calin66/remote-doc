@@ -33,3 +33,12 @@ export function validateLoginInfo(values) {
 
   return errors;
 }
+export function validateNewPacientInfo(values) {
+  let errors = {};
+  if (!values.email) {
+    errors.email = "câmp obligatoriu";
+  } else if (!/^[A-Z0-9._%+=]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+    errors.email = "Adresa de email nu este validă";
+  }
+  return errors;
+}
