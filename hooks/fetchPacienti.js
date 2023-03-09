@@ -13,7 +13,7 @@ export default function useFetchPacienti() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const docRef = doc(db, "users", currentUser.uid);
+        const docRef = doc(db, "medici", currentUser.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           setPacienti(docSnap.data().pacienti);

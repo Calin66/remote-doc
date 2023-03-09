@@ -1,7 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 import { db, storage } from "@/firebase";
 import validateInfo from "@/pages/validateInfo";
-import { getAuth } from "firebase/auth";
+import { getAuth, updateProfile } from "firebase/auth";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -64,11 +64,18 @@ function index() {
             nume: values.nume,
             email: values.email,
             uid: user.uid,
+            pacienti: {},
           });
         } catch (error) {
           setIsEroare(true);
           alert(error);
         }
+        updateProfile(user, {
+          displayName: values.nume,
+        }).catch((error) => {
+          setIsEroare(true);
+          alert(error);
+        });
       };
       await addInfo();
       if (!isEroare) {
