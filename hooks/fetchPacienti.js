@@ -3,10 +3,10 @@ import { doc, getDoc } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase";
 
-export default function useFetchTodos() {
+export default function useFetchPacienti() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [todos, setTodos] = useState(null);
+  const [pacienti, setPacienti] = useState([]);
 
   const { currentUser } = useAuth();
 
@@ -16,13 +16,12 @@ export default function useFetchTodos() {
         const docRef = doc(db, "users", currentUser.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          setTodos(docSnap.data().todos);
-          // setTodos('todos' in docSnap.data() ? docSnap.data().todos : {})
+          setPacienti(docSnap.data().pacienti);
         } else {
-          setTodos({});
+          setPacienti({});
         }
       } catch (err) {
-        setError("Failed to load todos");
+        setError("Failed to load pacienti");
         console.log(err);
       } finally {
         setLoading(false);
@@ -31,5 +30,5 @@ export default function useFetchTodos() {
     fetchData();
   }, []);
 
-  return { loading, error, todos, setTodos };
+  return { loading, error, pacienti, setPacienti };
 }
