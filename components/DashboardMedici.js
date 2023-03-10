@@ -18,7 +18,6 @@ export default function DashboardMedici() {
   const [values, setValues] = useState({
     email: "",
     nume: "",
-    activate: false,
   });
 
   const handleChange = (e) => {
@@ -46,7 +45,12 @@ export default function DashboardMedici() {
             : Math.max(...Object.keys(pacienti)) + 1;
         setPacienti({
           ...pacienti,
-          [newKey]: { link: link, nume: values.nume },
+          [newKey]: {
+            link: unique_id,
+            nume: values.nume,
+            activate: false,
+            email: values.email,
+          },
         });
 
         const userRef = doc(db, "medici", currentUser.uid);
@@ -54,7 +58,12 @@ export default function DashboardMedici() {
           userRef,
           {
             pacienti: {
-              [newKey]: { link: link, nume: values.nume },
+              [newKey]: {
+                link: unique_id,
+                nume: values.nume,
+                activate: false,
+                email: values.email,
+              },
             },
           },
           { merge: true }
@@ -67,7 +76,7 @@ export default function DashboardMedici() {
               {
                 link: link,
                 email: values.email,
-                numemedic: currentUser.displayName,
+                nume: currentUser.displayName,
               },
               "j-uAUT8IyQlZRAwWF"
             )
@@ -88,7 +97,6 @@ export default function DashboardMedici() {
       setValues({
         email: "",
         nume: "",
-        activate: false,
       });
     } else {
       console.log("errors", errors);
@@ -151,13 +159,13 @@ export default function DashboardMedici() {
     <div className="">
       {!loading && !pas && (
         <>
-          <div>
-            <h2>Pacienti confirmati</h2>
+          <div className=" mt-16 ">
+            <h2 className="text-xl">Pacienti confirmati</h2>
             <div>
               {Object.keys(pacienti).map((pacient, i) => {
                 if (pacient.activate)
                   return (
-                    <PacientCard activate={pacient.activate} key={i}>
+                    <PacientCard activate={pacienti[pacient].activate} key={i}>
                       {pacienti[pacient]}
                     </PacientCard>
                   );
@@ -165,8 +173,8 @@ export default function DashboardMedici() {
               })}
             </div>
           </div>
-          <div className="mt-10">
-            <h2>Pacienti neconfirmati</h2>
+          <div className="mt-16">
+            <h2 className="text-xl">Pacienti neconfirmati</h2>
             <div>
               {Object.keys(pacienti).map((pacient, i) => {
                 if (!pacient.activate)

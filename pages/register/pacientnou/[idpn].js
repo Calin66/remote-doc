@@ -1,10 +1,13 @@
+import { useFetchAllPacienti } from "@/hooks/fetchPacienti";
 import { useRouter } from "next/router";
 
 const Post = () => {
   const router = useRouter();
   const { idpn } = router.query;
-  console.log("idpn", idpn);
-  return <p>Link: {idpn}</p>;
+
+  const { statuss, loading, error } = useFetchAllPacienti(idpn);
+  console.log("status in idpn.js", statuss);
+  return <p>Status</p>;
 };
 
 export default Post;
