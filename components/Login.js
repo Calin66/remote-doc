@@ -32,15 +32,22 @@ export default function Login() {
   useEffect(() => {
     if (Object.keys(errors).length === 0 && isSubmitting) {
       const forsign = async () => {
-        await login(values.email, values.password).catch(function (error) {
-          let errorCode = error.code;
-          console.log("errorCode", errorCode);
-          setIsEroare(true);
-        });
-
-        if (!isEroare) {
+        try {
+          await login(values.email, values.password);
+          console.log("MAI DEPARTE");
           setIsSubmitting(false);
           router.push("/");
+        } catch (error) {
+          let errorCode = error.code;
+          if (errorCode === "auth/wrong-password")
+            setErrors({ password: "Ai introdus parola greșită" });
+          else if (errorCode === "auth/user-not-found")
+            setErrors({
+              email:
+                "Nu s-a găsit niciun utilizator cu această adresă de email.",
+            });
+          console.log("errorCode", errorCode);
+          setIsEroare(true);
         }
       };
       forsign();
@@ -51,17 +58,18 @@ export default function Login() {
 
   return (
     <div className="w-full flex flex-col items-center px-8">
-      <h1 className="mt-10 text-2xl">Login</h1>
+      <h1 className="mt-16 text-2xl font-semibold">Login</h1>
       <input
         type="text"
         name="email"
         value={values.email}
         onChange={handleChange}
         placeholder="Adresa de email"
-        className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c4 border-c5 text-slate-900 p-2 w-full max-w-[40ch]"
+        className="  mt-16 text-xl outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-[40ch]
+        "
       />
       {errors.email && (
-        <p className="mb-4 text-base text-c5 w-full p-2">{errors.email}</p>
+        <p className="mb-4 text-base text-c2 w-full p-2">{errors.email}</p>
       )}
       <input
         name="password"
@@ -69,18 +77,21 @@ export default function Login() {
         onChange={handleChange}
         type="password"
         placeholder="Parola"
-        className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c4 border-c5 text-slate-900 p-2 w-full max-w-[40ch]"
+        className=" mt-10 text-xl outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-[40ch]"
       />
       {errors.password && (
-        <p className="mb-4 text-base text-c5 w-full p-2">{errors.password}</p>
+        <p className="mb-4 text-base text-c2 w-full p-2">{errors.password}</p>
       )}
       <button
-        className="text-center bg-c5 text-white font-medium py-3 rounded-lg mt-20 w-5/6 mb-5"
+        className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-16 w-5/6"
         onClick={handleSubmit}
       >
         Submit
       </button>
-      <Link href="/register">Nu ai cont? Signup aici</Link>
+      <Link href="/register" className=" text-lg mt-2">
+        Nu ai cont? Fă-ți unul{" "}
+        <span className="text-c2 font-semibold">aici.</span>
+      </Link>
     </div>
   );
 }

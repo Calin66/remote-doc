@@ -9,7 +9,7 @@ function index() {
         pe email de la medicul tău de familie.
       </h1>
       <Link href="/login" className="mt-10 text-2xl">
-        Ai deja cont? Login <span>aici</span>
+        Ai deja cont? Login <span className="text-c5 font-semibold">aici.</span>
       </Link>
     </div>
   );

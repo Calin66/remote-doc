@@ -143,10 +143,10 @@ function index() {
             value={values.nume}
             onChange={handleChange}
             placeholder="Nume complet"
-            className=" mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c4 border-c5 text-slate-900 p-2 w-full max-w-[40ch]"
+            className=" mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-[40ch]"
           />
           {errors.nume && (
-            <p className="mb-4 text-base text-c5 w-full p-2">{errors.nume}</p>
+            <p className="mb-4 text-base text-c2 w-full p-2">{errors.nume}</p>
           )}
           <input
             name="email"
@@ -154,10 +154,10 @@ function index() {
             value={values.email}
             onChange={handleChange}
             placeholder="Adresa email"
-            className=" mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c4 border-c5 text-slate-900 p-2 w-full max-w-[40ch]"
+            className=" mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-[40ch]"
           />
           {errors.email && (
-            <p className="mb-4 text-base text-c5 w-full p-2">{errors.email}</p>
+            <p className="mb-4 text-base text-c2 w-full p-2">{errors.email}</p>
           )}
 
           <input
@@ -166,16 +166,16 @@ function index() {
             onChange={handleChange}
             type="password"
             placeholder="Password"
-            className="mt-10 outline-none text-slate-900 p-2 w-full max-w-[40ch] duration-300 border-b-2 border-solid focus:border-c4 border-c5"
+            className="mt-10 outline-none text-slate-900 p-2 w-full max-w-[40ch] duration-300 border-b-2 border-solid focus:border-c3 border-c2"
           />
           {errors.password && (
-            <p className="mb-4 text-base text-c5 w-full p-2">
+            <p className="mb-4 text-base text-c2 w-full p-2">
               {errors.password}
             </p>
           )}
 
           <button
-            className="text-center bg-c5 text-white font-medium py-3 rounded-lg mt-20 w-5/6"
+            className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6"
             onClick={() => handleNext(2)}
           >
             Următorul pas
@@ -183,7 +183,7 @@ function index() {
         </div>
       )}
       {pas === 2 && (
-        <div className="flex flex-col bg-c5 rounded-lg text-white p-6">
+        <div className="flex flex-col bg-c2 rounded-lg text-white p-6 mt-20">
           <label className="block text-lg relative">
             Adaugă dovada că ești medic
             <input
@@ -192,7 +192,7 @@ function index() {
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              className="mt-2 block w-full text-base rounded-sm cursor-pointer text-white bg-c5 border-c5"
+              className="mt-2 block w-full text-base rounded-sm cursor-pointer text-white bg-c2 border-c2"
             />
           </label>
 
@@ -207,7 +207,7 @@ function index() {
             </div>
           )}
           <button
-            className="text-center bg-white text-c5 font-medium px-10 py-3 rounded-lg mt-10 w-4/6 self-center"
+            className="text-center bg-white text-c2 font-medium px-10 py-3 rounded-lg mt-10 w-4/6 self-center"
             onClick={handleSubmit}
           >
             Submit
