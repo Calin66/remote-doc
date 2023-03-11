@@ -14,20 +14,18 @@ export default function PacientCard(props) {
     handleDelete,
   } = props;
   useEffect(() => {
-    if (!activate)
-      setCl(
-        "bg-gray-200 rounded-lg p-2 mt-4 first-letter flex justify-between items-center"
-      );
-    else
-      setCl(
-        "border-gray border rounded-lg p-2 mt-4 first-letter flex justify-between items-center"
-      );
+    const hatz =
+      "rounded-lg p-2 mt-4 first-letter flex justify-between items-center";
+    if (!activate) setCl(`bg-gray-200 ${hatz}`);
+    else setCl(`border-gray ${hatz}`);
   }, []);
 
   return (
     <div className={cl}>
       <h1 className=" text-lg">{children.nume}</h1>
-      <i className="fa-regular fa-pen-to-square"></i>
+      <div>
+        <i className="fa-solid fa-pen-to-square"></i>
+      </div>
     </div>
   );
 }

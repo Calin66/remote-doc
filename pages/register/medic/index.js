@@ -91,8 +91,8 @@ function index() {
           let errorCode = error.code;
           if (errorCode == "auth/email-already-in-use") {
             alert("Email deja inregistrat");
-            setIsEroare(true);
           }
+          setIsEroare(true);
           console.log("errorCode", errorCode);
         });
         //pt imagine si date extra
@@ -134,7 +134,7 @@ function index() {
     }
   }, [values.dovada]);
   return (
-    <div className="px-8">
+    <div>
       {pas === 1 && (
         <div className="flex flex-col justify-center items-center mt-20 text-xl px-2 text-black">
           <input
@@ -217,7 +217,6 @@ function index() {
           )}
         </div>
       )}
-      {pas === 3 && <div></div>}
     </div>
   );
 }

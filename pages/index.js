@@ -17,9 +17,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {currentUser ? (
-        <DashboardMedici />
+        <>
+          <h1>JONULE TE-AI LOGAT</h1>
+        </>
       ) : (
-        <div className="px-4 text-center flex flex-col">
+        <div className="text-center flex flex-col">
           <h1 className="text-2xl mt-10">
             Scapa de cozile interminabile de la medicul de familie.
           </h1>

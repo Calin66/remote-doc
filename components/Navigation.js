@@ -35,41 +35,64 @@ export default function Navigation() {
           Remote Doc
         </Link>
         {currentUser ? (
-          <div>
-            <div className="justify-center hidden md:flex">
+          <>
+            <div className="md:flex justify-center items-center  hidden">
               {links.map((link, i) => (
                 <Link key={i} className="px-4" href={link.href}>
                   {link.title}
                 </Link>
               ))}
             </div>
+
+            <i
+              className="fa-solid fa-bars text-3xl md:hidden"
+              onClick={() => setOpenModal(true)}
+            ></i>
+          </>
+        ) : (
+          <div>
+            <div className=" hidden sm:block">
+              <Link
+                href="/register"
+                className="bg-c2 py-2 w-32 inline-block text-white rounded-lg text-xl text-center mr-8"
+              >
+                Signup
+              </Link>
+              <Link
+                href="/login"
+                className="border border-c2 py-2 w-32 inline-block text-c2 rounded-lg text-xl text-center"
+              >
+                Login
+              </Link>
+            </div>
+            <i
+              className="fa-solid fa-bars text-3xl sm:hidden"
+              onClick={() => setOpenModal(true)}
+            ></i>
+          </div>
+        )}
+
+        {currentUser && (
+          <div className="hidden md:inline-block">
+            <button
+              onClick={() => {
+                logout();
+                setOpenModal(false);
+              }}
+              className="bg-red-600 py-2 w-32 text-white rounded-lg text-lg text-center hidden md:inline-block hover:bg-red-700"
+            >
+              Logout
+            </button>
+          </div>
+        )}
+        {/* {currentUser && (
+          <div className="md:hidden justify-center items-center  flex">
             <i
               className="fa-solid fa-bars text-3xl md:hidden"
               onClick={() => setOpenModal(true)}
             ></i>
           </div>
-        ) : (
-          <div className=" hidden sm:block">
-            <Link
-              href="/register"
-              className="bg-c2 py-2 w-32 inline-block text-white rounded-lg text-xl text-center mr-8"
-            >
-              Signup
-            </Link>
-            <Link
-              href="/login"
-              className="border border-c2 py-2 w-32 inline-block text-c2 rounded-lg text-xl text-center"
-            >
-              Login
-            </Link>
-          </div>
-        )}
-        {/* <Link
-          href="/register"
-          className=" bg-c5 text-white px-10 py-2 rounded-lg text-base"
-        >
-          Signup
-        </Link> */}
+        )} */}
       </div>
     </>
   );

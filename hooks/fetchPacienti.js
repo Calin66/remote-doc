@@ -12,20 +12,23 @@ export default function useFetchPacienti() {
 
   useEffect(() => {
     async function fetchData() {
-      try {
-        const docRef = doc(db, "medici", currentUser.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setPacienti(docSnap.data().pacienti);
-        } else {
-          setPacienti({});
+      if (currentUser) {
+        try {
+          const docRef = doc(db, "medici", currentUser.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            setPacienti(docSnap.data().pacienti);
+          } else {
+            setPacienti({});
+          }
+        } catch (err) {
+          setError("Failed to load pacienti");
+          console.log(err);
+        } finally {
+          setLoading(false);
         }
-      } catch (err) {
-        setError("Failed to load pacienti");
-        console.log(err);
-      } finally {
-        setLoading(false);
       }
+      setLoading(false);
     }
     fetchData();
   }, []);
@@ -38,7 +41,7 @@ export function useFetchAllPacienti(idpn) {
   const [allError, setAllError] = useState(null);
 
   const [statuss, setStatuss] = useState(false);
-
+  const [doc_uid, setDoc_uid] = useState();
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -47,11 +50,11 @@ export function useFetchAllPacienti(idpn) {
         const querySnapshot = await getDocs(collection(db, "medici"));
         querySnapshot.forEach((doc) => {
           const pacienti = doc.data().pacienti;
-          // console.log("docu.pacienti", docu.pacienti);
 
           Object.keys(pacienti).map((pacient, i) => {
             if (pacienti[pacient].link === idpn) {
               setStatuss(true);
+              setDoc_uid(doc.data().uid);
             }
           });
         });
@@ -72,5 +75,5 @@ export function useFetchAllPacienti(idpn) {
     fetchData();
   }, []);
 
-  return { allLoading, allError, statuss };
+  return { allLoading, allError, statuss, doc_uid };
 }

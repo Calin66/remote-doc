@@ -3,30 +3,6 @@ import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 export default function Register() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const [isLoggingIn, setIsLoggingIn] = useState(true);
-
-  const { login, signup, currentUser } = useAuth();
-  console.log(currentUser);
-
-  async function submitHandler() {
-    if (!email || !password) {
-      setError("Please enter email and password");
-      return;
-    }
-    if (isLoggingIn) {
-      try {
-        await login(email, password);
-      } catch (err) {
-        setError("Incorrect email or password");
-      }
-      return;
-    }
-    await signup(email, password);
-  }
-
   return (
     <div className="w-full 300 flex flex-col items-center">
       <h1 className="mt-10 text-2xl font-semibold">Sunt</h1>

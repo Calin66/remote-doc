@@ -21,8 +21,8 @@ export default function Modal(props) {
     <div>
       {currentUser ? (
         <div className="fixed w-screen h-screen top-0 left-0 bg-white text-lg flex flex-col ">
-          <div className="flex items-center justify-between  p-4 px-8 py-5 border-b border-solid border-c2">
-            <h1 className="font-bold text-2xl select-none ">Meniu</h1>
+          <div className="flex items-center justify-between  p-4 px-10 py-5 border-b border-solid border-c2">
+            <h1 className="font-semibold text-xl select-none ">Meniu</h1>
             <i
               onClick={() => setOpenModal(false)}
               className="fa-solid fa-xmark duration-300 hover:rotate-90 cursor-pointer text-3xl"
@@ -44,7 +44,7 @@ export default function Modal(props) {
                 logout();
                 setOpenModal(false);
               }}
-              className=" self-center bg-red-500 p-3 w-60 text-white rounded-xl font-bold text-xl mt-14"
+              className=" self-center bg-red-600 p-3 w-60 text-white rounded-xl font-bold text-xl mt-14"
             >
               Logout
             </button>
@@ -52,8 +52,8 @@ export default function Modal(props) {
         </div>
       ) : (
         <div className="fixed w-screen h-screen top-0 left-0 bg-white text-lg flex flex-col ">
-          <div className="flex items-center justify-between  p-4 px-8 py-5 border-b border-solid border-c2">
-            <h1 className="font-bold text-2xl select-none ">Meniu</h1>
+          <div className="flex items-center justify-between  p-4 px-10 py-5 border-b border-solid border-c2">
+            <h1 className=" font-semibold text-xl select-none ">Meniu</h1>
             <i
               onClick={() => setOpenModal(false)}
               className="fa-solid fa-xmark duration-300 hover:rotate-90 cursor-pointer text-3xl"
@@ -65,7 +65,7 @@ export default function Modal(props) {
               onClick={() => {
                 setOpenModal(false);
               }}
-              className=" self-center bg-c2 p-4 w-60 text-white rounded-xl font-bold text-xl mt-14 text-center"
+              className=" self-center bg-c2 p-3 w-60 text-white rounded-xl font-semibold text-xl mt-14 text-center"
             >
               Login
             </Link>
@@ -74,7 +74,7 @@ export default function Modal(props) {
               onClick={() => {
                 setOpenModal(false);
               }}
-              className=" self-center bg-c3 p-4 w-60 text-white rounded-xl font-bold text-xl mt-6 text-center"
+              className=" self-center bg-c3 p-3 w-60 text-white rounded-xl font-semibold text-xl mt-6 text-center"
             >
               Signup
             </Link>

@@ -156,10 +156,10 @@ export default function DashboardMedici() {
   // }
 
   return (
-    <div className="">
+    <div className=" md:w-1/2 mt-10 self-center md:border border-c2 rounded-lg md:p-16 md:relative md:pb-20 w-full">
       {!loading && !pas && (
         <>
-          <div className=" mt-16 ">
+          <div>
             <h2 className="text-xl">Pacienti confirmati</h2>
             <div>
               {Object.keys(pacienti).map((pacient, i) => {
@@ -190,7 +190,7 @@ export default function DashboardMedici() {
         </>
       )}
       {!loading && pas && (
-        <div className="flex flex-col px-8">
+        <div className="flex flex-col">
           <h1 className="mt-10 mb-10 text-2xl self-center">Invită pacienți</h1>
           <input
             type="text"
@@ -198,11 +198,13 @@ export default function DashboardMedici() {
             value={values.email}
             onChange={handleChange}
             placeholder="Adresa de email"
-            className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c4 border-c5 text-slate-900 p-2 w-full max-w-[40ch]"
+            className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-[40ch] self-center"
           />
 
           {errors.email && (
-            <p className="mb-4 text-base text-c5 w-full p-2">{errors.email}</p>
+            <p className="mb-4 text-base text-c2 w-full p-2 self-center max-w-[40ch]">
+              {errors.email}
+            </p>
           )}
           <input
             type="text"
@@ -210,13 +212,15 @@ export default function DashboardMedici() {
             value={values.nume}
             onChange={handleChange}
             placeholder="Nume complet"
-            className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c4 border-c5 text-slate-900 p-2 w-full max-w-[40ch]"
+            className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-[40ch] self-center"
           />
           {errors.nume && (
-            <p className="mb-4 text-base text-c5 w-full p-2">{errors.nume}</p>
+            <p className="mb-4 text-base text-c2 w-full p-2 self-center max-w-[40ch]">
+              {errors.nume}
+            </p>
           )}
           <button
-            className="text-center bg-c5 text-white font-medium py-3 rounded-lg mt-20 w-5/6 mb-5 self-center"
+            className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6 mb-5 self-center md:w-1/3"
             onClick={handleSubmit}
           >
             Submit
@@ -225,8 +229,8 @@ export default function DashboardMedici() {
       )}
       <button
         onClick={handlePas}
-        className=" bg-c5 font-bold text-2xl flex align-middle justify-center
-        rounded-full w-14 h-14 center text-white absolute bottom-10 right-10"
+        className=" bg-c2 font-bold text-2xl flex align-middle justify-center
+        rounded-full w-14 h-14 center text-white absolute bottom-4 right-4 md:right-14 md:top-12"
       >
         <i className="fa-solid fa-plus self-center"></i>
       </button>
