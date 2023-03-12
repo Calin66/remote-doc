@@ -80,8 +80,7 @@ export function useFetchAllPacienti(idpn) {
       fetchData();
       console.log("fetchData");
     }
-  }, []);
-  console.log("STATUSS AICI", statuss);
+  }, [idpn]);
 
   return { allLoading, allError, statuss, doc_uid };
 }
