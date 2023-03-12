@@ -3,8 +3,9 @@ import { db, storage } from "@/firebase";
 import { useFetchAllPacienti } from "@/hooks/fetchPacienti";
 import { validateNewPacientInfoJOURNEY } from "@/pages/validateInfo";
 import { getAuth, updateProfile } from "firebase/auth";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import Cookies from "js-cookie";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -12,7 +13,14 @@ import { v4 as uuid } from "uuid";
 
 const Post = () => {
   const router = useRouter();
-  const { idpn } = router.query;
+  const [idpn, setIdpn] = useState();
+  useEffect(() => {
+    const { idpn } = router.query;
+    setIdpn(idpn);
+  }, [router]);
+
+  console.log("idpn in idpn.js", idpn);
+
   const { statuss, allLoading, allError, doc_uid } = useFetchAllPacienti(idpn);
   const { signup } = useAuth();
 
@@ -59,10 +67,7 @@ const Post = () => {
     setIsSubmitting(true);
   };
 
-  const log = async () => {
-    // aici ar trebui sa vina datele aditionale despre utilizator. foloseste uid
-    const auth = getAuth();
-    const user = auth.currentUser;
+  const log = async (user) => {
     if (user.uid) {
       const addInfo = async () => {
         try {
@@ -82,6 +87,35 @@ const Post = () => {
             displayName: values.nume,
           });
 
+          const editeazaActivStatus = async () => {
+            const docRef = doc(db, "medici", doc_uid);
+            const docSnap = await getDoc(docRef);
+            const pacienti = docSnap.data().pacienti;
+            let ij = 1;
+
+            Object.keys(pacienti).map((pacient, i) => {
+              if (pacienti[pacient].link === idpn) {
+                ij = i + 1;
+              }
+            });
+
+            console.log("IJ", ij);
+            if (ij) {
+              await setDoc(
+                docRef,
+                {
+                  pacienti: {
+                    [ij]: {
+                      activate: true,
+                      link: "",
+                    },
+                  },
+                },
+                { merge: true }
+              );
+            }
+          };
+          editeazaActivStatus();
           alert("Contul dumneavoastra a fost creat");
         } catch (error) {
           setIsEroare(true);
@@ -91,6 +125,17 @@ const Post = () => {
       await addInfo();
     }
   };
+  const forImage = async (user) => {
+    const unique_id = uuid();
+    const imageRef = ref(
+      storage,
+      "acteIdentitate_pacienti/" + unique_id + ".png"
+    );
+    const snapI = await uploadBytes(imageRef, values.actIdentitate);
+    const iURL = await getDownloadURL(imageRef);
+    const infoRef = doc(db, "pacienti", user.uid);
+    await updateDoc(infoRef, { actIdentitate: iURL });
+  };
 
   useEffect(() => {
     if (Object.keys(errors).length === 0 && isSubmitting) {
@@ -99,20 +144,14 @@ const Post = () => {
           await signup(values.email, values.password);
           const auth = getAuth();
           const user = auth.currentUser;
-          log();
-          const forImage = async () => {
-            const unique_id = uuid();
-            const imageRef = ref(
-              storage,
-              "acteIdentitate_pacienti/" + unique_id + ".png"
-            );
-            const snapI = await uploadBytes(imageRef, values.actIdentitate);
-            const iURL = await getDownloadURL(imageRef);
-            const infoRef = doc(db, "pacienti", user.uid);
-            await updateDoc(infoRef, { actIdentitate: iURL });
-          };
-          await forImage();
+
+          await log(user);
+          await forImage(user);
+
+          Cookies.set("role", "pacient");
+
           setIsSubmitting(false);
+
           router.push("/");
         } catch (error) {
           let errorCode = error.code;
@@ -120,7 +159,7 @@ const Post = () => {
             alert("Email deja inregistrat");
           }
           setIsEroare(true);
-          console.log("error", error);
+          console.log("Eroare in catch", error);
         }
       };
       forsign();

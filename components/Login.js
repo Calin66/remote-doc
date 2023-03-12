@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function Login() {
     email: "",
     password: "",
   });
+
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEroare, setIsEroare] = useState(false);
@@ -29,13 +31,40 @@ export default function Login() {
     setIsSubmitting(true);
   };
 
+  const forAuth = async (user) => {
+    try {
+      const docRef = doc(db, "medici", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        Cookies.set("role", "medic");
+      } else {
+        const docRef2 = doc(db, "pacienti", user.uid);
+        const docSnap2 = await getDoc(docRef2);
+        if (docSnap2.exists()) {
+          Cookies.set("role", "pacient");
+        } else {
+          console.log("Nu am gasit rol");
+        }
+      }
+    } catch (err) {
+      console.log("Eroare in forAuth", err);
+    }
+  };
+
   useEffect(() => {
     if (Object.keys(errors).length === 0 && isSubmitting) {
       const forsign = async () => {
         try {
           await login(values.email, values.password);
-          console.log("MAI DEPARTE");
+
+          const auth = getAuth();
+          const user = auth.currentUser;
+
+          await forAuth(user);
+
           setIsSubmitting(false);
+
           router.push("/");
         } catch (error) {
           let errorCode = error.code;
@@ -57,7 +86,7 @@ export default function Login() {
   }, [errors, isSubmitting]);
 
   return (
-    <div className="w-full flex flex-col items-center px-8">
+    <div className="w-full flex flex-col items-center px-2">
       <h1 className="mt-16 text-2xl font-semibold">Login</h1>
       <input
         type="text"

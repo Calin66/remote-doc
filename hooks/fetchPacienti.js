@@ -45,14 +45,18 @@ export function useFetchAllPacienti(idpn) {
   const { currentUser } = useAuth();
 
   useEffect(() => {
+    console.log("idpn", idpn);
+
     async function fetchData() {
       try {
         const querySnapshot = await getDocs(collection(db, "medici"));
+
         querySnapshot.forEach((doc) => {
           const pacienti = doc.data().pacienti;
-
           Object.keys(pacienti).map((pacient, i) => {
-            if (pacienti[pacient].link === idpn) {
+            console.log("pacient in fetchPacients", pacienti[pacient]);
+            console.log("link in fetchPacients", idpn);
+            if (pacienti[pacient].link == idpn) {
               setStatuss(true);
               setDoc_uid(doc.data().uid);
             }
@@ -66,14 +70,18 @@ export function useFetchAllPacienti(idpn) {
         //   setPacienti({});
         // }
       } catch (err) {
-        setAllError("Failed to load pacienti");
+        setAllError("Failed to load pacients");
         console.log(err);
       } finally {
         setAllLoading(false);
       }
     }
-    fetchData();
+    if (idpn) {
+      fetchData();
+      console.log("fetchData");
+    }
   }, []);
+  console.log("STATUSS AICI", statuss);
 
   return { allLoading, allError, statuss, doc_uid };
 }

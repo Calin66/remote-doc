@@ -7,6 +7,8 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 const AuthContext = React.createContext();
 
@@ -27,6 +29,9 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
+    Cookies.remove("role");
+    const router = useRouter();
+    router.push("/");
     return signOut(auth);
   }
 

@@ -1,4 +1,5 @@
 import { useAuth } from "@/context/AuthContext";
+import Cookies from "js-cookie";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
@@ -71,7 +72,6 @@ export default function Navigation() {
             ></i>
           </div>
         )}
-
         {currentUser && (
           <div className="hidden md:inline-block">
             <button

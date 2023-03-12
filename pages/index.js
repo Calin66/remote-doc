@@ -6,9 +6,7 @@ import { useAuth } from "../context/AuthContext";
 
 export default function Home() {
   const { currentUser } = useAuth();
-  useEffect(() => {
-    console.log(currentUser);
-  }, []);
+
   return (
     <>
       <Head>

@@ -18,7 +18,7 @@ export default function Register() {
       >
         <i className="fa-solid fa-user text-white text-6xl"></i>
       </Link>
-      <Link href="/login" className="mt-10 text-2xl">
+      <Link href="/login" className="mt-10 text-lg">
         Ai deja cont? Login <span className="text-c2 font-semibold">aici</span>
       </Link>
     </div>

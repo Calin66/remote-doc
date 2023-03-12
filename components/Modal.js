@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import ReactDom from "react-dom";

@@ -2,12 +2,13 @@ import { useAuth } from "@/context/AuthContext";
 import { db, storage } from "@/firebase";
 import validateInfo from "@/pages/validateInfo";
 import { getAuth, updateProfile } from "firebase/auth";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuid } from "uuid";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 function index() {
   const router = useRouter();
@@ -53,10 +54,7 @@ function index() {
     setErrors(validateInfo(values));
     setIsSubmitting(true);
   };
-  const log = async () => {
-    // aici ar trebui sa vina datele aditionale despre utilizator. foloseste uid
-    const auth = getAuth();
-    const user = auth.currentUser;
+  const log = async (user) => {
     if (user.uid) {
       const addInfo = async () => {
         try {
@@ -84,33 +82,39 @@ function index() {
     }
   };
 
+  const forImage = async (user) => {
+    const unique_id = uuid();
+    const imageRef = ref(storage, "dovezi/" + unique_id + ".png");
+    const snapI = await uploadBytes(imageRef, values.dovada);
+    const iURL = await getDownloadURL(imageRef);
+    const infoRef = doc(db, "medici", user.uid);
+    await updateDoc(infoRef, { dovada: iURL });
+  };
+
   useEffect(() => {
     if (Object.keys(errors).length === 0 && isSubmitting) {
       const forsign = async () => {
-        await signup(values.email, values.password).catch(function (error) {
+        try {
+          await signup(values.email, values.password);
+
+          const auth = getAuth();
+          const user = auth.currentUser;
+          console.log("User inainte de cele doua functii", user);
+
+          await log(user);
+          await forImage(user);
+
+          setIsSubmitting(false);
+
+          Cookies.set("role", "medic");
+          router.push("/");
+        } catch (error) {
           let errorCode = error.code;
           if (errorCode == "auth/email-already-in-use") {
             alert("Email deja inregistrat");
           }
           setIsEroare(true);
           console.log("errorCode", errorCode);
-        });
-        //pt imagine si date extra
-        if (!isEroare) {
-          const auth = getAuth();
-          const user = auth.currentUser;
-          log();
-          const forImage = async () => {
-            const unique_id = uuid();
-            const imageRef = ref(storage, "dovezi/" + unique_id + ".png");
-            const snapI = await uploadBytes(imageRef, values.dovada);
-            const iURL = await getDownloadURL(imageRef);
-            const infoRef = doc(db, "medici", user.uid);
-            await updateDoc(infoRef, { dovada: iURL });
-          };
-          await forImage();
-          setIsSubmitting(false);
-          router.push("/");
         }
       };
       forsign();
