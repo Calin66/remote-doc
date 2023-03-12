@@ -30,8 +30,6 @@ export function AuthProvider({ children }) {
 
   function logout() {
     Cookies.remove("role");
-    const router = useRouter();
-    router.push("/");
     return signOut(auth);
   }
 

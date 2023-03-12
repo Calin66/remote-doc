@@ -98,8 +98,6 @@ export default function DashboardMedici() {
         email: "",
         nume: "",
       });
-    } else {
-      console.log("errors", errors);
     }
   }, [errors, isSubmitting]);
 
@@ -156,7 +154,7 @@ export default function DashboardMedici() {
   // }
 
   return (
-    <div className=" md:w-1/2 mt-10 self-center md:border border-c2 rounded-lg md:p-16 md:relative md:pb-20 w-full">
+    <div className=" md:w-1/2 self-center md:border border-c2 rounded-lg md:p-16 md:relative md:pb-20 w-full">
       {!loading && !pas && (
         <>
           <div>
@@ -198,11 +196,11 @@ export default function DashboardMedici() {
             value={values.email}
             onChange={handleChange}
             placeholder="Adresa de email"
-            className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-[40ch] self-center"
+            className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg self-center"
           />
 
           {errors.email && (
-            <p className="mb-4 text-base text-c2 w-full p-2 self-center max-w-[40ch]">
+            <p className=" text-base text-c2 w-full p-2 self-center max-w-lg">
               {errors.email}
             </p>
           )}
@@ -212,15 +210,15 @@ export default function DashboardMedici() {
             value={values.nume}
             onChange={handleChange}
             placeholder="Nume complet"
-            className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-[40ch] self-center"
+            className="mt-14 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg self-center"
           />
           {errors.nume && (
-            <p className="mb-4 text-base text-c2 w-full p-2 self-center max-w-[40ch]">
+            <p className=" text-base text-c2 w-full p-2 self-center max-w-lg">
               {errors.nume}
             </p>
           )}
           <button
-            className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6 mb-5 self-center md:w-1/3"
+            className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-24 w-5/6 mb-5 self-center max-w-xs"
             onClick={handleSubmit}
           >
             Submit

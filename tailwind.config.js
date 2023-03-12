@@ -13,6 +13,9 @@ module.exports = {
         c4: "#FFB703",
         c5: "#FB8500",
       },
+      minHeight: {
+        hatz: "85vh",
+      },
     },
   },
   plugins: [],

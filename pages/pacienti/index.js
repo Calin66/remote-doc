@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 
 function index() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full min-h-hatz pt-10">
       <DashboardMedici />
     </div>
   );

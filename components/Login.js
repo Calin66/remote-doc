@@ -4,6 +4,9 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import Cookies from "js-cookie";
+import { getAuth } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/firebase";
 
 export default function Login() {
   const router = useRouter();
@@ -75,30 +78,28 @@ export default function Login() {
               email:
                 "Nu s-a găsit niciun utilizator cu această adresă de email.",
             });
-          console.log("errorCode", errorCode);
+          console.log("error in login", error);
           setIsEroare(true);
         }
       };
       forsign();
-    } else {
-      console.log("errors", errors);
     }
   }, [errors, isSubmitting]);
 
   return (
-    <div className="w-full flex flex-col items-center px-2">
-      <h1 className="mt-16 text-2xl font-semibold">Login</h1>
+    <div className="w-full flex flex-col items-center px-2 md:border border-c2 md:w-1/2 rounded-lg self-center md:py-20 md:px-14">
+      <h1 className=" text-2xl font-semibold">Login</h1>
       <input
         type="text"
         name="email"
         value={values.email}
         onChange={handleChange}
         placeholder="Adresa de email"
-        className="  mt-16 text-xl outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-[40ch]
+        className="  mt-16 text-xl outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg
         "
       />
       {errors.email && (
-        <p className="mb-4 text-base text-c2 w-full p-2">{errors.email}</p>
+        <p className="text-base text-c2 w-full p-2 max-w-lg">{errors.email}</p>
       )}
       <input
         name="password"
@@ -106,18 +107,20 @@ export default function Login() {
         onChange={handleChange}
         type="password"
         placeholder="Parola"
-        className=" mt-10 text-xl outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-[40ch]"
+        className=" mt-14 text-xl outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg"
       />
       {errors.password && (
-        <p className="mb-4 text-base text-c2 w-full p-2">{errors.password}</p>
+        <p className="text-base text-c2 w-full p-2 max-w-lg">
+          {errors.password}
+        </p>
       )}
       <button
-        className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-16 w-5/6"
+        className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6 max-w-xs"
         onClick={handleSubmit}
       >
         Submit
       </button>
-      <Link href="/register" className=" text-lg mt-2">
+      <Link href="/register" className=" text-lg mt-3">
         Nu ai cont? Fă-ți unul{" "}
         <span className="text-c2 font-semibold">aici.</span>
       </Link>

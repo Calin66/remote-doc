@@ -4,7 +4,7 @@ import React from "react";
 
 function index() {
   return (
-    <div>
+    <div className=" flex flex-col justify-center w-full">
       <Register />
     </div>
   );

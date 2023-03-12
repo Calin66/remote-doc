@@ -63,6 +63,7 @@ const Post = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+
     setErrors(validateNewPacientInfoJOURNEY(values));
     setIsSubmitting(true);
   };
@@ -99,7 +100,6 @@ const Post = () => {
               }
             });
 
-            console.log("IJ", ij);
             if (ij) {
               await setDoc(
                 docRef,
@@ -115,8 +115,7 @@ const Post = () => {
               );
             }
           };
-          editeazaActivStatus();
-          alert("Contul dumneavoastra a fost creat");
+          await editeazaActivStatus();
         } catch (error) {
           setIsEroare(true);
           alert(error);
@@ -145,13 +144,15 @@ const Post = () => {
           const auth = getAuth();
           const user = auth.currentUser;
 
-          await log(user);
-          await forImage(user);
+          log(user);
+          forImage(user);
+          // De aici am scos await, daca nu merge trb bagat inapoi await la fiecare functie
 
           Cookies.set("role", "pacient");
 
           setIsSubmitting(false);
 
+          console.log("Contul a fost creat");
           router.push("/");
         } catch (error) {
           let errorCode = error.code;
@@ -184,11 +185,11 @@ const Post = () => {
   }, [errors]);
 
   return (
-    <div className="">
+    <div className=" md:border border-c2 rounded-lg md:py-20 md:px-14 w-full md:w-1/2">
       {!allLoading ? (
         <>
           {statuss ? (
-            <div className="mt-10">
+            <div className="flex flex-col">
               {pas === 1 && (
                 <div className=" flex flex-col items-center text-center">
                   <h2 className=" text-xl font-semibold">Bine ai venit!</h2>
@@ -197,7 +198,7 @@ const Post = () => {
                     formular.
                   </p>
                   <button
-                    className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6"
+                    className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6 max-w-xs"
                     onClick={() => setPas(2)}
                   >
                     Următorul pas
@@ -205,8 +206,8 @@ const Post = () => {
                 </div>
               )}
               {pas === 2 && (
-                <div className="flex flex-col justify-center items-center mt-10 text-xl px-2 text-black">
-                  <h1 className="mt-4 text-2xl font-medium">Signup</h1>
+                <div className="flex flex-col justify-center items-center text-xl px-2 text-black">
+                  <h1 className="text-2xl font-medium">Signup pacient nou</h1>
 
                   <input
                     type="text"
@@ -214,10 +215,10 @@ const Post = () => {
                     value={values.nume}
                     onChange={handleChange}
                     placeholder="Nume complet"
-                    className=" mt-20 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-[40ch]"
+                    className=" mt-16 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg"
                   />
                   {errors.nume && (
-                    <p className="text-base text-c2 w-full p-2 select-none">
+                    <p className="text-base text-c2 w-full p-2 select-none max-w-lg">
                       {errors.nume}
                     </p>
                   )}
@@ -228,16 +229,16 @@ const Post = () => {
                     onChange={handleChange}
                     type="telefon"
                     placeholder="Nr de telefon"
-                    className="mt-14 outline-none text-slate-900 p-2 w-full max-w-[40ch] duration-300 border-b-2 border-solid focus:border-c3 border-c2"
+                    className="mt-14 outline-none text-slate-900 p-2 w-full max-w-lg duration-300 border-b-2 border-solid focus:border-c3 border-c2"
                   />
                   {errors.telefon && (
-                    <p className="text-base text-c2 w-full p-2 select-none">
+                    <p className="text-base text-c2 w-full p-2 select-none max-w-lg">
                       {errors.telefon}
                     </p>
                   )}
 
                   <button
-                    className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6 "
+                    className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6 max-w-xs"
                     onClick={() => handleNext(3)}
                   >
                     Următorul pas
@@ -245,8 +246,8 @@ const Post = () => {
                 </div>
               )}
               {pas === 3 && (
-                <div className="flex flex-col justify-center items-center mt-10 text-xl px-2 text-black">
-                  <h1 className="mt-4 text-2xl font-medium">Signup</h1>
+                <div className="flex flex-col justify-center items-center text-xl text-black">
+                  <h1 className=" text-2xl font-medium">Pasul #2</h1>
 
                   <input
                     name="email"
@@ -254,10 +255,10 @@ const Post = () => {
                     value={values.email}
                     onChange={handleChange}
                     placeholder="Adresa email"
-                    className=" mt-20 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-[40ch]"
+                    className=" mt-16 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg"
                   />
                   {errors.email && (
-                    <p className="text-base text-c2 w-full p-2 select-none">
+                    <p className="text-base text-c2 w-full p-2 select-none max-w-lg">
                       {errors.email}
                     </p>
                   )}
@@ -268,16 +269,16 @@ const Post = () => {
                     onChange={handleChange}
                     type="password"
                     placeholder="Parola"
-                    className=" mt-14 outline-none text-slate-900 p-2 w-full max-w-[40ch] duration-300 border-b-2 border-solid focus:border-c3 border-c2"
+                    className=" mt-14 outline-none text-slate-900 p-2 w-full max-w-lg duration-300 border-b-2 border-solid focus:border-c3 border-c2"
                   />
                   {errors.password && (
-                    <p className="text-base text-c2 w-full p-2 select-none">
+                    <p className="text-base text-c2 w-full p-2 select-none max-w-lg">
                       {errors.password}
                     </p>
                   )}
 
                   <button
-                    className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-16 w-5/6 "
+                    className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-16 w-5/6 max-w-xs"
                     onClick={() => handleNext(4)}
                   >
                     Următorul pas
@@ -285,7 +286,7 @@ const Post = () => {
                 </div>
               )}
               {pas === 4 && (
-                <div className="flex flex-col bg-c2 rounded-lg text-white p-6 mt-20">
+                <div className="flex flex-col bg-c2 rounded-lg text-white p-6 md:w-1/2 self-center">
                   <label className="block text-lg relative">
                     Adaugă act de identitate
                     <input
@@ -309,13 +310,13 @@ const Post = () => {
                     </div>
                   )}
                   <button
-                    className="text-center bg-white text-c2 font-medium px-10 py-2 rounded-lg mt-10 w-4/6 self-center"
+                    className="text-center bg-white text-c2 font-medium px-10 py-2 rounded-lg mt-10 w-5/6 self-center max-w-xs"
                     onClick={handleSubmit}
                   >
                     Submit
                   </button>
                   {errors.actIdentitate && (
-                    <p className="mt-4 text-base w-full text-center select-none">
+                    <p className="mt-4 text-base w-full text-center select-none max-w-lg">
                       {errors.actIdentitate}
                     </p>
                   )}
@@ -324,9 +325,9 @@ const Post = () => {
             </div>
           ) : (
             <div>
-              <p>
-                Linkul nu mai este valid. Vorbeste cu medicul tau de familie
-                pentru a primi un nou link de conectare
+              <p className="text-center">
+                Linkul nu mai este valid. Vorbește cu medicul tău de familie
+                pentru a primi un nou link de conectare.
               </p>
             </div>
           )}

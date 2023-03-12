@@ -138,19 +138,23 @@ function index() {
     }
   }, [values.dovada]);
   return (
-    <div>
+    <div className="md:w-1/2 self-center md:border border-c2 rounded-lg md:py-20 md:flex flex-col w-full">
       {pas === 1 && (
-        <div className="flex flex-col justify-center items-center mt-20 text-xl px-2 text-black">
+        <div className="flex flex-col justify-center items-center text-xl text-black">
+          <h1 className="text-2xl font-medium mb-10">Signup Medic</h1>
+
           <input
             type="text"
             name="nume"
             value={values.nume}
             onChange={handleChange}
             placeholder="Nume complet"
-            className=" mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-[40ch]"
+            className=" mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg"
           />
           {errors.nume && (
-            <p className="mb-4 text-base text-c2 w-full p-2">{errors.nume}</p>
+            <p className="text-base text-c2 w-full p-2 max-w-lg ">
+              {errors.nume}
+            </p>
           )}
           <input
             name="email"
@@ -158,10 +162,12 @@ function index() {
             value={values.email}
             onChange={handleChange}
             placeholder="Adresa email"
-            className=" mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-[40ch]"
+            className=" mt-14 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg"
           />
           {errors.email && (
-            <p className="mb-4 text-base text-c2 w-full p-2">{errors.email}</p>
+            <p className="text-base text-c2 w-full p-2 max-w-lg">
+              {errors.email}
+            </p>
           )}
 
           <input
@@ -170,16 +176,16 @@ function index() {
             onChange={handleChange}
             type="password"
             placeholder="Password"
-            className="mt-10 outline-none text-slate-900 p-2 w-full max-w-[40ch] duration-300 border-b-2 border-solid focus:border-c3 border-c2"
+            className="mt-14 outline-none text-slate-900 p-2 w-full max-w-lg duration-300 border-b-2 border-solid focus:border-c3 border-c2"
           />
           {errors.password && (
-            <p className="mb-4 text-base text-c2 w-full p-2">
+            <p className=" text-base text-c2 w-full p-2 max-w-lg">
               {errors.password}
             </p>
           )}
 
           <button
-            className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6"
+            className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-24 w-5/6 max-w-xs"
             onClick={() => handleNext(2)}
           >
             Următorul pas
@@ -187,7 +193,7 @@ function index() {
         </div>
       )}
       {pas === 2 && (
-        <div className="flex flex-col bg-c2 rounded-lg text-white p-6 mt-20">
+        <div className="flex flex-col bg-c2 rounded-lg text-white p-6 md:w-1/2 self-center">
           <label className="block text-lg relative">
             Adaugă dovada că ești medic
             <input
@@ -211,13 +217,15 @@ function index() {
             </div>
           )}
           <button
-            className="text-center bg-white text-c2 font-medium px-10 py-3 rounded-lg mt-10 w-4/6 self-center"
+            className="text-center bg-white text-c2 font-medium px-10 py-3 rounded-lg mt-10 w-5/6 self-center max-w-xs"
             onClick={handleSubmit}
           >
             Submit
           </button>
           {errors.dovada && (
-            <p className="mt-4 text-base w-full text-center">{errors.dovada}</p>
+            <p className="mt-4 text-base w-full text-center max-w-lg">
+              {errors.dovada}
+            </p>
           )}
         </div>
       )}

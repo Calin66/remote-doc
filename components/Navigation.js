@@ -1,12 +1,17 @@
 import { useAuth } from "@/context/AuthContext";
 import Cookies from "js-cookie";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
 
 export default function Navigation() {
   const [openModal, setOpenModal] = useState(false);
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
+
+  const router = useRouter();
+
+  const role = Cookies.get("role");
 
   const links = [
     {
@@ -26,18 +31,25 @@ export default function Navigation() {
       href: "/setari",
     },
   ];
+  const pacientLinks = [];
 
   return (
     <>
-      {openModal && <Modal setOpenModal={setOpenModal} links={links} />}
+      {openModal && (
+        <Modal
+          setOpenModal={setOpenModal}
+          links={links}
+          pacientLinks={pacientLinks}
+        />
+      )}
 
       <div className="sticky top-0 w-full left-0 bg-inherit flex items-center justify-between px-10 py-5 border-b border-solid border-c2 text-lg">
         <Link href="/" className=" text-xl font-semibold">
           Remote Doc
         </Link>
-        {currentUser ? (
+        {role === "medic" && (
           <>
-            <div className="md:flex justify-center items-center  hidden">
+            <div className="md:flex justify-center items-center hidden">
               {links.map((link, i) => (
                 <Link key={i} className="px-4" href={link.href}>
                   {link.title}
@@ -50,7 +62,24 @@ export default function Navigation() {
               onClick={() => setOpenModal(true)}
             ></i>
           </>
-        ) : (
+        )}
+        {role === "pacient" && (
+          <>
+            <div className="md:flex justify-center items-center hidden">
+              {pacientLinks.map((link, i) => (
+                <Link key={i} className="px-4" href={link.href}>
+                  {link.title}
+                </Link>
+              ))}
+            </div>
+
+            <i
+              className="fa-solid fa-bars text-3xl md:hidden"
+              onClick={() => setOpenModal(true)}
+            ></i>
+          </>
+        )}
+        {!role && (
           <div>
             <div className=" hidden sm:block">
               <Link
@@ -72,11 +101,12 @@ export default function Navigation() {
             ></i>
           </div>
         )}
-        {currentUser && (
+        {role && (
           <div className="hidden md:inline-block">
             <button
               onClick={() => {
                 logout();
+                router.push("/");
                 setOpenModal(false);
               }}
               className="bg-red-600 py-2 w-32 text-white rounded-lg text-lg text-center hidden md:inline-block hover:bg-red-700"

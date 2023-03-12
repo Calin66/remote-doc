@@ -15,12 +15,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {currentUser ? (
-        <>
-          <h1>JONULE TE-AI LOGAT</h1>
-        </>
+        <h1>JONULE TE-AI LOGAT</h1>
       ) : (
         <div className="text-center flex flex-col">
-          <h1 className="text-2xl mt-10">
+          <h1 className="text-2xl">
             Scapa de cozile interminabile de la medicul de familie.
           </h1>
           <h2 className="text-2xl mt-10">Fa ti cont pentru a incepe</h2>
