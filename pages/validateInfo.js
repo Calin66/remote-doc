@@ -71,3 +71,18 @@ export function validateNewPacientInfoJOURNEY(values) {
 
   return errors;
 }
+export function validateNewAsistentInfo(values) {
+  let errors = {};
+  if (!values.nume) {
+    errors.nume = "Câmp obligatoriu";
+  }
+
+  // if (!values.program_cabinet) {
+  //   errors.program_clinica = "Câmp obligatoriu";
+  // }
+  // if (!values.program_domiciliu) {
+  //   errors.program_domiciliu = "Câmp obligatoriu";
+  // }
+
+  return errors;
+}
