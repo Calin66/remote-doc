@@ -1,5 +1,7 @@
 import { db } from "@/firebase";
-import useFetchDateMedic from "@/hooks/fetchDateSetari";
+import useFetchDateMedic, {
+  useFetchDatePacient,
+} from "@/hooks/fetchDateSetari";
 import { getAuth } from "firebase/auth";
 import { deleteField, doc, setDoc } from "firebase/firestore";
 import Cookies from "js-cookie";
@@ -8,6 +10,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import {
   validateDateMedic,
+  validateDatePacient,
   validateEditAsistentInfo,
   validateNewAsistentInfo,
 } from "../validateInfo";
@@ -523,12 +526,134 @@ function index() {
               </button>
             </div>
           )}
-
-          {role === "pacient" && <div>indexpacient</div>}
         </div>
       )}
+      {role === "pacient" && <SetariPacient />}
     </>
   );
 }
+const SetariPacient = () => {
+  const labels = {
+    nume: "Nume complet",
+    email: "Adresă email",
+    telefon: "Nr. telefon",
+    cnp: "CNP",
+  };
+
+  const [valuesLocal, setValuesLocal] = useState({
+    nume: "",
+    email: "",
+    telefon: "",
+    cnp: "",
+  });
+
+  const [valoriDb, setValoriDb] = useState({
+    nume: "",
+    email: "",
+    telefon: "",
+    cnp: "",
+  });
+
+  const { date, handleEditDate, errorP, loadingP } =
+    useFetchDatePacient(valuesLocal);
+
+  const [errors, setErrors] = useState({});
+  const [clasa, setClasa] = useState(false);
+  const [isSubmittingAici, setIsSubmittingAici] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValuesLocal({
+      ...valuesLocal,
+      [name]: value,
+    });
+  };
+
+  const handleClasa = async () => {
+    if (clasa === true) {
+      setIsSubmittingAici(true);
+      setErrors(validateDatePacient(valuesLocal));
+    } else {
+      setClasa(!clasa);
+    }
+  };
+
+  //   const handleNewAsistentImageChange = () => {};
+
+  useEffect(() => {
+    console.log("errors", errors);
+    if (Object.keys(errors).length === 0 && isSubmittingAici) {
+      console.log("AM INCEPUT");
+
+      const asasdasda = async () => {
+        await handleEditDate(valuesLocal, valoriDb);
+        setValoriDb(valuesLocal);
+      };
+      asasdasda();
+      setIsSubmittingAici(false);
+      setClasa(!clasa);
+    }
+  }, [errors, isSubmittingAici]);
+
+  useEffect(() => {
+    setValoriDb(date);
+    setValuesLocal(date);
+  }, [date]);
+
+  return (
+    <div className="mt-14 min-h-hatz">
+      <div className=" w-full">
+        {Object.keys(valuesLocal).map((val, i) => {
+          return (
+            <div key={i} className="w-full mb-20">
+              <label className=" text-xl font-medium duration-300 text-black w-full">
+                {labels[val]}
+                {clasa ? (
+                  <input
+                    key={i}
+                    type="text"
+                    name={val}
+                    value={valuesLocal[val]}
+                    onChange={handleChange}
+                    className={
+                      errors[val]
+                        ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-blue-100 border-b-2 p-2"
+                        : "outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2"
+                    }
+                  />
+                ) : (
+                  <input
+                    readOnly
+                    key={i}
+                    type="text"
+                    name={val}
+                    value={valuesLocal[val]}
+                    className="outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2"
+                  />
+                )}
+              </label>
+
+              {/* <i className="fa-solid fa-pen-to-square"></i> */}
+            </div>
+          );
+        })}
+      </div>
+      <button className="text-center text-red-500 font-medium p-3 rounded-lg w-5/6 self-center max-w-xs border mb-3 border-red-500">
+        Vreau să mă transfer la alt medic de familie
+      </button>
+      <button
+        onClick={handleClasa}
+        className=" bg-c2 font-bold text-2xl flex align-middle justify-center
+            rounded-full w-16 h-16 center text-white fixed bottom-8 right-4 md:right-14 md:top-12"
+      >
+        {clasa ? (
+          <i className="fa-solid fa-check self-center text-2xl"></i>
+        ) : (
+          <i className="fa-solid fa-pen self-center text-xl"></i>
+        )}
+      </button>
+    </div>
+  );
+};
 
 export default index;

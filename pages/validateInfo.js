@@ -124,3 +124,23 @@ export function validateDateMedic(values) {
 
   return errors;
 }
+
+export function validateDatePacient(values) {
+  let errors = {};
+  if (!values.nume) {
+    errors.nume = "Câmp obligatoriu";
+  }
+  if (!values.email) {
+    errors.email = "Câmp obligatoriu";
+  } else if (!/^[A-Z0-9._%+=]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+    errors.email = "Adresa de email nu este validă";
+  }
+  if (!values.telefon) {
+    errors.telefon = "Câmp obligatoriu";
+  }
+  if (!values.cnp) {
+    errors.cnp = "Câmp obligatoriu";
+  }
+
+  return errors;
+}

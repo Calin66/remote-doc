@@ -6,7 +6,7 @@ export default function Layout(props) {
   return (
     <div className="flex flex-col min-h-screen relative">
       <Navigation />
-      <main className="flex-1 flex flex-col p-4 px-10 content-center justify-center align-center items-center align-middle">
+      <main className="flex-1 flex flex-col p-4 px-miniHatz content-center justify-center align-center items-center align-middle">
         {children}
       </main>
     </div>

@@ -78,6 +78,7 @@ const Post = () => {
               nume: values.nume,
               email: values.email,
               telefon: values.telefon,
+              cnp: "",
               uid: user.uid,
               doc_uid: doc_uid,
             },
