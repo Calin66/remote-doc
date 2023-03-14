@@ -77,12 +77,12 @@ export function validateNewAsistentInfo(values) {
     errors.nume = "Câmp obligatoriu";
   }
 
-  // if (!values.program_cabinet) {
-  //   errors.program_clinica = "Câmp obligatoriu";
-  // }
-  // if (!values.program_domiciliu) {
-  //   errors.program_domiciliu = "Câmp obligatoriu";
-  // }
+  if (!values.program_clinica) {
+    errors.program_clinica = "Câmp obligatoriu";
+  }
+  if (!values.program_domiciliu) {
+    errors.program_domiciliu = "Câmp obligatoriu";
+  }
 
   return errors;
 }

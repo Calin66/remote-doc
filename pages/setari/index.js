@@ -1,17 +1,20 @@
+import { db } from "@/firebase";
 import useFetchDateMedic from "@/hooks/fetchDateSetari";
+import { getAuth } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { validateNewAsistentInfo } from "../validateInfo";
 
-function NewAsistent({ handlePas }) {
+function NewAsistent({ handlePas, valuesLocal }) {
   const [valoriAsistent, setValoriAsistent] = useState({
     nume: "",
     program_clinica: "",
     program_domiciliu: "",
   });
-  const [erorsNewAsistent, setErrorsNewAsistent] = useState({});
-
+  const [errorsNewAsistent, setErrorsNewAsistent] = useState({});
+  const [isSubmittingNA, setIsSubmittingNA] = useState(false);
   const handleNewAsistentChange = (e) => {
     const { name, value } = e.target;
     setValoriAsistent({
@@ -21,7 +24,41 @@ function NewAsistent({ handlePas }) {
   };
   const handleNewAsistent = () => {
     setErrorsNewAsistent(validateNewAsistentInfo(valoriAsistent));
+    setIsSubmittingNA(true);
   };
+
+  console.log("v in prima functie", valuesLocal);
+
+  const upd = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const newKey =
+      Object.keys(valuesLocal.asistenti).length === 0
+        ? 1
+        : Math.max(...Object.keys(valuesLocal.asistenti)) + 1;
+    await setDoc(
+      doc(db, "medici", user.uid),
+      {
+        asistenti: {
+          ...valuesLocal.asistenti,
+          [newKey]: {
+            nume: valoriAsistent.nume,
+            program_clinica: valoriAsistent.program_clinica,
+            program_domiciliu: valoriAsistent.program_domiciliu,
+          },
+        },
+      },
+      { merge: true }
+    );
+    handleChangeA();
+
+    console.log("Update done");
+  };
+  useEffect(() => {
+    if (Object.keys(errorsNewAsistent).length === 0 && isSubmittingNA) {
+      upd();
+    }
+  }, [errorsNewAsistent, isSubmittingNA]);
 
   return (
     <div className="w-full flex flex-col">
@@ -43,9 +80,9 @@ function NewAsistent({ handlePas }) {
         className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg self-center"
       />
 
-      {erorsNewAsistent.nume && (
+      {errorsNewAsistent.nume && (
         <p className=" text-base text-c2 w-full p-2 self-center max-w-lg">
-          {erorsNewAsistent.nume}
+          {errorsNewAsistent.nume}
         </p>
       )}
 
@@ -58,6 +95,12 @@ function NewAsistent({ handlePas }) {
         className="mt-14 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg self-center"
       />
 
+      {errorsNewAsistent.program_clinica && (
+        <p className=" text-base text-c2 w-full p-2 self-center max-w-lg">
+          {errorsNewAsistent.program_clinica}
+        </p>
+      )}
+
       <input
         type="text"
         name="program_domiciliu"
@@ -66,6 +109,12 @@ function NewAsistent({ handlePas }) {
         placeholder="Program la domiciliu"
         className="mt-14 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg self-center"
       />
+
+      {errorsNewAsistent.program_domiciliu && (
+        <p className=" text-base text-c2 w-full p-2 self-center max-w-lg">
+          {errorsNewAsistent.program_domiciliu}
+        </p>
+      )}
 
       <button
         className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-24 w-5/6 mb-5 self-center max-w-xs"
@@ -83,7 +132,7 @@ function NewAsistent({ handlePas }) {
   );
 }
 
-function AsistentCard(asistent) {
+function AsistentCard({ asistent }) {
   return (
     <div className="border border-c3 px-3 py-3 my-4 rounded-lg flex">
       {/* <Image
@@ -101,8 +150,9 @@ function AsistentCard(asistent) {
 }
 
 function index() {
-  const [pas, setPas] = useState(true);
+  const [pas, setPas] = useState(false);
   const role = Cookies.get("role");
+
   const labels = {
     nume: "Nume complet",
     email: "Adresa email",
@@ -111,6 +161,7 @@ function index() {
     program_domiciliu: "Program la domiciliu",
     locatie_clinica: "Adresa clinicii",
   };
+
   const [valuesLocal, setValuesLocal] = useState({
     nume: "",
     email: "",
@@ -118,8 +169,9 @@ function index() {
     program_clinica: "",
     program_domiciliu: "",
     locatie_clinica: "",
-    asistenti: [],
+    asistenti: {},
   });
+
   const [valoriDb, setValoriDb] = useState({
     nume: "",
     email: "",
@@ -127,7 +179,7 @@ function index() {
     program_clinica: "",
     program_domiciliu: "",
     locatie_clinica: "",
-    asistenti: [],
+    asistenti: {},
   });
   const { date, handleEditDate, errorD, loadingD } =
     useFetchDateMedic(valuesLocal);
@@ -148,11 +200,15 @@ function index() {
 
   const handleClasa = async () => {
     if (clasa === true) {
-      ("am intrat in handle clasa si in if");
       await handleEditDate(valuesLocal, valoriDb);
       setValoriDb(valuesLocal);
     }
     setClasa(!clasa);
+  };
+
+  const handleChangeA = (asistent) => {
+    console.log("ACCI");
+    setValuesLocal(valoriDb);
   };
 
   //   const handleNewAsistentImageChange = () => {};
@@ -163,7 +219,7 @@ function index() {
   }, [date]);
 
   if (!loadingD && role === "medic" && pas)
-    return <NewAsistent handlePas={handlePas} />;
+    return <NewAsistent handlePas={handlePas} handleChangeA={handleChangeA} />;
   return (
     <>
       {!loadingD && (
@@ -211,9 +267,17 @@ function index() {
                   </button>
                 </div>
                 <div className="flex flex-col">
-                  {valuesLocal.asistenti?.map((asistent, i) => {
-                    return <AsistentCard asistent={asistent} key={i} />;
-                  })}
+                  {valuesLocal.asistenti &&
+                    Object.keys(valuesLocal.asistenti)?.map((asistent, i) => {
+                      console.log("vla", valuesLocal.asistenti);
+                      console.log("a", asistent);
+                      return (
+                        <AsistentCard
+                          asistent={valuesLocal.asistenti[asistent]}
+                          key={i}
+                        />
+                      );
+                    })}
                 </div>
               </div>
               <button
