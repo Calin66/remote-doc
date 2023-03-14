@@ -7,6 +7,7 @@ import _ from "lodash";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import {
+  validateDateMedic,
   validateEditAsistentInfo,
   validateNewAsistentInfo,
 } from "../validateInfo";
@@ -163,6 +164,7 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
     program_clinica: "Program la clinică",
     program_domiciliu: "Program la domiciliu",
   };
+
   const [valuesLocal, setValuesLocal] = useState({
     nume: asistent.nume,
     program_clinica: asistent.program_clinica,
@@ -189,10 +191,6 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
     });
   };
 
-  const handleSubmitAsistent = () => {
-    setIsSubmittingEditAsistent(true);
-    setErrorsEditAsistent(validateEditAsistentInfo(valuesLocal));
-  };
   const handleDateAsistent = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
@@ -216,9 +214,9 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
 
   const handleClasa = async () => {
     if (clasa === true) {
-      handleSubmitAsistent();
-    }
-    setClasa(!clasa);
+      setIsSubmittingEditAsistent(true);
+      setErrorsEditAsistent(validateEditAsistentInfo(valuesLocal));
+    } else setClasa(!clasa);
   };
 
   const deleteAsistent = async () => {
@@ -241,6 +239,7 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
     handleSetPag(null, null, null, valuesLocal.cheie);
   };
   useEffect(() => {
+    console.log(errorsEditAsistent);
     if (
       Object.keys(errorsEditAsistent).length === 0 &&
       isSubmittingEditAsistent
@@ -251,13 +250,16 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
       } else {
         handleDateAsistent();
       }
+      setClasa(!clasa);
     }
   }, [errorsEditAsistent, isSubmittingEditAsistent]);
+
   if (asistent)
     return (
       <div className="w-full flex flex-col mt-14">
         <div className="w-full">
           {Object.keys(valuesLocal).map((val, i) => {
+            console.log("val", val);
             if (val !== "cheie")
               return (
                 <div key={i} className="flex w-full justify-between mb-20">
@@ -270,7 +272,11 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
                         name={val}
                         value={valuesLocal[val]}
                         onChange={handleChange}
-                        className="outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2"
+                        className={
+                          errorsEditAsistent[val]
+                            ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-blue-100 border-b-2 p-2"
+                            : "outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2"
+                        }
                       />
                     ) : (
                       <input
@@ -352,9 +358,9 @@ function index() {
   });
   const { date, handleEditDate, errorD, loadingD } =
     useFetchDateMedic(valuesLocal);
-
+  const [errors, setErrors] = useState({});
   const [clasa, setClasa] = useState(false);
-
+  const [isSubmittingAici, setIsSubmittingAici] = useState(false);
   const handlePas = () => {
     setPas(!pas);
   };
@@ -389,10 +395,12 @@ function index() {
 
   const handleClasa = async () => {
     if (clasa === true) {
-      await handleEditDate(valuesLocal, valoriDb);
-      setValoriDb(valuesLocal);
+      //AAAA
+      setIsSubmittingAici(true);
+      setErrors(validateDateMedic(valuesLocal));
+    } else {
+      setClasa(!clasa);
     }
-    setClasa(!clasa);
   };
 
   const handleChangeA = (asistent) => {
@@ -401,6 +409,20 @@ function index() {
   };
 
   //   const handleNewAsistentImageChange = () => {};
+  useEffect(() => {
+    console.log("errors", errors);
+    if (Object.keys(errors).length === 0 && isSubmittingAici) {
+      console.log("AM INCEPUT");
+      const asasdasda = async () => {
+        await handleEditDate(valuesLocal, valoriDb);
+        setValoriDb(valuesLocal);
+      };
+      asasdasda();
+      setIsSubmittingAici(false);
+      setClasa(!clasa);
+    }
+  }, [errors, isSubmittingAici]);
+
   useEffect(() => {
     setValoriDb(date);
     setValuesLocal(date);
@@ -432,8 +454,8 @@ function index() {
               {Object.keys(valuesLocal).map((val, i) => {
                 if (val !== "asistenti")
                   return (
-                    <div key={i} className="flex w-full justify-between mb-20">
-                      <label className=" text-xl font-medium duration-300 text-black self-center">
+                    <div key={i} className="w-full mb-20">
+                      <label className=" text-xl font-medium duration-300 text-black w-full">
                         {labels[val]}
                         {clasa ? (
                           <input
@@ -442,7 +464,11 @@ function index() {
                             name={val}
                             value={valuesLocal[val]}
                             onChange={handleChange}
-                            className="outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2"
+                            className={
+                              errors[val]
+                                ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-blue-100 border-b-2 p-2"
+                                : "outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2"
+                            }
                           />
                         ) : (
                           <input
@@ -455,6 +481,7 @@ function index() {
                           />
                         )}
                       </label>
+
                       {/* <i className="fa-solid fa-pen-to-square"></i> */}
                     </div>
                   );

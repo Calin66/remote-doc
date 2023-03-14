@@ -101,3 +101,26 @@ export function validateEditAsistentInfo(values) {
 
   return errors;
 }
+
+export function validateDateMedic(values) {
+  let errors = {};
+  if (!values.nume) {
+    errors.nume = "Câmp obligatoriu";
+  }
+  if (!values.email) {
+    errors.email = "Câmp obligatoriu";
+  } else if (!/^[A-Z0-9._%+=]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+    errors.email = "Adresa de email nu este validă";
+  }
+  // if (!values.nume_clinica) {
+  //   errors.nume_clinica = "Câmp obligatoriu";
+  // }
+  // if (!values.program_clinica) {
+  //   errors.program_clinica = "Câmp obligatoriu";
+  // }
+  // if (!values.program_domiciliu) {
+  //   errors.program_domiciliu = "Câmp obligatoriu";
+  // }
+
+  return errors;
+}
