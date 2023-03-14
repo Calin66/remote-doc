@@ -19,7 +19,7 @@ function CalendarDay(programari) {
             }
             {
                 programari.map(programare=>(
-                    <Link href={"view/"+programare.id} style=
+                    <Link key={programare.id} href={"view/"+programare.id} style=
                     {
                         {
                             top:Math.floor(programare.start_minute*hour_pixel_per_minute)+"px",
