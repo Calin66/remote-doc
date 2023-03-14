@@ -15,9 +15,9 @@ export default function PacientCard(props) {
   } = props;
   useEffect(() => {
     const hatz =
-      "rounded-lg p-2 mt-4 first-letter flex justify-between items-center";
+      "rounded-lg px-4 py-2 mt-4 first-letter flex justify-between items-center";
     if (!activate) setCl(`bg-gray-200 ${hatz}`);
-    else setCl(`border-gray ${hatz}`);
+    else setCl(`border border-black ${hatz}`);
   }, []);
 
   return (

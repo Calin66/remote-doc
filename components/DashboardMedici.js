@@ -161,7 +161,7 @@ export default function DashboardMedici() {
             <h2 className="text-xl">Pacienti confirmati</h2>
             <div>
               {Object.keys(pacienti).map((pacient, i) => {
-                if (pacient.activate)
+                if (pacienti[pacient].activate)
                   return (
                     <PacientCard activate={pacienti[pacient].activate} key={i}>
                       {pacienti[pacient]}
@@ -175,9 +175,9 @@ export default function DashboardMedici() {
             <h2 className="text-xl">Pacienti neconfirmati</h2>
             <div>
               {Object.keys(pacienti).map((pacient, i) => {
-                if (!pacient.activate)
+                if (!pacienti[pacient].activate)
                   return (
-                    <PacientCard activate={pacient.activate} key={i}>
+                    <PacientCard activate={pacienti[pacient].activate} key={i}>
                       {pacienti[pacient]}
                     </PacientCard>
                   );
