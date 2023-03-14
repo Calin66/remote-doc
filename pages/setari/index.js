@@ -1,11 +1,15 @@
 import { db } from "@/firebase";
 import useFetchDateMedic from "@/hooks/fetchDateSetari";
 import { getAuth } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { deleteField, doc, setDoc } from "firebase/firestore";
 import Cookies from "js-cookie";
+import _ from "lodash";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { validateNewAsistentInfo } from "../validateInfo";
+import {
+  validateEditAsistentInfo,
+  validateNewAsistentInfo,
+} from "../validateInfo";
 
 function NewAsistent({ handlePas, valuesLocal }) {
   const [valoriAsistent, setValoriAsistent] = useState({
@@ -27,11 +31,10 @@ function NewAsistent({ handlePas, valuesLocal }) {
     setIsSubmittingNA(true);
   };
 
-  console.log("v in prima functie", valuesLocal);
-
   const upd = async () => {
     const auth = getAuth();
     const user = auth.currentUser;
+
     const newKey =
       Object.keys(valuesLocal.asistenti).length === 0
         ? 1
@@ -51,6 +54,7 @@ function NewAsistent({ handlePas, valuesLocal }) {
       { merge: true }
     );
     handleChangeA();
+    handlePas();
 
     console.log("Update done");
   };
@@ -132,9 +136,12 @@ function NewAsistent({ handlePas, valuesLocal }) {
   );
 }
 
-function AsistentCard({ asistent }) {
+function AsistentCard({ asistent, handleSetPag, cheie }) {
   return (
-    <div className="border border-c3 px-3 py-3 my-4 rounded-lg flex">
+    <div
+      className="border-2 border-c1 px-3 py-2 mb-3 rounded-lg flex justify-between items-center"
+      onClick={() => handleSetPag(asistent, cheie)}
+    >
       {/* <Image
         width={10}
         height={10}
@@ -144,10 +151,171 @@ function AsistentCard({ asistent }) {
       {/* <div className="bg-c3 text-white rounded-full flex items-center justify-center p-3 text-xl">
         <i className="fa-solid fa-user"></i>
       </div> */}
-      <p>{asistent.nume}</p>
+      <p className="font-medium">{asistent.nume}</p>
+      <i className="fa-solid fa-user-pen"></i>
     </div>
   );
 }
+
+const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
+  const labels = {
+    nume: "Nume complet",
+    program_clinica: "Program la clinică",
+    program_domiciliu: "Program la domiciliu",
+  };
+  const [valuesLocal, setValuesLocal] = useState({
+    nume: asistent.nume,
+    program_clinica: asistent.program_clinica,
+    program_domiciliu: asistent.program_domiciliu,
+    cheie: asistent.cheie,
+  });
+  const valuesDB = {
+    nume: asistent.nume,
+    program_clinica: asistent.program_clinica,
+    program_domiciliu: asistent.program_domiciliu,
+    cheie: asistent.cheie,
+  };
+  const [clasa, setClasa] = useState(false);
+  const [isSubmittingEditAsistent, setIsSubmittingEditAsistent] =
+    useState(false);
+
+  const [errorsEditAsistent, setErrorsEditAsistent] = useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setValuesLocal({
+      ...valuesLocal,
+      [name]: value,
+    });
+  };
+
+  const handleSubmitAsistent = () => {
+    setIsSubmittingEditAsistent(true);
+    setErrorsEditAsistent(validateEditAsistentInfo(valuesLocal));
+  };
+  const handleDateAsistent = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    await setDoc(
+      doc(db, "medici", user.uid),
+      {
+        asistenti: {
+          ...valuesBig.asistenti,
+          [asistent.cheie]: {
+            nume: valuesLocal.nume,
+            program_clinica: valuesLocal.program_clinica,
+            program_domiciliu: valuesLocal.program_domiciliu,
+          },
+        },
+      },
+      { merge: true }
+    );
+    handleSetPag(null, null, valuesLocal);
+  };
+
+  const handleClasa = async () => {
+    if (clasa === true) {
+      handleSubmitAsistent();
+    }
+    setClasa(!clasa);
+  };
+
+  const deleteAsistent = async () => {
+    console.log("valuesLocal", valuesLocal);
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    await setDoc(
+      doc(db, "medici", user.uid),
+      {
+        asistenti: {
+          ...valuesBig.asistenti,
+          [asistent.cheie]: deleteField(),
+        },
+      },
+      { merge: true }
+    );
+
+    handleSetPag(null, null, null, valuesLocal.cheie);
+  };
+  useEffect(() => {
+    if (
+      Object.keys(errorsEditAsistent).length === 0 &&
+      isSubmittingEditAsistent
+    ) {
+      if (_.isEqual(valuesLocal, valuesDB)) {
+        console.log("Sunt egale nu am facut nimic");
+        handleSetPag();
+      } else {
+        handleDateAsistent();
+      }
+    }
+  }, [errorsEditAsistent, isSubmittingEditAsistent]);
+  if (asistent)
+    return (
+      <div className="w-full flex flex-col mt-14">
+        <div className="w-full">
+          {Object.keys(valuesLocal).map((val, i) => {
+            if (val !== "cheie")
+              return (
+                <div key={i} className="flex w-full justify-between mb-20">
+                  <label className=" text-xl font-medium duration-300 text-black self-center">
+                    {labels[val]}
+                    {clasa ? (
+                      <input
+                        key={i}
+                        type="text"
+                        name={val}
+                        value={valuesLocal[val]}
+                        onChange={handleChange}
+                        className="outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2"
+                      />
+                    ) : (
+                      <input
+                        readOnly
+                        key={i}
+                        type="text"
+                        name={val}
+                        value={valuesLocal[val]}
+                        className="outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2"
+                      />
+                    )}
+                  </label>
+                </div>
+              );
+          })}
+        </div>
+        <div className="flex w-screen border-t border-c2 py-4 justify-center fixed bottom-0 left-0 text-lg bg-white">
+          <button
+            className="text-center text-red-500 rounded-full w-14 h-14 border border-red-500 mr-8"
+            onClick={() => handleSetPag()}
+          >
+            <i className="fa-solid fa-arrow-left"></i>
+          </button>
+          <button
+            onClick={handleClasa}
+            className=" text-center text-c2 rounded-full w-14 h-14 border border-c2 mr-8"
+          >
+            {clasa ? (
+              <i className="fa-solid fa-check"></i>
+            ) : (
+              <i className="fa-solid fa-pen"></i>
+            )}
+          </button>
+
+          <button
+            onClick={deleteAsistent}
+            className="text-center text-red-500 rounded-full w-14 h-14 border border-red-500"
+          >
+            <i className="fa-solid fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    );
+  else return <div className="hidden"></div>;
+};
 
 function index() {
   const [pas, setPas] = useState(false);
@@ -172,6 +340,7 @@ function index() {
     asistenti: {},
   });
 
+  const [pag, setPag] = useState({});
   const [valoriDb, setValoriDb] = useState({
     nume: "",
     email: "",
@@ -188,6 +357,26 @@ function index() {
 
   const handlePas = () => {
     setPas(!pas);
+  };
+  const handleSetPag = (asistent, cheie, valoriA, del) => {
+    if (valoriA) {
+      setValuesLocal({
+        ...valuesLocal,
+        asistenti: {
+          ...valuesLocal.asistenti,
+          [valoriA.cheie]: valoriA,
+        },
+      });
+    } else if (del) {
+      const copie = valuesLocal;
+      delete copie.asistenti[del];
+      console.log("copie", copie);
+      console.log("del", del);
+      setValuesLocal(copie);
+    }
+    if (asistent) {
+      setPag({ ...asistent, cheie: cheie });
+    } else setPag({});
   };
 
   const handleChange = (e) => {
@@ -213,18 +402,32 @@ function index() {
 
   //   const handleNewAsistentImageChange = () => {};
   useEffect(() => {
-    // console.log("date in index.js", date);
     setValoriDb(date);
     setValuesLocal(date);
   }, [date]);
 
   if (!loadingD && role === "medic" && pas)
-    return <NewAsistent handlePas={handlePas} handleChangeA={handleChangeA} />;
+    return (
+      <NewAsistent
+        handlePas={handlePas}
+        handleChangeA={handleChangeA}
+        valuesLocal={valuesLocal}
+      />
+    );
+  if (role === "medic" && Object.keys(pag).length !== 0)
+    return (
+      <PaginaAsistent
+        handleSetPag={handleSetPag}
+        asistent={pag}
+        valuesBig={valuesLocal}
+      />
+    );
+
   return (
     <>
       {!loadingD && (
         <div className="mt-14 min-h-hatz">
-          {role === "medic" && !pas && (
+          {role === "medic" && Object.keys(pag).length === 0 && !pas && (
             <div className=" w-full">
               {Object.keys(valuesLocal).map((val, i) => {
                 if (val !== "asistenti")
@@ -266,14 +469,14 @@ function index() {
                     Adauga asistent
                   </button>
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col mt-4">
                   {valuesLocal.asistenti &&
                     Object.keys(valuesLocal.asistenti)?.map((asistent, i) => {
-                      console.log("vla", valuesLocal.asistenti);
-                      console.log("a", asistent);
                       return (
                         <AsistentCard
+                          handleSetPag={handleSetPag}
                           asistent={valuesLocal.asistenti[asistent]}
+                          cheie={asistent}
                           key={i}
                         />
                       );
@@ -293,7 +496,8 @@ function index() {
               </button>
             </div>
           )}
-          {role === "pacient" && <div>indexpacient</div>}{" "}
+
+          {role === "pacient" && <div>indexpacient</div>}
         </div>
       )}
     </>

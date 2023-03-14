@@ -64,15 +64,14 @@ export default function useFetchDateMedic(valuesLocal) {
             console.log("Schimb date la {}");
             setDate({});
           }
-          setLoadingD(false);
         } catch (err) {
           setErrorD("Failed to load medic data");
           console.log(err);
         }
+        setLoadingD(false);
       }
     }
     fetchData();
   }, []);
-  // console.log("date inainte de plecare", date);
   return { loadingD, errorD, date, handleEditDate };
 }
