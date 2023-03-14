@@ -43,7 +43,7 @@ export default function Navigation() {
         />
       )}
 
-      <div className="sticky top-0 w-full left-0 bg-inherit flex items-center justify-between px-10 py-5 border-b border-solid border-c2 text-lg">
+      <div className="sticky top-0 w-full left-0 bg-inherit flex items-center justify-between px-10 py-5 border-b-2 border-solid border-c2 bg-white text-lg">
         <Link href="/" className=" text-xl font-semibold">
           Remote Doc
         </Link>

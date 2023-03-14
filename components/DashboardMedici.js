@@ -14,7 +14,7 @@ export default function DashboardMedici() {
   const { pacienti, setPacienti, loading, error } = useFetchPacienti();
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  // console.log("pacienti,", pacienti);
   const [values, setValues] = useState({
     email: "",
     nume: "",
