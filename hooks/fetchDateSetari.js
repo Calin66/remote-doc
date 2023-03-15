@@ -112,7 +112,6 @@ export function useFetchDatePacient(valuesLocal) {
     async function fetchData() {
       if (Object.keys(date).length !== 0) {
         // console.log("date in fetch", date);
-        setLoadingP(false);
       } else if (currentUser && role === "pacient") {
         try {
           const docRef = doc(db, "pacienti", currentUser.uid);
@@ -135,10 +134,10 @@ export function useFetchDatePacient(valuesLocal) {
           setErrorP("Failed to load medic data");
           console.log(err);
         }
-        setLoadingP(false);
       }
     }
     fetchData();
+    setLoadingP(false);
   }, []);
   return { loadingP, errorP, date, handleEditDate };
 }

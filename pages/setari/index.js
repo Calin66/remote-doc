@@ -3,10 +3,18 @@ import useFetchDateMedic, {
   useFetchDatePacient,
 } from "@/hooks/fetchDateSetari";
 import { getAuth } from "firebase/auth";
-import { deleteField, doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteField,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
 import Cookies from "js-cookie";
 import _ from "lodash";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import {
   validateDateMedic,
@@ -131,7 +139,7 @@ function NewAsistent({ handlePas, valuesLocal }) {
         Submit
       </button>
       <button
-        className="text-center text-red-500 font-medium py-3 rounded-lg w-5/6 mb-5 self-center max-w-xs border border-red-500"
+        className="text-center text-c5 font-medium py-3 rounded-lg w-5/6 mb-5 self-center max-w-xs border border-c5"
         onClick={handlePas}
       >
         Cancel
@@ -298,7 +306,7 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
         </div>
         <div className="flex w-screen border-t border-c2 py-4 justify-center fixed bottom-0 left-0 text-lg bg-white">
           <button
-            className="text-center text-red-500 rounded-full w-14 h-14 border border-red-500 mr-8"
+            className="text-center text-c5 rounded-full w-14 h-14 border border-c5 mr-8"
             onClick={() => handleSetPag()}
           >
             <i className="fa-solid fa-arrow-left"></i>
@@ -316,7 +324,7 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
 
           <button
             onClick={deleteAsistent}
-            className="text-center text-red-500 rounded-full w-14 h-14 border border-red-500"
+            className="text-center text-c5 rounded-full w-14 h-14 border border-c5"
           >
             <i className="fa-solid fa-trash"></i>
           </button>
@@ -326,7 +334,7 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
   else return <div className="hidden"></div>;
 };
 
-function index() {
+export default function index() {
   const [pas, setPas] = useState(false);
   const role = Cookies.get("role");
 
@@ -413,7 +421,7 @@ function index() {
 
   //   const handleNewAsistentImageChange = () => {};
   useEffect(() => {
-    console.log("errors", errors);
+    // console.log("errors", errors);
     if (Object.keys(errors).length === 0 && isSubmittingAici) {
       console.log("AM INCEPUT");
       const asasdasda = async () => {
@@ -533,12 +541,16 @@ function index() {
   );
 }
 const SetariPacient = () => {
+  const router = useRouter();
+
   const labels = {
     nume: "Nume complet",
     email: "Adresă email",
     telefon: "Nr. telefon",
     cnp: "CNP",
   };
+
+  const [idMedic, setIdMedic] = useState("");
 
   const [valuesLocal, setValuesLocal] = useState({
     nume: "",
@@ -560,6 +572,10 @@ const SetariPacient = () => {
   const [errors, setErrors] = useState({});
   const [clasa, setClasa] = useState(false);
   const [isSubmittingAici, setIsSubmittingAici] = useState(false);
+  const [changeMedic, setChangeMedic] = useState(false);
+  const [confirmare, setConfirmare] = useState(false);
+  const [isSubmittingMediciF, setIsSubmittingMediciF] = useState(false);
+  const [errorsCM, setErrorsCM] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -567,6 +583,22 @@ const SetariPacient = () => {
       ...valuesLocal,
       [name]: value,
     });
+  };
+
+  const handleConfirmare = () => {
+    setConfirmare(!confirmare);
+    setChangeMedic(!changeMedic);
+  };
+
+  const handleChangeMedic = () => {
+    setChangeMedic(!changeMedic);
+  };
+
+  const handleChangeMedicF = () => {
+    if (!idMedic) {
+      setErrorsCM("Câmp obligatoriu");
+    }
+    setIsSubmittingMediciF(true);
   };
 
   const handleClasa = async () => {
@@ -578,10 +610,31 @@ const SetariPacient = () => {
     }
   };
 
-  //   const handleNewAsistentImageChange = () => {};
+  //   const handleNewAsistentImageChange = () => {}
+  const amnevoiedeasync = async () => {
+    const docRef = doc(db, "pacienti", idMedic);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  };
 
   useEffect(() => {
-    console.log("errors", errors);
+    // console.log(errorsCM);
+    // console.log("isSubmittingMediciF", isSubmittingMediciF);
+    if (Object.keys(errorsCM).length === 0 && isSubmittingMediciF) {
+      console.log("legit");
+      amnevoiedeasync();
+      setIsSubmittingMediciF(false);
+    }
+  }, [errorsCM, isSubmittingMediciF]);
+
+  useEffect(() => {
+    // console.log("errors", errors);
     if (Object.keys(errors).length === 0 && isSubmittingAici) {
       console.log("AM INCEPUT");
 
@@ -600,60 +653,125 @@ const SetariPacient = () => {
     setValuesLocal(date);
   }, [date]);
 
-  return (
-    <div className="mt-14 min-h-hatz">
-      <div className=" w-full">
-        {Object.keys(valuesLocal).map((val, i) => {
-          return (
-            <div key={i} className="w-full mb-20">
-              <label className=" text-xl font-medium duration-300 text-black w-full">
-                {labels[val]}
-                {clasa ? (
-                  <input
-                    key={i}
-                    type="text"
-                    name={val}
-                    value={valuesLocal[val]}
-                    onChange={handleChange}
-                    className={
-                      errors[val]
-                        ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-blue-100 border-b-2 p-2"
-                        : "outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2"
-                    }
-                  />
-                ) : (
-                  <input
-                    readOnly
-                    key={i}
-                    type="text"
-                    name={val}
-                    value={valuesLocal[val]}
-                    className="outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2"
-                  />
-                )}
-              </label>
+  if (!loadingP) {
+    console.log("confirmare", confirmare);
+    console.log("changeMedic", changeMedic);
 
-              {/* <i className="fa-solid fa-pen-to-square"></i> */}
-            </div>
-          );
-        })}
-      </div>
-      <button className="text-center text-red-500 font-medium p-3 rounded-lg w-5/6 self-center max-w-xs border mb-3 border-red-500">
-        Vreau să mă transfer la alt medic de familie
-      </button>
-      <button
-        onClick={handleClasa}
-        className=" bg-c2 font-bold text-2xl flex align-middle justify-center
-            rounded-full w-16 h-16 center text-white fixed bottom-8 right-4 md:right-14 md:top-12"
-      >
-        {clasa ? (
-          <i className="fa-solid fa-check self-center text-2xl"></i>
-        ) : (
-          <i className="fa-solid fa-pen self-center text-xl"></i>
-        )}
-      </button>
-    </div>
-  );
+    if (confirmare) {
+      return (
+        <div className="w-full flex flex-col">
+          <label className=" text-xl font-medium duration-300 text-black w-full">
+            Id-ul medicului la care vrei să te transferi
+            <input
+              type="text"
+              value={idMedic}
+              onChange={(e) => {
+                setIdMedic(e.target.value);
+              }}
+              className={
+                "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-orange-100 border-b-2 p-2"
+              }
+            />
+          </label>
+          {errorsCM && (
+            <p className="text-base text-c5 w-full p-2 self-center max-w-lg">
+              {errorsCM}
+            </p>
+          )}
+          <button
+            className="text-center text-xl bg-c4 text-white font-medium py-3 rounded-lg mt-14 w-5/6 mb-5 self-center max-w-xs"
+            onClick={handleChangeMedicF}
+          >
+            Submit
+          </button>
+        </div>
+      );
+    }
+
+    if (changeMedic) {
+      return (
+        <div className="w-full flex flex-col text-center text-xl">
+          <p>
+            <span className="font-medium text-c5">ATENȚIE!</span> Medicul de
+            familie nu poate fi schimbat decât o dată la 6 luni în afara
+            circumstanțelor excepționale.
+          </p>
+          <div className="w-full mt-10 flex">
+            <button
+              className="text-center text-c5 font-medium py-3 rounded-lg w-1/2  self-center max-w-xs border border-c5 mr-4"
+              onClick={handleChangeMedic}
+            >
+              Cancel
+            </button>
+            <button
+              className="text-center text-white bg-c5 font-medium py-3 rounded-lg w-1/2 self-center max-w-xs border border-c5"
+              onClick={handleConfirmare}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    if (!changeMedic) {
+      return (
+        <div className="mt-14 min-h-hatz">
+          <div className=" w-full flex flex-col ">
+            {Object.keys(valuesLocal).map((val, i) => {
+              return (
+                <div key={i} className="w-full mb-20">
+                  <label className=" text-xl font-medium duration-300 text-black w-full">
+                    {labels[val]}
+                    {clasa ? (
+                      <input
+                        key={i}
+                        type="text"
+                        name={val}
+                        value={valuesLocal[val]}
+                        onChange={handleChange}
+                        className={
+                          errors[val]
+                            ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-blue-100 border-b-2 p-2"
+                            : "outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2"
+                        }
+                      />
+                    ) : (
+                      <input
+                        readOnly
+                        key={i}
+                        type="text"
+                        name={val}
+                        value={valuesLocal[val]}
+                        className="outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2"
+                      />
+                    )}
+                  </label>
+
+                  {/* <i className="fa-solid fa-pen-to-square"></i> */}
+                </div>
+              );
+            })}
+            <button
+              className="text-center text-c5 font-medium p-3 rounded-lg w-3/6 self-center max-w-xs border mb-3 border-c5"
+              onClick={handleChangeMedic}
+            >
+              Vreau să mă transfer la alt medic de familie
+            </button>
+            <button
+              onClick={handleClasa}
+              className=" bg-c2 font-bold text-2xl flex align-middle justify-center
+          rounded-full w-16 h-16 center text-white fixed bottom-8 right-4 md:right-14 md:top-12"
+            >
+              {clasa ? (
+                <i className="fa-solid fa-check self-center text-2xl"></i>
+              ) : (
+                <i className="fa-solid fa-pen self-center text-xl"></i>
+              )}
+            </button>
+          </div>
+        </div>
+      );
+    }
+  }
 };
-
-export default index;
