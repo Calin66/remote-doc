@@ -109,6 +109,7 @@ const Post = () => {
                     [ij]: {
                       activate: true,
                       link: "",
+                      uid: user.uid,
                     },
                   },
                 },

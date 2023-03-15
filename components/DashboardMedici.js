@@ -62,7 +62,6 @@ export default function DashboardMedici() {
                 link: unique_id,
                 nume: values.nume,
                 activate: false,
-                email: values.email,
               },
             },
           },
@@ -105,54 +104,6 @@ export default function DashboardMedici() {
     setPas(!pas);
   };
 
-  // async function handleEditTodo() {
-  //   if (!edittedValue) {
-  //     return;
-  //   }
-  //   const newKey = edit;
-  //   setTodos({ ...todos, [newKey]: edittedValue });
-  //   const userRef = doc(db, "users", currentUser.uid);
-  //   await setDoc(
-  //     userRef,
-  //     {
-  //       todos: {
-  //         [newKey]: edittedValue,
-  //       },
-  //     },
-  //     { merge: true }
-  //   );
-  //   setEdit(null);
-  //   setEdittedValue("");
-  // }
-
-  // function handleAddEdit(todoKey) {
-  //   return () => {
-  //     console.log(todos[todoKey]);
-  //     console.log("bannan");
-  //     setEdit(todoKey);
-  //     setEdittedValue(todos[todoKey]);
-  //   };
-  // }
-
-  // function handleDelete(todoKey) {
-  //   return async () => {
-  //     const tempObj = { ...todos };
-  //     delete tempObj[todoKey];
-
-  //     setTodos(tempObj);
-  //     const userRef = doc(db, "users", currentUser.uid);
-  //     await setDoc(
-  //       userRef,
-  //       {
-  //         todos: {
-  //           [todoKey]: deleteField(),
-  //         },
-  //       },
-  //       { merge: true }
-  //     );
-  //   };
-  // }
-
   return (
     <div className=" md:w-1/2 self-center md:border border-c2 rounded-lg md:p-16 md:relative md:pb-20 w-full">
       {!loading && !pas && (
@@ -161,9 +112,14 @@ export default function DashboardMedici() {
             <h2 className="text-xl">Pacienti confirmati</h2>
             <div>
               {Object.keys(pacienti).map((pacient, i) => {
+                console.log(pacienti[pacient]);
                 if (pacienti[pacient].activate)
                   return (
-                    <PacientCard activate={pacienti[pacient].activate} key={i}>
+                    <PacientCard
+                      activate={pacienti[pacient].activate}
+                      key={i}
+                      id={pacienti[pacient].uid}
+                    >
                       {pacienti[pacient]}
                     </PacientCard>
                   );
