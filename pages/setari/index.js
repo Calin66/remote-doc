@@ -270,7 +270,7 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
       <div className="w-full flex flex-col mt-14">
         <div className="w-full">
           {Object.keys(valuesLocal).map((val, i) => {
-            console.log("val", val);
+            // console.log("val", val);
             if (val !== "cheie")
               return (
                 <div key={i} className="flex w-full justify-between mb-20">
@@ -387,8 +387,8 @@ export default function index() {
     } else if (del) {
       const copie = valuesLocal;
       delete copie.asistenti[del];
-      console.log("copie", copie);
-      console.log("del", del);
+      // console.log("copie", copie);
+      // console.log("del", del);
       setValuesLocal(copie);
     }
     if (asistent) {
@@ -415,7 +415,6 @@ export default function index() {
   };
 
   const handleChangeA = (asistent) => {
-    console.log("ACCI");
     setValuesLocal(valoriDb);
   };
 
@@ -548,6 +547,8 @@ const SetariPacient = () => {
     email: "Adresă email",
     telefon: "Nr. telefon",
     cnp: "CNP",
+    uid: "Id utilizator",
+    doc_uid: "Id medic",
   };
 
   const [idMedic, setIdMedic] = useState("");
@@ -557,6 +558,8 @@ const SetariPacient = () => {
     email: "",
     telefon: "",
     cnp: "",
+    uid: "",
+    doc_uid: "",
   });
 
   const [valoriDb, setValoriDb] = useState({
@@ -564,6 +567,8 @@ const SetariPacient = () => {
     email: "",
     telefon: "",
     cnp: "",
+    uid: "",
+    doc_uid: "",
   });
 
   const { date, handleEditDate, errorP, loadingP } =
@@ -612,14 +617,72 @@ const SetariPacient = () => {
 
   //   const handleNewAsistentImageChange = () => {}
   const amnevoiedeasync = async () => {
-    const docRef = doc(db, "pacienti", idMedic);
-    const docSnap = await getDoc(docRef);
+    try {
+      const docRef = doc(db, "medici", idMedic);
+      const docSnap = await getDoc(docRef);
+      const docRef2 = doc(db, "medici", valuesLocal.doc_uid);
+      const docSnap2 = await getDoc(docRef2);
 
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
+      if (docSnap.exists() && docSnap2.exists()) {
+        const pacientiMN = docSnap.data().pacienti;
+        const pacientiMV = docSnap2.data().pacienti;
+
+        const newKey =
+          Object.keys(pacientiMN).length === 0
+            ? 1
+            : Math.max(...Object.keys(pacientiMN)) + 1;
+
+        // console.log(pacientiMN);
+
+        console.log(pacientiMV);
+        const oldKey =
+          Object.keys(pacientiMV).find((pacient) => {
+            return pacientiMV[pacient].nume === valuesLocal.nume;
+          }) - "0";
+
+        console.log("newKey", newKey);
+        console.log("oldKey", oldKey);
+
+        await setDoc(
+          doc(db, "medici", valuesLocal.doc_uid),
+          {
+            pacienti: {
+              ...pacientiMV,
+              [oldKey]: deleteField(),
+            },
+          },
+          { merge: true }
+        );
+
+        await setDoc(
+          doc(db, "medici", idMedic),
+          {
+            pacienti: {
+              ...pacientiMN,
+              [newKey]: {
+                activate: true,
+                email: valuesLocal.email,
+                link: "",
+                nume: valuesLocal.nume,
+              },
+            },
+          },
+          { merge: true }
+        );
+
+        await setDoc(
+          doc(db, "pacienti", valuesLocal.uid),
+          {
+            doc_uid: idMedic,
+          },
+          { merge: true }
+        );
+      } else {
+        console.log("BRO NU AM GASIT");
+      }
+      router.push("/");
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -640,8 +703,10 @@ const SetariPacient = () => {
 
       const asasdasda = async () => {
         await handleEditDate(valuesLocal, valoriDb);
+
         setValoriDb(valuesLocal);
       };
+
       asasdasda();
       setIsSubmittingAici(false);
       setClasa(!clasa);
@@ -654,14 +719,19 @@ const SetariPacient = () => {
   }, [date]);
 
   if (!loadingP) {
-    console.log("confirmare", confirmare);
-    console.log("changeMedic", changeMedic);
+    // console.log("confirmare", confirmare);
+    // console.log("changeMedic", changeMedic);
 
     if (confirmare) {
       return (
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col text-justify">
           <label className=" text-xl font-medium duration-300 text-black w-full">
-            Id-ul medicului la care vrei să te transferi
+            Id-ul medicului la care vrei să te transferi{" "}
+            <span className="text-c5 font-normal text-lg">
+              <span>&#40;</span>
+              Fiecare persoană își poate vedea id-ul propriu în setări.
+              <span>&#41;</span>
+            </span>
             <input
               type="text"
               value={idMedic}
@@ -669,7 +739,7 @@ const SetariPacient = () => {
                 setIdMedic(e.target.value);
               }}
               className={
-                "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-orange-100 border-b-2 p-2"
+                "outline-none w-full max-w-lg font-normal text-lg mt-8  border-c5 bg-orange-100 border-b-2 p-2"
               }
             />
           </label>
@@ -679,7 +749,7 @@ const SetariPacient = () => {
             </p>
           )}
           <button
-            className="text-center text-xl bg-c4 text-white font-medium py-3 rounded-lg mt-14 w-5/6 mb-5 self-center max-w-xs"
+            className="text-center text-xl bg-white border border-c5 text-c5 font-medium py-3 rounded-lg mt-14 w-5/6 mb-5 self-center max-w-xs"
             onClick={handleChangeMedicF}
           >
             Submit
@@ -719,38 +789,40 @@ const SetariPacient = () => {
         <div className="mt-14 min-h-hatz">
           <div className=" w-full flex flex-col ">
             {Object.keys(valuesLocal).map((val, i) => {
-              return (
-                <div key={i} className="w-full mb-20">
-                  <label className=" text-xl font-medium duration-300 text-black w-full">
-                    {labels[val]}
-                    {clasa ? (
-                      <input
-                        key={i}
-                        type="text"
-                        name={val}
-                        value={valuesLocal[val]}
-                        onChange={handleChange}
-                        className={
-                          errors[val]
-                            ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-blue-100 border-b-2 p-2"
-                            : "outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2"
-                        }
-                      />
-                    ) : (
-                      <input
-                        readOnly
-                        key={i}
-                        type="text"
-                        name={val}
-                        value={valuesLocal[val]}
-                        className="outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2"
-                      />
-                    )}
-                  </label>
+              if (val !== "doc_uid")
+                return (
+                  <div key={i} className="w-full mb-20">
+                    <label className=" text-xl font-medium duration-300 text-black w-full">
+                      {labels[val]}
+                      {clasa ? (
+                        <input
+                          key={i}
+                          type="text"
+                          name={val}
+                          value={valuesLocal[val]}
+                          onChange={handleChange}
+                          className={
+                            errors[val]
+                              ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-blue-100 border-b-2 p-2"
+                              : "outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2"
+                          }
+                        />
+                      ) : (
+                        <input
+                          readOnly
+                          key={i}
+                          type="text"
+                          name={val}
+                          value={valuesLocal[val]}
+                          className="outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2"
+                        />
+                      )}
+                    </label>
 
-                  {/* <i className="fa-solid fa-pen-to-square"></i> */}
-                </div>
-              );
+                    {/* <i className="fa-solid fa-pen-to-square"></i> */}
+                  </div>
+                );
+              else return <div className="hidden" key={i}></div>;
             })}
             <button
               className="text-center text-c5 font-medium p-3 rounded-lg w-3/6 self-center max-w-xs border mb-3 border-c5"
