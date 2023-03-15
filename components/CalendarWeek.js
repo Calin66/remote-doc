@@ -20,12 +20,12 @@ function CalendarWeek(programari) {
   const pixel_per_day = 128;
 
   return (
-    <div className="overflow-auto box-border">
-      <table className="relative w-fit">
+    <div className="overflow-hidden box-border">
+      <table className="relative w-fit min-w-[900px]">
         <tr className="h-8 border-y-2">
-          <td className="w-[128px] border-l-2 px-2 text-center"></td>
+          <td className="w-[64px] border-l-2 px-2 text-center"></td>
           {daysOfWeek.map((day) => (
-            <td key={day} className="border-x-2 w-32 text-center">
+            <td key={day} className="border-x-2 w-[128px] text-center">
               {day}
             </td>
           ))}
@@ -50,7 +50,7 @@ function CalendarWeek(programari) {
               //height: getHeight(programare) + "px",
               left: 64 + (programare.day - 1) * pixel_per_day + "px",
             }}
-            className="text-lg absolute w-32 duration-150 ease-inout hover:b hover:w-64 bg-c2 text-white rounded-lg px-4 py-2 flex flex-col overflow-y-hidden weekCard"
+            className="text-lg absolute w-[128px] duration-150 ease-inout hover:b hover:w-64 bg-c2 text-white rounded-lg px-4 py-2 flex flex-col overflow-y-hidden weekCard"
           >
             {programare.name}
             {
