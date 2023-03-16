@@ -23,7 +23,7 @@ import {
   validateNewAsistentInfo,
 } from "../validateInfo";
 
-function NewAsistent({ handlePas, valuesLocal }) {
+function NewAsistent({ handlePas, valuesLocal, handleChangeA }) {
   const [valoriAsistent, setValoriAsistent] = useState({
     nume: "",
     program_clinica: "",
@@ -65,7 +65,7 @@ function NewAsistent({ handlePas, valuesLocal }) {
       },
       { merge: true }
     );
-    handleChangeA();
+    handleChangeA(valoriAsistent);
     handlePas();
 
     console.log("Update done");
@@ -369,12 +369,15 @@ export default function index() {
   });
   const { date, handleEditDate, errorD, loadingD } =
     useFetchDateMedic(valuesLocal);
+
   const [errors, setErrors] = useState({});
   const [clasa, setClasa] = useState(false);
   const [isSubmittingAici, setIsSubmittingAici] = useState(false);
+
   const handlePas = () => {
     setPas(!pas);
   };
+
   const handleSetPag = (asistent, cheie, valoriA, del) => {
     if (valoriA) {
       setValuesLocal({
@@ -415,7 +418,23 @@ export default function index() {
   };
 
   const handleChangeA = (asistent) => {
-    setValuesLocal(valoriDb);
+    const costel = valuesLocal;
+
+    console.log("asistent", asistent);
+    console.log("valuesLocal", valuesLocal);
+
+    const newKey =
+      Object.keys(valuesLocal.asistenti).length === 0
+        ? 1
+        : Math.max(...Object.keys(valuesLocal.asistenti)) + 1;
+
+    costel.asistenti = {
+      ...costel.asistenti,
+      [newKey]: asistent,
+    };
+
+    setValuesLocal(costel);
+    setValoriDb(costel);
   };
 
   //   const handleNewAsistentImageChange = () => {};

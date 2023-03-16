@@ -144,3 +144,33 @@ export function validateDatePacient(values) {
 
   return errors;
 }
+
+export function validateDatePacientInPacienti(values) {
+  let errors = {};
+
+  return errors;
+}
+
+export function validateDateConsultatie(values) {
+  let errors = {};
+  if (!values.data) {
+    errors.data = "Câmp obligatoriu";
+  }
+  if (!values.locul) {
+    errors.locul = "Câmp obligatoriu";
+  }
+  if (!values.simptome) {
+    errors.simptome = "Câmp obligatoriu";
+  }
+  if (!values.diagnostic) {
+    errors.diagnostic = "Câmp obligatoriu";
+  }
+  if (!values.cod) {
+    errors.cod = "Câmp obligatoriu";
+  }
+  if (!values.prescriptie) {
+    errors.prescriptie = "Câmp obligatoriu";
+  }
+
+  return errors;
+}
