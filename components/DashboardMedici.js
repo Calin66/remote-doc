@@ -112,7 +112,7 @@ export default function DashboardMedici() {
             <h2 className="text-xl">Pacienti confirmati</h2>
             <div>
               {Object.keys(pacienti).map((pacient, i) => {
-                console.log(pacienti[pacient]);
+                // console.log(pacienti[pacient]);
                 if (pacienti[pacient].activate)
                   return (
                     <PacientCard

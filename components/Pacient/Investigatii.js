@@ -1,6 +1,7 @@
 import { db } from "@/firebase";
 import { validateDateConsultatie } from "@/pages/validateInfo";
 import { doc, setDoc } from "firebase/firestore";
+import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
@@ -15,7 +16,7 @@ export function NewInvestigatie({ handlePage, id, newKey, handleChangeSus }) {
     simptome: "Simptome",
     diagnostic: "Diagnostic",
     cod: "Cod consultatie",
-    prescriptie: "Prescriptie",
+    prescriptie: "Prescriptie / Recomandări",
     nr_zile_medical: "Nr. zile concediu medical",
   };
 
@@ -187,33 +188,148 @@ export function NewInvestigatie({ handlePage, id, newKey, handleChangeSus }) {
   );
 }
 
-export function Investigatie({ investigatie }) {
+export function Investigatie({ investigatie, handlePageCI }) {
   const router = useRouter();
+
+  const labels = {
+    data: "Data consultatiei",
+    locul: "Unde a fost realizata consultatia",
+    simptome: "Simptome",
+    diagnostic: "Diagnostic",
+    cod: "Cod consultatie",
+    prescriptie: "Prescriptie / Recomandări",
+    nr_zile_medical: "Nr. zile concediu medical",
+  };
+  const [values, setValues] = useState({
+    data: investigatie.data,
+    locul: investigatie.locul,
+    simptome: investigatie.simptome,
+    diagnostic: investigatie.diagnostic,
+    prescriptie: investigatie.prescriptie,
+    nr_zile_medical: investigatie.nr_zile_medical,
+    cod: investigatie.cod,
+  });
+  // console.log("investigatie", investigatie);
 
   return (
     <div className="w-full">
-      <h1>PAAA</h1>
+      {Object.keys(values).map((val, i) => {
+        if (val === "nr_zile_medical") {
+          return (
+            <div key={i} className="w-full mb-20">
+              <label className=" text-xl font-medium duration-300 text-black w-full">
+                {labels[val]}
+                <input
+                  readOnly
+                  type="number"
+                  name={val}
+                  value={values[val]}
+                  className="outline-none w-full max-w-lg font-normal mt-4  border-c4 border-b-2 p-2"
+                />
+              </label>
+            </div>
+          );
+        } else if (val === "data") {
+          return (
+            <div key={i} className="w-full mb-20">
+              <label className=" text-xl font-medium duration-300 text-black w-full">
+                {labels[val]}
+                <input
+                  readOnly
+                  type="date"
+                  name={val}
+                  value={values[val]}
+                  className="outline-none w-full max-w-lg font-normal mt-4  border-c4 border-b-2 p-2"
+                />
+              </label>
+            </div>
+          );
+        } else if (
+          val === "simptome" ||
+          val === "diagnostic" ||
+          val === "prescriptie"
+        ) {
+          return (
+            <div key={i} className="w-full mb-20">
+              <label className=" text-xl font-medium duration-300 text-black w-full">
+                {labels[val]}
+                <textarea
+                  readOnly
+                  type="text"
+                  name={val}
+                  value={values[val]}
+                  className="outline-none w-full max-w-lg font-normal mt-4 h-28 text-base border-c4 bg-orange-50 border-b-2 p-2"
+                />
+              </label>
+            </div>
+          );
+        } else
+          return (
+            <div key={i} className="w-full mb-20">
+              <label className=" text-xl font-medium duration-300 text-black w-full">
+                {labels[val]}
+                <input
+                  readOnly
+                  type="text"
+                  name={val}
+                  value={values[val]}
+                  className="outline-none w-full max-w-lg font-normal mt-4  border-c4  border-b-2 p-2"
+                />
+              </label>
+            </div>
+          );
+      })}
+      <div className="fixed bottom-4 right-4 md:right-14 md:top-12 flex">
+        <button
+          onClick={() => handlePageCI()}
+          className=" bg-c5 text-lg flex align-middle justify-center
+            rounded-full w-12 h-12 center text-white"
+        >
+          <i className="fa-solid fa-arrow-left self-center"></i>
+        </button>
+        {/* <button
+          onClick={() => handlePage(2)}
+          className=" bg-c4 text-lg flex align-middle justify-center
+            rounded-full w-12 h-12 center text-white mr-3 "
+        >
+          <i className="fa-solid fa-file self-center"></i>
+        </button>
+        <button
+          onClick={handleClasa}
+          className=" bg-c2 text-lg flex align-middle justify-center
+            rounded-full w-12 h-12 center text-white"
+        >
+          <i className="fa-solid fa-check self-center"></i>
+        </button> */}
+      </div>
     </div>
   );
 }
 
 function Investigatii({ investigatii, handlePage, handlePageCI }) {
   const router = useRouter();
-  console.log("investigatii", investigatii);
+  // console.log("investigatii", investigatii);
+  const role = Cookies.get("role");
   if (investigatii) {
     return (
       <div className="">
-        <button
-          className=" bg-c1 p-2 mt-4 rounded-xl font-normal text-lg w-full"
-          onClick={() => handlePage(3)}
-        >
-          Adauga investigatie / consultatie
-        </button>
+        {role === "medic" && (
+          <button
+            className=" bg-c1 p-2 mt-4 rounded-xl font-normal text-lg w-full"
+            onClick={() => handlePage(3)}
+          >
+            Adauga investigatie / consultatie
+          </button>
+        )}
         {Object.keys(investigatii).map((val, i) => {
           return (
             <div
-              onClick={() => handlePageCI(val)}
-              className="w-full text-center border border-c1 mt-4 rounded-xl p-2"
+              onClick={() => handlePageCI(investigatii[val])}
+              className={
+                role === "medic"
+                  ? "w-full text-center border border-c1 mt-4 rounded-xl p-2"
+                  : "w-full text-center border border-c4 mt-4 rounded-xl p-2"
+              }
               key={i}
             >
               <p>{investigatii[val].data}</p>

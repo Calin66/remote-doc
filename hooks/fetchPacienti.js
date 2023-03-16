@@ -45,7 +45,7 @@ export function useFetchAllPacienti(idpn) {
   const { currentUser } = useAuth();
 
   useEffect(() => {
-    console.log("idpn", idpn);
+    // console.log("idpn", idpn);
 
     async function fetchData() {
       try {
@@ -54,8 +54,8 @@ export function useFetchAllPacienti(idpn) {
         querySnapshot.forEach((doc) => {
           const pacienti = doc.data().pacienti;
           Object.keys(pacienti).map((pacient, i) => {
-            console.log("pacient in fetchPacients", pacienti[pacient]);
-            console.log("link in fetchPacients", idpn);
+            // console.log("pacient in fetchPacients", pacienti[pacient]);
+            // console.log("link in fetchPacients", idpn);
             if (pacienti[pacient].link == idpn) {
               setStatuss(true);
               setDoc_uid(doc.data().uid);

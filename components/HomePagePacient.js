@@ -1,128 +1,41 @@
-import Investigatii, {
-  Investigatie,
-  NewInvestigatie,
-} from "@/components/Pacient/Investigatii";
-import { db } from "@/firebase";
-import useFetchPacient from "@/hooks/fetchDatePacient";
-import { useFetchDatePacient } from "@/hooks/fetchDateSetari";
-import { doc, getDoc } from "firebase/firestore";
-import { useRouter } from "next/router";
+import { useFetchPacientinPacient } from "@/hooks/fetchDatePacient";
 import React, { useEffect, useState } from "react";
-import { validateDatePacientInPacienti } from "../validateInfo";
+import Investigatii, { Investigatie } from "./Pacient/Investigatii";
 
-const index = (req) => {
-  const router = useRouter();
-  const [id, setId] = useState();
-
-  useEffect(() => {
-    const { id } = router.query;
-    setId(id);
-  }, [router]);
-
+function HomePagePacient() {
   const labels = {
-    uid: "Id-ul utilizatorului",
-    nume: "Nume",
-    prenume: "Prenume",
-    sexul: "Sexul",
-    telefon: "Nr. telefon",
-    email: "Adresă email",
-    cnp: "CNP",
-    uid: "Id utilizator",
-    doc_uid: "Id medic",
+    nume: "Nume Doctor",
+    prenume: "Prenume Doctor",
+    telefon: "Nr. telefon doctor",
+    email: "Email doctor",
     antecedente_heredocolaterale: "Antecedente heredocolaterale",
     antecedente_personale: "Antecedente personale",
     investigatii: "Consultații și investigații",
   };
 
   const [valuesLocal, setValuesLocal] = useState({
-    uid: "",
     nume: "",
     prenume: "",
-    sexul: "",
     telefon: "",
     email: "",
-    cnp: "",
-    act_identitate: "",
     antecedente_heredocolaterale: "",
     antecedente_personale: "",
     investigatii: {},
   });
 
-  const [valuesDb, setValuesDb] = useState({
-    id: "",
-    nume: "",
-    prenume: "",
-    sexul: "",
-    telefon: "",
-    email: "",
-    cnp: "",
-    act_identitate: "",
-    antecedente_heredocolaterale: "",
-    antecedente_personale: "",
-    investigatii: {},
-  });
-  // a se exclude in Object.keys return input type text
-  // sexul, act_identitate, antecedente_heredocolaterale, antecedente_personale investigatii
-
-  const { date, handleEditDate, error, loading } = useFetchPacient(
-    valuesLocal,
-    id
-  );
-
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [clasa, setClasa] = useState(false);
-
+  const { date, handleEditDate, error, loading } =
+    useFetchPacientinPacient(valuesLocal);
   const [page, setPage] = useState(0);
-  const [fisier, setFisier] = useState(null);
   const [pageCI, setPageCI] = useState(null);
-
-  const handleImageChange = (e) => {
-    const fileU = e.target.files[0];
-    setFisier(fileU);
-    // console.log("fileU", fileU);
-  };
 
   const handlePage = (nr) => {
     setPage(nr);
   };
 
-  const handleChangeSus = (valoriInv) => {
-    const costel = valuesLocal;
-
-    // console.log("asistent", valoriInv);
-    // console.log("valuesLocal", valuesLocal);
-
-    const newKey =
-      Object.keys(valuesLocal.investigatii).length === 0
-        ? 1
-        : Math.max(...Object.keys(valuesLocal.investigatii)) + 1;
-
-    costel.investigatii = {
-      ...costel.investigatii,
-      [newKey]: valoriInv,
-    };
-
-    setValuesLocal(costel);
-    setValuesDb(costel);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setValuesLocal({
-      ...valuesLocal,
-      [name]: value,
-    });
-  };
-
-  const handleClasa = async () => {
-    if (clasa === true) {
-      setIsSubmitting(true);
-      setErrors(validateDatePacientInPacienti(valuesLocal));
-    } else {
-      setClasa(!clasa);
-    }
+  const handleImageChange = (e) => {
+    const fileU = e.target.files[0];
+    setFisier(fileU);
+    // console.log("fileU", fileU);
   };
 
   const handlePageCI = (val) => {
@@ -134,23 +47,12 @@ const index = (req) => {
       handlePage(4);
     }
   };
-
   useEffect(() => {
     if (Object.keys(date).length) {
       // console.log("date", date);
-      setValuesDb(date);
       setValuesLocal(date);
     }
   }, [date]);
-
-  useEffect(() => {
-    if (Object.keys(errors).length === 0 && isSubmitting) {
-      handleEditDate(valuesLocal, valuesDb);
-      setIsSubmitting(false);
-      setClasa(!clasa);
-    }
-    // console.log("errors in [id].js", errors);
-  }, [errors, isSubmitting]);
 
   if (!loading)
     return (
@@ -179,28 +81,15 @@ const index = (req) => {
                   <div key={i} className="w-full mb-20">
                     <label className=" text-xl font-medium duration-300 text-black w-full">
                       {labels[val]}
-                      {clasa ? (
-                        <textarea
-                          onChange={handleChange}
-                          key={i}
-                          type="text"
-                          name={val}
-                          value={valuesLocal[val]}
-                          className={
-                            "outline-none w-full max-w-lg mt-4 bg-blue-100 border-c2 h-28 border-b-2 p-2 font-normal text-base"
-                          }
-                        />
-                      ) : (
-                        <textarea
-                          readOnly
-                          onChange={handleChange}
-                          key={i}
-                          type="text"
-                          name={val}
-                          value={valuesLocal[val]}
-                          className="outline-none w-full max-w-lg mt-4 bg-blue-50 border-c1 h-28 border-b-2 p-2 font-normal text-base"
-                        />
-                      )}
+
+                      <textarea
+                        readOnly
+                        key={i}
+                        type="text"
+                        name={val}
+                        value={valuesLocal[val]}
+                        className="outline-none w-full max-w-lg mt-4 bg-orange-50 border-c4 h-28 border-b-2 p-2 font-normal text-base"
+                      />
                     </label>
                   </div>
                 );
@@ -215,7 +104,7 @@ const index = (req) => {
                         type="text"
                         name={val}
                         value={valuesLocal[val]}
-                        className="outline-none w-full max-w-lg font-normal mt-4 border-c3 border-b-2 p-2"
+                        className="outline-none w-full max-w-lg font-normal mt-4 border-c1 border-b-2 p-2"
                       />
                     </label>
                   </div>
@@ -224,29 +113,11 @@ const index = (req) => {
             })}
             <div className="fixed bottom-4 right-4 md:right-14 md:top-12 flex">
               <button
-                onClick={() => router.push("/pacienti")}
-                className=" bg-c5 text-lg flex align-middle justify-center
-            rounded-full w-12 h-12 center text-white mr-3"
-              >
-                <i className="fa-solid fa-arrow-left self-center"></i>
-              </button>
-              <button
                 onClick={() => setPage(1)}
                 className=" bg-c4 text-lg flex align-middle justify-center
             rounded-full w-12 h-12 center text-white mr-3 "
               >
                 <i className="fa-solid fa-file self-center"></i>
-              </button>
-              <button
-                onClick={handleClasa}
-                className=" bg-c2 text-lg flex align-middle justify-center
-            rounded-full w-12 h-12 center text-white"
-              >
-                {clasa ? (
-                  <i className="fa-solid fa-check self-center"></i>
-                ) : (
-                  <i className="fa-solid fa-pen self-center"></i>
-                )}
               </button>
             </div>
           </div>
@@ -291,24 +162,12 @@ const index = (req) => {
             <p></p>
           </div>
         )}
-        {page === 3 && (
-          <NewInvestigatie
-            handlePage={handlePage}
-            id={id}
-            handleChangeSus={handleChangeSus}
-            newKey={
-              Object.keys(valuesLocal.investigatii).length === 0
-                ? 1
-                : Math.max(...Object.keys(valuesLocal.investigatii)) + 1
-            }
-          />
-        )}
         {page === 4 && pageCI && (
           <Investigatie investigatie={pageCI} handlePageCI={handlePageCI} />
         )}
       </div>
     );
   else return <div></div>;
-};
+}
 
-export default index;
+export default HomePagePacient;
