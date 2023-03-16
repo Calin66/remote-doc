@@ -17,8 +17,8 @@ function CreateAppointment() {
   const [date, setDate] = useState();
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
-  const [priority, setPriority] = useState();
-  const [notes, setNotes] = useState();
+  const [priority, setPriority] = useState("1");
+  const [notes, setNotes] = useState("");
   const { pacienti } = useFetchPacienti();
 
   const handleSubmit = (e) => {
@@ -34,6 +34,7 @@ function CreateAppointment() {
       notes,
     };
     const CreateAppointment = async (a) => {
+      console.log(a);
       try {
         const newAppointmentRef = await addDoc(collection(db, "programari"), a);
       } catch (error) {
@@ -65,6 +66,9 @@ function CreateAppointment() {
             onChange={(e) => setIdPacient(e.target.value)}
             className={inputClassName}
           >
+            <option disabled selected value="">
+              -- alege un pacient --
+            </option>
             {Object.keys(pacienti).map((p) => {
               const pc = pacienti[p];
               return <option value={pc.uid}>{pc.nume}</option>;
@@ -103,7 +107,9 @@ function CreateAppointment() {
             onChange={(e) => setPriority(e.target.value)}
             className={inputClassName}
           >
-            <option value="1">Normal</option>
+            <option value="1" selected>
+              Normal
+            </option>
             <option value="2">Ridicat</option>
             <option value="3">Urgent</option>
           </select>
