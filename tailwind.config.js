@@ -16,6 +16,9 @@ module.exports = {
       minHeight: {
         hatz: "85vh",
       },
+      padding: {
+        miniHatz: "9vw",
+      },
     },
   },
   plugins: [],

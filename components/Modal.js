@@ -19,7 +19,6 @@ export default function Modal(props) {
   if (!_document) {
     return null;
   }
-  // trb facuta navigatie si pt aia care nu au cont si pt pacienti si pt medici
   return ReactDom.createPortal(
     <div>
       {role === "medic" && (
