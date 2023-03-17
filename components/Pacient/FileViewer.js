@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
-function FileViewer({ handlePage }) {
+function FileViewer({ handlePage, files }) {
   const router = useRouter();
 
   const [errors, setErrors] = useState({});
@@ -19,23 +19,49 @@ function FileViewer({ handlePage }) {
   };
 
   return (
-    <div className="w-full flex flex-col">
-      {/* <div className="relative group w-full h-64 flex justify-center items-center">
-        <div className=" text-c2 font-medium text-lg absolute left-0 top-0 w-full h-full rounded-xl bg-white bg-opacity-80 shadow-2xl backdrop-blur-xl flex flex-col items-center justify-center content-center align-middle text-center  ">
-          <i className="fa-solid fa-cloud-arrow-up text-2xl"></i>
-          <p className="text-center">Incarca un fisier</p>
-        </div>
-        <label className="relative z-20 cursor-pointer  hover:text-c3 w-full h-full ">
-          <input
-            onChange={handleImageChange}
-            accept=".jpg, .jpeg .png, .svg, .webp .pdf"
-            className="relative z-10 opacity-0 h-full w-full cursor-pointer"
-            type="file"
-            name="document"
-            id="document"
-          />
-        </label>
-      </div> */}
+    <div className=" min-h-hatz w-full">
+      <div className="w-full flex flex-col mt-10">
+        {Object.keys(files).map((file, i) => {
+          const fisier = files[file];
+          const dt = fisier.data.toString();
+
+          let data = "";
+          if (dt) {
+            data = dt;
+            // dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
+          }
+
+          return (
+            <div
+              className={
+                fisier.rol === "medic"
+                  ? "w-full overflow-hidden relative px-5 min-h-fit h-28 border mb-10 rounded-3xl flex items-center justify-between border-c2 text-base font-medium"
+                  : "w-full overflow-hidden relative px-5 min-h-fit h-28 border mb-10 rounded-3xl flex items-center justify-between border-c5 text-base font-medium"
+              }
+              key={i}
+            >
+              <div>
+                <p>{fisier.titlu}</p>
+                <p className="font-normal">Incarcat de {fisier.nume_from}</p>
+                <p
+                  className={
+                    fisier.rol === "medic"
+                      ? "font-normal w-full bg-c1 text-white absolute left-0 bottom-0 text-center"
+                      : "font-normal w-full bg-c4  text-white absolute left-0 bottom-0 text-center"
+                  }
+                >
+                  {data}
+                </p>
+              </div>
+              {fisier.type.includes("pdf") ? (
+                <i className="fa-solid fa-file-pdf text-2xl"></i>
+              ) : (
+                <i className="fa-solid fa-file-image text-2xl"></i>
+              )}
+            </div>
+          );
+        })}
+      </div>
       <div className="fixed bottom-4 right-4 md:right-14 md:top-12 flex">
         <button
           onClick={() => handlePage(0)}
@@ -48,7 +74,7 @@ function FileViewer({ handlePage }) {
         <button
           onClick={() => handlePage(2)}
           className=" bg-c2 text-lg flex align-middle justify-center
-            rounded-full w-12 h-12 center text-white"
+          rounded-full w-12 h-12 center text-white"
         >
           {clasa ? (
             <i className="fa-solid fa-check self-center"></i>

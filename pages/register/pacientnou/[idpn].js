@@ -128,10 +128,7 @@ const Post = () => {
   };
   const forImage = async (user) => {
     const unique_id = uuid();
-    const imageRef = ref(
-      storage,
-      "acteIdentitate_pacienti/" + unique_id + ".png"
-    );
+    const imageRef = ref(storage, "acteIdentitate_pacienti/" + unique_id);
     const snapI = await uploadBytes(imageRef, values.actIdentitate);
     const iURL = await getDownloadURL(imageRef);
     const infoRef = doc(db, "pacienti", user.uid);

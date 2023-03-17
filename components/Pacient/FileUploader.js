@@ -1,9 +1,20 @@
-import { db } from "@/firebase";
+import { db, storage } from "@/firebase";
 import { validateNewDocument } from "@/pages/validateInfo";
-import { addDoc, collection } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  setDoc,
+  Timestamp,
+} from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
+import { v4 as uuid } from "uuid";
 
-function FileUploader({ handlePage, id }) {
+function FileUploader({ handlePage, id, handlePageF, nume_to }) {
+  const role = Cookies.get("role");
   const labels = {
     // fisier: "",
     titlu: "Titlu",
@@ -27,11 +38,15 @@ function FileUploader({ handlePage, id }) {
   const handleImageChange = (e) => {
     const { name } = e;
     const fileU = e.target.files[0];
-    // console.log("fileU", fileU);
-    setValuesLocal({
-      ...valuesLocal,
-      fisier: fileU,
-    });
+    if (fileU) {
+      // console.log("fileU", fileU);
+      const type = fileU.type;
+      setValuesLocal({
+        ...valuesLocal,
+        fisier: fileU,
+        type: type,
+      });
+    }
   };
 
   const handleClasa = async () => {
@@ -56,13 +71,51 @@ function FileUploader({ handlePage, id }) {
       setIsSubmitting(false);
 
       const updatePacienti = async () => {
+        console.log("Am inceput");
         try {
-          await addDoc(collection(db, "fisiere"), {}, { merge: true });
+          const unique_id = uuid();
+          const imageRef = ref(storage, "fisiere/" + unique_id);
+          const snapI = await uploadBytes(imageRef, valuesLocal.fisier);
+          const iURL = await getDownloadURL(imageRef);
+
+          const auth = getAuth();
+          const user = auth.currentUser;
+
+          const data = serverTimestamp();
+
+          const rol = role === "medic" ? "medic" : "pacient";
+
+          await addDoc(collection(db, "fisiere"), {
+            type: valuesLocal.type,
+            from: user.uid,
+            to: id,
+            titlu: valuesLocal.titlu,
+            observatii: valuesLocal.observatii,
+            fisier: iURL,
+            rol: rol,
+            data: data,
+            nume_from: user.displayName,
+            nume_to: nume_to,
+          });
+          handlePageF({
+            type: valuesLocal.type,
+            from: user.uid,
+            to: id,
+            rol: rol,
+            titlu: valuesLocal.titlu,
+            observatii: valuesLocal.observatii,
+            fisier: iURL,
+            data: data,
+            nume_from: user.displayName,
+            nume_to: nume_to,
+          });
           console.log("Changes synced with db");
         } catch (error) {
           console.log("eroare in catch in fetchDateSetari", error);
         }
       };
+
+      updatePacienti();
     }
   }, [isSubmitting, errors]);
 
@@ -98,7 +151,7 @@ function FileUploader({ handlePage, id }) {
             )}
             <input
               onChange={handleImageChange}
-              accept=".jpg, .jpeg .png, .svg, .webp .pdf"
+              accept=".pdf, .jpg, .jpeg, .png, .svg"
               className="opacity-0 h-full w-full absolute"
               type="file"
             />

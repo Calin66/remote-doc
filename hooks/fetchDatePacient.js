@@ -1,14 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  Timestamp,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import Cookies from "js-cookie";
-import _ from "lodash";
+import _, { orderBy } from "lodash";
 import { getAuth } from "firebase/auth";
 
 export default function useFetchPacient(valuesLocal, id) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [date, setDate] = useState({});
+  const [date2, setDate2] = useState({});
 
   const role = Cookies.get("role");
 
@@ -43,6 +52,7 @@ export default function useFetchPacient(valuesLocal, id) {
         // console.log("date in fetch", date);
         setLoading(false);
       } else if (role === "medic" && id) {
+        console.log("AM INTRAT IN SMECHERIe");
         // console.log("id", id);
         // console.log("valuesLocal", valuesLocal);
 
@@ -61,6 +71,34 @@ export default function useFetchPacient(valuesLocal, id) {
             });
             // console.log("dateAici", dateAici);
             setDate(dateAici);
+            // console.log("MERG FIX INATINTE DE FOR FILES");
+            const forFiles = async () => {
+              // console.log("SUNT IN FOR FILES");
+              const q = query(
+                collection(db, "fisiere"),
+                orderBy("data", "desc")
+              );
+              const querySnapshot = await getDocs(q);
+              const dateAici = {};
+              let cheie = 1;
+              querySnapshot.forEach((doc) => {
+                // console.log(doc.id, " => ", doc.data());
+                const data = doc.data();
+                if (
+                  data.from === id ||
+                  data.to === id ||
+                  data.from === user.uid ||
+                  data.to === user.uid
+                ) {
+                  dateAici[cheie] = data;
+                  cheie++;
+                }
+                console.log("fisssssiere", dateAici);
+                setDate2(dateAici);
+                // doc.data() is never undefined for query doc snapshots
+              });
+            };
+            forFiles();
           } else {
             console.log("Schimb date la {}");
             setDate({});
@@ -74,7 +112,7 @@ export default function useFetchPacient(valuesLocal, id) {
     }
     fetchData();
   }, [id]);
-  return { date, handleEditDate, error, loading };
+  return { date, date2, handleEditDate, error, loading };
 }
 
 export function useFetchPacientinPacient(valuesLocal) {

@@ -24,7 +24,6 @@ const index = (req) => {
   const labels = {
     uid: "Id-ul utilizatorului",
     nume: "Nume",
-    prenume: "Prenume",
     sexul: "Sexul",
     telefon: "Nr. telefon",
     email: "Adresă email",
@@ -39,7 +38,6 @@ const index = (req) => {
   const [valuesLocal, setValuesLocal] = useState({
     uid: "",
     nume: "",
-    prenume: "",
     sexul: "",
     telefon: "",
     email: "",
@@ -53,7 +51,6 @@ const index = (req) => {
   const [valuesDb, setValuesDb] = useState({
     id: "",
     nume: "",
-    prenume: "",
     sexul: "",
     telefon: "",
     email: "",
@@ -66,7 +63,7 @@ const index = (req) => {
   // a se exclude in Object.keys return input type text
   // sexul, act_identitate, antecedente_heredocolaterale, antecedente_personale investigatii
 
-  const { date, handleEditDate, error, loading } = useFetchPacient(
+  const { date, date2, handleEditDate, error, loading } = useFetchPacient(
     valuesLocal,
     id
   );
@@ -75,8 +72,9 @@ const index = (req) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [clasa, setClasa] = useState(false);
+  const [files, setFiles] = useState({});
 
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(0);
   const [pageCI, setPageCI] = useState(null);
 
   const handlePage = (nr) => {
@@ -129,14 +127,28 @@ const index = (req) => {
       handlePage(4);
     }
   };
+  const handlePageF = (val) => {
+    if (val) {
+      const newKey =
+        Object.keys(files).length === 0
+          ? 1
+          : Math.max(...Object.keys(files)) + 1;
+
+      handlePage(1);
+
+      setFiles({ ...files, [newKey]: val });
+    }
+  };
 
   useEffect(() => {
     if (Object.keys(date).length) {
       // console.log("date", date);
       setValuesDb(date);
       setValuesLocal(date);
+      setFiles(date2);
+      console.log(date2);
     }
-  }, [date]);
+  }, [date, date2]);
 
   useEffect(() => {
     if (Object.keys(errors).length === 0 && isSubmitting) {
@@ -146,6 +158,8 @@ const index = (req) => {
     }
     // console.log("errors in [id].js", errors);
   }, [errors, isSubmitting]);
+
+  if (page === 1) return <FileViewer handlePage={handlePage} files={files} />;
 
   if (!loading)
     return (
@@ -246,8 +260,14 @@ const index = (req) => {
             </div>
           </div>
         )}
-        {page === 1 && <FileViewer handlePage={handlePage} />}
-        {page === 2 && <FileUploader handlePage={handlePage} id={id} />}
+        {page === 2 && (
+          <FileUploader
+            nume_to={valuesLocal.nume}
+            handlePage={handlePage}
+            id={id}
+            handlePageF={handlePageF}
+          />
+        )}
         {page === 3 && (
           <NewInvestigatie
             handlePage={handlePage}

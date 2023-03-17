@@ -84,7 +84,7 @@ function index() {
 
   const forImage = async (user) => {
     const unique_id = uuid();
-    const imageRef = ref(storage, "dovezi/" + unique_id + ".png");
+    const imageRef = ref(storage, "dovezi/" + unique_id);
     const snapI = await uploadBytes(imageRef, values.dovada);
     const iURL = await getDownloadURL(imageRef);
     const infoRef = doc(db, "medici", user.uid);
