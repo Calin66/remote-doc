@@ -72,7 +72,8 @@ const index = (req) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [clasa, setClasa] = useState(false);
-  const [files, setFiles] = useState({});
+
+  const [files, setFiles] = useState([]);
 
   const [page, setPage] = useState(0);
   const [pageCI, setPageCI] = useState(null);
@@ -129,24 +130,18 @@ const index = (req) => {
   };
   const handlePageF = (val) => {
     if (val) {
-      const newKey =
-        Object.keys(files).length === 0
-          ? 1
-          : Math.max(...Object.keys(files)) + 1;
-
+      const fi = files;
+      fi.unshift(val);
+      setFiles(fi);
       handlePage(1);
-
-      setFiles({ ...files, [newKey]: val });
     }
   };
 
   useEffect(() => {
     if (Object.keys(date).length) {
-      // console.log("date", date);
       setValuesDb(date);
       setValuesLocal(date);
       setFiles(date2);
-      console.log(date2);
     }
   }, [date, date2]);
 

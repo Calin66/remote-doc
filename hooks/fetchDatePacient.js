@@ -4,9 +4,11 @@ import {
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
   query,
   setDoc,
   Timestamp,
+  where,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import Cookies from "js-cookie";
@@ -17,7 +19,7 @@ export default function useFetchPacient(valuesLocal, id) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [date, setDate] = useState({});
-  const [date2, setDate2] = useState({});
+  const [date2, setDate2] = useState([]);
 
   const role = Cookies.get("role");
 
@@ -74,29 +76,32 @@ export default function useFetchPacient(valuesLocal, id) {
             // console.log("MERG FIX INATINTE DE FOR FILES");
             const forFiles = async () => {
               // console.log("SUNT IN FOR FILES");
-              const q = query(
-                collection(db, "fisiere"),
-                orderBy("data", "desc")
-              );
+
+              const fisRef = collection(db, "fisiere");
+
+              const q = query(fisRef, orderBy("titlu"));
+
               const querySnapshot = await getDocs(q);
-              const dateAici = {};
-              let cheie = 1;
+              const dateAici = [];
+
               querySnapshot.forEach((doc) => {
                 // console.log(doc.id, " => ", doc.data());
                 const data = doc.data();
-                if (
-                  data.from === id ||
-                  data.to === id ||
-                  data.from === user.uid ||
-                  data.to === user.uid
-                ) {
-                  dateAici[cheie] = data;
-                  cheie++;
+                if (data.from === id || data.from === user.uid) {
+                  dateAici.push({ ...doc.data() });
                 }
-                console.log("fisssssiere", dateAici);
-                setDate2(dateAici);
-                // doc.data() is never undefined for query doc snapshots
               });
+              dateAici.sort((a, b) => {
+                if (a.data.seconds > b.data.seconds) {
+                  return -1;
+                }
+                if (a.data.seconds < b.data.seconds) {
+                  return 1;
+                }
+                return 0;
+              });
+              console.log("dateAcic", dateAici);
+              setDate2(dateAici);
             };
             forFiles();
           } else {

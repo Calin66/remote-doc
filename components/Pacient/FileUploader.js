@@ -97,6 +97,7 @@ function FileUploader({ handlePage, id, handlePageF, nume_to }) {
             nume_from: user.displayName,
             nume_to: nume_to,
           });
+
           handlePageF({
             type: valuesLocal.type,
             from: user.uid,
@@ -105,7 +106,7 @@ function FileUploader({ handlePage, id, handlePageF, nume_to }) {
             titlu: valuesLocal.titlu,
             observatii: valuesLocal.observatii,
             fisier: iURL,
-            data: data,
+            data: "Acum",
             nume_from: user.displayName,
             nume_to: nume_to,
           });
@@ -183,9 +184,7 @@ function FileUploader({ handlePage, id, handlePageF, nume_to }) {
               name="observatii"
               value={valuesLocal.observatii}
               className={
-                errors.titlu
-                  ? "outline-none w-full max-w-lg mt-4 bg-orange-50 border-c5 h-28 border-b-2 p-2 font-normal text-base"
-                  : "outline-none w-full max-w-lg mt-4 bg-blue-50 border-c1 h-28 border-b-2 p-2 font-normal text-base"
+                "outline-none w-full max-w-lg mt-4 bg-blue-50 border-c1 h-28 border-b-2 p-2 font-normal text-base"
               }
             />
           </label>

@@ -183,9 +183,6 @@ export function validateNewDocument(values) {
   if (!values.titlu) {
     errors.titlu = "Câmp obligatoriu";
   }
-  if (!values.observatii) {
-    errors.observatii = "Câmp obligatoriu";
-  }
 
   return errors;
 }
