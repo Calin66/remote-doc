@@ -19,6 +19,10 @@ module.exports = {
       padding: {
         miniHatz: "9vw",
       },
+      boxShadow: {
+        "3xl": "0px 10px 40px -5px #8ECAE6",
+        "4xl": "0px 6px 40px -15px #FB8500",
+      },
     },
   },
   plugins: [],

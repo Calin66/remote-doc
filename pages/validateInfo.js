@@ -174,3 +174,18 @@ export function validateDateConsultatie(values) {
 
   return errors;
 }
+
+export function validateNewDocument(values) {
+  let errors = {};
+  if (!values.fisier) {
+    errors.fisier = "Câmp obligatoriu";
+  }
+  if (!values.titlu) {
+    errors.titlu = "Câmp obligatoriu";
+  }
+  if (!values.observatii) {
+    errors.observatii = "Câmp obligatoriu";
+  }
+
+  return errors;
+}

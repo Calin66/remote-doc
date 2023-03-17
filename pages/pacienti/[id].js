@@ -1,3 +1,5 @@
+import FileUploader from "@/components/Pacient/FileUploader";
+import FileViewer from "@/components/Pacient/FileViewer";
 import Investigatii, {
   Investigatie,
   NewInvestigatie,
@@ -74,15 +76,8 @@ const index = (req) => {
 
   const [clasa, setClasa] = useState(false);
 
-  const [page, setPage] = useState(0);
-  const [fisier, setFisier] = useState(null);
+  const [page, setPage] = useState(2);
   const [pageCI, setPageCI] = useState(null);
-
-  const handleImageChange = (e) => {
-    const fileU = e.target.files[0];
-    setFisier(fileU);
-    // console.log("fileU", fileU);
-  };
 
   const handlePage = (nr) => {
     setPage(nr);
@@ -215,7 +210,7 @@ const index = (req) => {
                         type="text"
                         name={val}
                         value={valuesLocal[val]}
-                        className="outline-none w-full max-w-lg font-normal mt-4 border-c3 border-b-2 p-2"
+                        className="outline-none w-full max-w-lg font-normal mt-4 border-c4 border-b-2 p-2"
                       />
                     </label>
                   </div>
@@ -225,14 +220,14 @@ const index = (req) => {
             <div className="fixed bottom-4 right-4 md:right-14 md:top-12 flex">
               <button
                 onClick={() => router.push("/pacienti")}
-                className=" bg-c5 text-lg flex align-middle justify-center
+                className=" bg-c4 text-lg flex align-middle justify-center
             rounded-full w-12 h-12 center text-white mr-3"
               >
                 <i className="fa-solid fa-arrow-left self-center"></i>
               </button>
               <button
                 onClick={() => setPage(1)}
-                className=" bg-c4 text-lg flex align-middle justify-center
+                className=" bg-c5 text-lg flex align-middle justify-center
             rounded-full w-12 h-12 center text-white mr-3 "
               >
                 <i className="fa-solid fa-file self-center"></i>
@@ -251,46 +246,8 @@ const index = (req) => {
             </div>
           </div>
         )}
-        {page === 1 && (
-          <div className="w-full flex flex-col">
-            <h1>HATZ HONUULE</h1>
-            <div className="flex w-screen border-t border-c2 py-4 justify-center fixed bottom-0 left-0 text-xl bg-white">
-              <button
-                className="text-center text-c5 rounded-full w-14 h-14 border border-c5 mr-8"
-                onClick={() => setPage(0)}
-              >
-                <i className="fa-solid fa-arrow-left"></i>
-              </button>
-              <button
-                onClick={() => setPage(2)}
-                className=" text-center text-c2 rounded-full w-14 h-14 border border-c2 mr-8"
-              >
-                <i className="fa-solid fa-file-arrow-up"></i>
-              </button>
-            </div>
-          </div>
-        )}
-        {page === 2 && (
-          <div className="w-full flex flex-col">
-            <div className="relative group w-full h-64 flex justify-center items-center">
-              <div className=" text-c2 font-medium text-lg absolute left-0 top-0 w-full h-full rounded-xl bg-white bg-opacity-80 shadow-2xl backdrop-blur-xl flex flex-col items-center justify-center content-center align-middle text-center  ">
-                <i className="fa-solid fa-cloud-arrow-up text-2xl"></i>
-                <p className="text-center">Incarca un fisier</p>
-              </div>
-              <label className="relative z-20 cursor-pointer  hover:text-c3 w-full h-full ">
-                <input
-                  onChange={handleImageChange}
-                  accept=".jpg, .jpeg .png, .svg, .webp .pdf"
-                  className="relative z-10 opacity-0 h-full w-full cursor-pointer"
-                  type="file"
-                  name="document"
-                  id="document"
-                />
-              </label>
-            </div>
-            <p></p>
-          </div>
-        )}
+        {page === 1 && <FileViewer handlePage={handlePage} />}
+        {page === 2 && <FileUploader handlePage={handlePage} id={id} />}
         {page === 3 && (
           <NewInvestigatie
             handlePage={handlePage}
