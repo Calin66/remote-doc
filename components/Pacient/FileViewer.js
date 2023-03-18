@@ -1,8 +1,16 @@
+import { db } from "@/firebase";
+import { getAuth } from "firebase/auth";
+import { deleteDoc, doc } from "firebase/firestore";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
+import IfViewer from "./IfViewer";
 
-function FileViewer({ handlePage, files }) {
+function FileViewer({ handlePage, files, handleDeleteFisierHelper }) {
   const router = useRouter();
+
+  const auth = getAuth();
+  const user = auth.currentUser;
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -22,11 +30,44 @@ function FileViewer({ handlePage, files }) {
     if (file) setOpenFile(file);
     else setOpenFile({});
   };
-  if (Object.keys(openFile).length) return <div></div>;
+  const handleBack = (file) => {
+    if (file) {
+      console.log("AICI AM INTRAT");
+      handleDeleteFisierHelper(file);
+    }
+    setOpenFile({});
+  };
+
+  const handleDeleteFisier = (file) => {
+    if (user.uid === file.from && file.id) {
+      console.log("handleDELETE");
+      const delet = async () => {
+        await deleteDoc(doc(db, "fisiere", file.id));
+        handleBack(file);
+      };
+      delet();
+    }
+  };
+
+  if (Object.keys(openFile).length)
+    return (
+      <IfViewer
+        openFile={openFile}
+        handleBack={handleBack}
+        handleDeleteFisier={handleDeleteFisier}
+      />
+    );
   else
     return (
       <div className=" min-h-hatz w-full">
         <div className="w-full flex flex-col mt-10">
+          {Object.keys(files).length === 0 && (
+            <div>
+              <h1 className="text-2xl text-center">
+                Momentan nu sunt fisiere de afisat.
+              </h1>
+            </div>
+          )}
           {Object.keys(files).map((file, i) => {
             const fisier = files[file];
 
@@ -77,16 +118,16 @@ function FileViewer({ handlePage, files }) {
                   <i
                     className={
                       fisier.rol === "medic"
-                        ? "fa-solid fa-file-pdf text-2xl text-c2"
-                        : "fa-solid fa-file-pdf text-2xl text-c5"
+                        ? "fa-solid fa-file-pdf text-2xl text-c3"
+                        : "fa-solid fa-file-pdf text-2xl text-orange-900 "
                     }
                   ></i>
                 ) : (
                   <i
                     className={
                       fisier.rol === "medic"
-                        ? "fa-solid fa-file-image text-2xl text-c2"
-                        : "fa-solid fa-file-image text-2xl text-c5"
+                        ? "fa-solid fa-file-image text-2xl text-c3"
+                        : "fa-solid fa-file-image text-2xl text-orange-900"
                     }
                   ></i>
                 )}

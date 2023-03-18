@@ -125,6 +125,8 @@ export function useFetchPacientinPacient(valuesLocal) {
   const [error, setError] = useState(null);
 
   const [date, setDate] = useState({});
+  const [date2, setDate2] = useState([]);
+
   // const [date_medic, setDate_medic] = useState({});
 
   const role = Cookies.get("role");
@@ -141,7 +143,9 @@ export function useFetchPacientinPacient(valuesLocal) {
           const docRef = doc(db, "pacienti", user.uid);
           const docSnap = await getDoc(docRef);
 
-          const docRef2 = doc(db, "medici", docSnap.data().doc_uid);
+          const data1 = docSnap.data();
+
+          const docRef2 = doc(db, "medici", data1.doc_uid);
           const docSnap2 = await getDoc(docRef2);
 
           if (docSnap.exists()) {
@@ -156,8 +160,38 @@ export function useFetchPacientinPacient(valuesLocal) {
               }
             });
 
-            console.log("dateAici", dateAici);
             setDate(dateAici);
+
+            const forFiles = async () => {
+              // console.log("SUNT IN FOR FILES");
+
+              const fisRef = collection(db, "fisiere");
+
+              const q = query(fisRef, orderBy("titlu"));
+
+              const querySnapshot = await getDocs(q);
+              const dateAici = [];
+
+              querySnapshot.forEach((doc) => {
+                // console.log(doc.id, " => ", doc.data());
+                const data = doc.data();
+                if (data.from === data1.doc_uid || data.from === user.uid) {
+                  dateAici.push({ ...doc.data() });
+                }
+              });
+              dateAici.sort((a, b) => {
+                if (a.data.seconds > b.data.seconds) {
+                  return -1;
+                }
+                if (a.data.seconds < b.data.seconds) {
+                  return 1;
+                }
+                return 0;
+              });
+              console.log("dateAcic", dateAici);
+              setDate2(dateAici);
+            };
+            forFiles();
           } else {
             console.log("Schimb date la {}");
             setDate({});
@@ -171,5 +205,5 @@ export function useFetchPacientinPacient(valuesLocal) {
     }
     fetchData();
   }, []);
-  return { date, error, loading };
+  return { date, date2, error, loading };
 }

@@ -4,6 +4,7 @@ import { getAuth } from "firebase/auth";
 import {
   addDoc,
   collection,
+  doc,
   serverTimestamp,
   setDoc,
   Timestamp,
@@ -85,7 +86,10 @@ function FileUploader({ handlePage, id, handlePageF, nume_to }) {
 
           const rol = role === "medic" ? "medic" : "pacient";
 
-          await addDoc(collection(db, "fisiere"), {
+          const newFisierRef = doc(collection(db, "fisiere"));
+          const id2 = newFisierRef.id;
+
+          await setDoc(newFisierRef, {
             type: valuesLocal.type,
             from: user.uid,
             to: id,
@@ -96,6 +100,7 @@ function FileUploader({ handlePage, id, handlePageF, nume_to }) {
             data: data,
             nume_from: user.displayName,
             nume_to: nume_to,
+            id: id2,
           });
 
           handlePageF({
@@ -109,6 +114,7 @@ function FileUploader({ handlePage, id, handlePageF, nume_to }) {
             data: "Acum",
             nume_from: user.displayName,
             nume_to: nume_to,
+            id: id2,
           });
           console.log("Changes synced with db");
         } catch (error) {

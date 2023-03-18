@@ -1,11 +1,12 @@
 import { useFetchPacientinPacient } from "@/hooks/fetchDatePacient";
 import React, { useEffect, useState } from "react";
+import FileUploader from "./Pacient/FileUploader";
+import FileViewer from "./Pacient/FileViewer";
 import Investigatii, { Investigatie } from "./Pacient/Investigatii";
 
 function HomePagePacient() {
   const labels = {
-    nume: "Nume Doctor",
-    prenume: "Prenume Doctor",
+    nume: "Nume complet doctor",
     telefon: "Nr. telefon doctor",
     email: "Email doctor",
     antecedente_heredocolaterale: "Antecedente heredocolaterale",
@@ -14,8 +15,8 @@ function HomePagePacient() {
   };
 
   const [valuesLocal, setValuesLocal] = useState({
+    doc_uid: "",
     nume: "",
-    prenume: "",
     telefon: "",
     email: "",
     antecedente_heredocolaterale: "",
@@ -23,8 +24,10 @@ function HomePagePacient() {
     investigatii: {},
   });
 
-  const { date, handleEditDate, error, loading } =
-    useFetchPacientinPacient(valuesLocal);
+  const { date, date2, error, loading } = useFetchPacientinPacient(valuesLocal);
+
+  const [files, setFiles] = useState([]);
+
   const [page, setPage] = useState(0);
   const [pageCI, setPageCI] = useState(null);
 
@@ -47,12 +50,39 @@ function HomePagePacient() {
       handlePage(4);
     }
   };
+
+  const handlePageF = (val) => {
+    if (val) {
+      const fi = files;
+      fi.unshift(val);
+      setFiles(fi);
+      handlePage(1);
+    }
+  };
+
+  const handleDeleteFisierHelper = (fisier) => {
+    const index = files.indexOf(fisier);
+    const fisiere = files;
+    fisiere.splice(index, 1);
+    setFiles(fisiere);
+  };
+
   useEffect(() => {
     if (Object.keys(date).length) {
       // console.log("date", date);
       setValuesLocal(date);
+      setFiles(date2);
     }
-  }, [date]);
+  }, [date, date2]);
+
+  if (page === 1)
+    return (
+      <FileViewer
+        handlePage={handlePage}
+        files={files}
+        handleDeleteFisierHelper={handleDeleteFisierHelper}
+      />
+    );
 
   if (!loading)
     return (
@@ -93,7 +123,7 @@ function HomePagePacient() {
                     </label>
                   </div>
                 );
-              } else if (val !== "act_identitate")
+              } else if (val !== "act_identitate" && val !== "doc_uid")
                 return (
                   <div key={i} className="w-full mb-20">
                     <label className=" text-xl font-medium duration-300 text-black w-full">
@@ -114,7 +144,7 @@ function HomePagePacient() {
             <div className="fixed bottom-4 right-4 md:right-14 md:top-12 flex">
               <button
                 onClick={() => setPage(1)}
-                className=" bg-c4 text-lg flex align-middle justify-center
+                className=" bg-c5 text-lg flex align-middle justify-center
             rounded-full w-12 h-12 center text-white mr-3 "
               >
                 <i className="fa-solid fa-file self-center"></i>
@@ -122,45 +152,14 @@ function HomePagePacient() {
             </div>
           </div>
         )}
-        {page === 1 && (
-          <div className="w-full flex flex-col">
-            <h1>HATZ HONUULE</h1>
-            <div className="flex w-screen border-t border-c2 py-4 justify-center fixed bottom-0 left-0 text-xl bg-white">
-              <button
-                className="text-center text-c5 rounded-full w-14 h-14 border border-c5 mr-8"
-                onClick={() => setPage(0)}
-              >
-                <i className="fa-solid fa-arrow-left"></i>
-              </button>
-              <button
-                onClick={() => setPage(2)}
-                className=" text-center text-c2 rounded-full w-14 h-14 border border-c2 mr-8"
-              >
-                <i className="fa-solid fa-file-arrow-up"></i>
-              </button>
-            </div>
-          </div>
-        )}
+
         {page === 2 && (
-          <div className="w-full flex flex-col">
-            <div className="relative group w-full h-64 flex justify-center items-center">
-              <div className=" text-c2 font-medium text-lg absolute left-0 top-0 w-full h-full rounded-xl bg-white bg-opacity-80 shadow-2xl backdrop-blur-xl flex flex-col items-center justify-center content-center align-middle text-center  ">
-                <i className="fa-solid fa-cloud-arrow-up text-2xl"></i>
-                <p className="text-center">Incarca un fisier</p>
-              </div>
-              <label className="relative z-20 cursor-pointer  hover:text-c3 w-full h-full ">
-                <input
-                  onChange={handleImageChange}
-                  accept=".jpg, .jpeg .png, .svg, .webp .pdf"
-                  className="relative z-10 opacity-0 h-full w-full cursor-pointer"
-                  type="file"
-                  name="document"
-                  id="document"
-                />
-              </label>
-            </div>
-            <p></p>
-          </div>
+          <FileUploader
+            nume_to={valuesLocal.nume}
+            handlePage={handlePage}
+            id={valuesLocal.doc_uid}
+            handlePageF={handlePageF}
+          />
         )}
         {page === 4 && pageCI && (
           <Investigatie investigatie={pageCI} handlePageCI={handlePageCI} />

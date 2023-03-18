@@ -137,6 +137,13 @@ const index = (req) => {
     }
   };
 
+  const handleDeleteFisierHelper = (fisier) => {
+    const index = files.indexOf(fisier);
+    const fisiere = files;
+    fisiere.splice(index, 1);
+    setFiles(fisiere);
+  };
+
   useEffect(() => {
     if (Object.keys(date).length) {
       setValuesDb(date);
@@ -154,7 +161,14 @@ const index = (req) => {
     // console.log("errors in [id].js", errors);
   }, [errors, isSubmitting]);
 
-  if (page === 1) return <FileViewer handlePage={handlePage} files={files} />;
+  if (page === 1)
+    return (
+      <FileViewer
+        handlePage={handlePage}
+        files={files}
+        handleDeleteFisierHelper={handleDeleteFisierHelper}
+      />
+    );
 
   if (!loading)
     return (
