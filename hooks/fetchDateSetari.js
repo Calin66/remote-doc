@@ -24,10 +24,8 @@ export default function useFetchDateMedic(valuesLocal) {
           {
             nume: valoriLocal.nume,
             email: valoriLocal.email,
-            nume_clinica: valoriLocal.nume_clinica,
             program_clinica: valoriLocal.program_clinica,
             program_domiciliu: valoriLocal.program_domiciliu,
-            locatie_clinica: valoriLocal.locatie_clinica,
             asistenti: valoriLocal.asistenti,
           },
           { merge: true }

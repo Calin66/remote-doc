@@ -6,15 +6,20 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        poppins: ["var(--font-poppins)"],
+        edu_NSW_ACT_Foundation: ["var(--font-edu_NSW_ACT_Foundation)"],
+      },
       colors: {
         c1: "#8ECAE6",
         c2: "#219EBC",
         c3: "#023047",
         c4: "#FFB703",
         c5: "#FB8500",
+        c6: "#4364fa",
       },
       minHeight: {
-        hatz: "85vh",
+        hatz: "80vh",
       },
       padding: {
         miniHatz: "9vw",
