@@ -8,6 +8,7 @@ import { db } from "@/firebase";
 import useFetchPacient from "@/hooks/fetchDatePacient";
 import { useFetchDatePacient } from "@/hooks/fetchDateSetari";
 import { doc, getDoc } from "firebase/firestore";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { validateDatePacientInPacienti } from "../validateInfo";
@@ -42,7 +43,7 @@ const index = (req) => {
     telefon: "",
     email: "",
     cnp: "",
-    act_identitate: "",
+    actIdentitate: "",
     antecedente_heredocolaterale: "",
     antecedente_personale: "",
     investigatii: {},
@@ -55,7 +56,7 @@ const index = (req) => {
     telefon: "",
     email: "",
     cnp: "",
-    act_identitate: "",
+    actIdentitate: "",
     antecedente_heredocolaterale: "",
     antecedente_personale: "",
     investigatii: {},
@@ -222,7 +223,24 @@ const index = (req) => {
                     </label>
                   </div>
                 );
-              } else if (val !== "act_identitate")
+              } else if (val === "actIdentitate" && valuesLocal[val]) {
+                return (
+                  <div
+                    key={i}
+                    className="text-xl font-medium duration-300 text-black w-full mb-20 "
+                  >
+                    <p className="mb-4">Act identitate pacient</p>
+                    <div className="relative h-52 rounded-lg overflow-hidden">
+                      <Image
+                        src={valuesLocal[val]}
+                        fill
+                        alt=""
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
+                  </div>
+                );
+              } else
                 return (
                   <div key={i} className="w-full mb-20">
                     <label className=" text-xl font-medium duration-300 text-black w-full">
@@ -238,7 +256,6 @@ const index = (req) => {
                     </label>
                   </div>
                 );
-              else return <div className="hidden" key={i}></div>;
             })}
             <div className="fixed bottom-4 right-4 md:right-14 md:top-12 flex">
               <button

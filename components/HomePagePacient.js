@@ -1,4 +1,5 @@
 import { useFetchPacientinPacient } from "@/hooks/fetchDatePacient";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import FileUploader from "./Pacient/FileUploader";
 import FileViewer from "./Pacient/FileViewer";
@@ -19,6 +20,7 @@ function HomePagePacient() {
     nume: "",
     telefon: "",
     email: "",
+    dovada: "",
     antecedente_heredocolaterale: "",
     antecedente_personale: "",
     investigatii: {},
@@ -123,7 +125,24 @@ function HomePagePacient() {
                     </label>
                   </div>
                 );
-              } else if (val !== "act_identitate" && val !== "doc_uid")
+              } else if (val === "dovada" && valuesLocal.dovada) {
+                return (
+                  <div
+                    key={i}
+                    className="text-xl font-medium duration-300 text-black w-full mb-20 "
+                  >
+                    <p className="mb-4">Dovada doctorului</p>
+                    <div className="relative h-52 rounded-lg overflow-hidden">
+                      <Image
+                        src={valuesLocal[val]}
+                        fill
+                        alt=""
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
+                  </div>
+                );
+              } else if (val !== "doc_uid")
                 return (
                   <div key={i} className="w-full mb-20">
                     <label className=" text-xl font-medium duration-300 text-black w-full">
@@ -145,7 +164,7 @@ function HomePagePacient() {
               <button
                 onClick={() => setPage(1)}
                 className=" bg-c5 text-lg flex align-middle justify-center
-            rounded-full w-12 h-12 center text-white mr-3 "
+            rounded-full w-12 h-12 center text-white mr-3 md:mr-0 "
               >
                 <i className="fa-solid fa-file self-center"></i>
               </button>

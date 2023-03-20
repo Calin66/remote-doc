@@ -153,11 +153,27 @@ export function useFetchPacientinPacient(valuesLocal) {
             const dat2 = docSnap2.data();
             const dateAici = {};
             Object.keys(valuesLocal).map((cheie, i) => {
-              if (dat2[cheie]) dateAici[cheie] = dat[cheie];
-              else if (dat[cheie]) dateAici[cheie] = dat[cheie];
+              // console.log("cheie", cheie);
+              // console.log("dat2", dat2[cheie]);
+              if (cheie === "doc_uid") {
+                dateAici[cheie] = dat2.uid;
+              } else if (cheie === "dovada") {
+                dateAici[cheie] = dat2[cheie] || "";
+              } else if (
+                cheie === "telefon" ||
+                cheie === "email" ||
+                cheie === "nume"
+              ) {
+                dateAici[cheie] = dat2[cheie] || "";
+              } else if (dat2[cheie]) dateAici[cheie] = dat[cheie];
+              else if (cheie === "investigatii") {
+                dateAici[cheie] = dat[cheie];
+              } else if (dat[cheie] && !valuesLocal[cheie])
+                dateAici[cheie] = dat[cheie];
               else {
                 dateAici[cheie] = valuesLocal[cheie];
               }
+              // console.log("dateAici", dateAici);
             });
 
             setDate(dateAici);

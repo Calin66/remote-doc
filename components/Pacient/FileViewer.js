@@ -92,8 +92,8 @@ function FileViewer({ handlePage, files, handleDeleteFisierHelper }) {
               <div
                 className={
                   fisier.rol === "medic"
-                    ? "w-full overflow-hidden relative px-5 min-h-fit h-28 border mb-10 rounded-2xl flex items-center pb-5 justify-between border-c2 text-base font-medium"
-                    : "w-full overflow-hidden relative px-5 min-h-fit h-28 border mb-10 rounded-2xl flex items-center pb-5 justify-between border-c5 text-base font-medium"
+                    ? "w-full overflow-hidden relative px-5 min-h-fit h-28 border mb-10 rounded-2xl flex items-center pb-5 justify-between border-c2 text-base font-medium max-w-xl self-center cursor-pointer"
+                    : "w-full overflow-hidden relative px-5 min-h-fit h-28 border mb-10 rounded-2xl flex items-center pb-5 justify-between border-c5 text-base font-medium max-w-xl self-center cursor-pointer"
                 }
                 key={i}
                 onClick={() => handleOpenFile(fisier)}

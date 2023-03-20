@@ -152,7 +152,7 @@ function NewAsistent({ handlePas, valuesLocal, handleChangeA }) {
 function AsistentCard({ asistent, handleSetPag, cheie }) {
   return (
     <div
-      className="border-2 border-c1 px-3 py-2 mb-3 rounded-lg flex justify-between items-center"
+      className="border-2 border-c1 px-3 py-2 mb-3 rounded-lg flex justify-between items-center cursor-pointer"
       onClick={() => handleSetPag(asistent, cheie)}
     >
       {/* <Image
@@ -269,13 +269,16 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
   if (asistent)
     return (
       <div className="w-full flex flex-col mt-14">
-        <div className="w-full">
+        <div className="w-full flex flex-col">
           {Object.keys(valuesLocal).map((val, i) => {
             // console.log("val", val);
             if (val !== "cheie")
               return (
-                <div key={i} className="flex w-full justify-between mb-20">
-                  <label className=" text-xl font-medium duration-300 text-black self-center">
+                <div
+                  key={i}
+                  className="flex flex-col w-full justify-between mb-20 self-center"
+                >
+                  <label className=" text-xl font-medium duration-300 text-black self-center max-w-lg w-full">
                     {labels[val]}
                     {clasa ? (
                       <input
@@ -286,8 +289,8 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
                         onChange={handleChange}
                         className={
                           errorsEditAsistent[val]
-                            ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-blue-100 border-b-2 p-2"
-                            : "outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2"
+                            ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-blue-100 border-b-2 p-2 block"
+                            : "outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2 block"
                         }
                       />
                     ) : (
@@ -297,7 +300,7 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
                         type="text"
                         name={val}
                         value={valuesLocal[val]}
-                        className="outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2"
+                        className="outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2 block"
                       />
                     )}
                   </label>
@@ -532,17 +535,19 @@ export default function index() {
                     })}
                 </div>
               </div>
-              <button
-                onClick={handleClasa}
-                className=" bg-c2 font-bold text-2xl flex align-middle justify-center
-            rounded-full w-16 h-16 center text-white fixed bottom-8 right-4 md:right-14 md:top-12"
-              >
-                {clasa ? (
-                  <i className="fa-solid fa-check self-center text-2xl"></i>
-                ) : (
-                  <i className="fa-solid fa-pen self-center text-xl"></i>
-                )}
-              </button>
+              <div className="fixed bottom-4 right-4 md:right-14 md:top-12 flex">
+                <button
+                  onClick={handleClasa}
+                  className=" bg-c2 text-lg flex align-middle justify-center
+            rounded-full w-12 h-12 center text-white"
+                >
+                  {clasa ? (
+                    <i className="fa-solid fa-check self-center"></i>
+                  ) : (
+                    <i className="fa-solid fa-pen self-center"></i>
+                  )}
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -808,31 +813,32 @@ const SetariPacient = () => {
 
     if (!changeMedic) {
       return (
-        <div className="mt-14 min-h-hatz">
+        <div className="mt-20 min-h-hatz">
           <div className=" w-full flex flex-col ">
             {Object.keys(valuesLocal).map((val, i) => {
               if (val === "locatie")
                 return (
-                  <div key={i} className="w-full mb-20">
-                    <label className=" text-xl font-medium duration-300 text-black w-full">
-                      {labels[val]}
-                      <div
-                        className={
-                          " w-full max-w-lg font-normal mt-4  border-c3 border-b-2 p-2 flex justify-between items-center"
-                        }
-                      >
-                        <input
-                          readOnly
-                          type="text"
-                          name={val}
-                          value={valuesLocal[val].nume}
-                          onClick={() => router.push("/harta")}
-                          className="outline-none bg-inherit"
-                        />
-                        <i className="fa-solid fa-map-location-dot text-c2"></i>
-                      </div>
-                    </label>
-                  </div>
+                  <div key={i}></div>
+                  // <div key={i} className="w-full mb-20">
+                  //   <label className=" text-xl font-medium duration-300 text-black w-full">
+                  //     {labels[val]}
+                  //     <div
+                  //       className={
+                  //         " w-full max-w-lg font-normal mt-4  border-c3 border-b-2 p-2 flex justify-between items-center"
+                  //       }
+                  //     >
+                  //       <input
+                  //         readOnly
+                  //         type="text"
+                  //         name={val}
+                  //         value={valuesLocal[val].nume}
+                  //         onClick={() => router.push("/harta")}
+                  //         className="outline-none bg-inherit"
+                  //       />
+                  //       <i className="fa-solid fa-map-location-dot text-c5"></i>
+                  //     </div>
+                  //   </label>
+                  // </div>
                 );
               else if (val === "uid") {
                 return (
@@ -864,8 +870,8 @@ const SetariPacient = () => {
                           onChange={handleChange}
                           className={
                             errors[val]
-                              ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-blue-100 border-b-2 p-2"
-                              : "outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2"
+                              ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-orange-100 border-b-2 p-2"
+                              : "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-orange-50 border-b-2 p-2"
                           }
                         />
                       ) : (
@@ -874,7 +880,7 @@ const SetariPacient = () => {
                           type="text"
                           name={val}
                           value={valuesLocal[val]}
-                          className="outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2"
+                          className="outline-none w-full max-w-lg font-normal mt-4 border-c5 border-b-2 p-2"
                         />
                       )}
                     </label>
@@ -884,23 +890,25 @@ const SetariPacient = () => {
                 );
               else return <div className="hidden" key={i}></div>;
             })}
+            <div className="fixed bottom-4 right-4 md:right-14 md:top-12 flex">
+              <button
+                onClick={handleClasa}
+                className=" bg-c5 text-lg flex align-middle justify-center
+            rounded-full w-12 h-12 center text-white"
+              >
+                {clasa ? (
+                  <i className="fa-solid fa-check self-center"></i>
+                ) : (
+                  <i className="fa-solid fa-pen self-center"></i>
+                )}
+              </button>
+            </div>
 
             <button
               className="text-center text-c5 font-medium p-3 rounded-lg w-3/6 self-center max-w-xs border mb-3 border-c5"
               onClick={handleChangeMedic}
             >
               Vreau să mă transfer la alt medic de familie
-            </button>
-            <button
-              onClick={handleClasa}
-              className=" bg-c2 font-bold text-2xl flex align-middle justify-center
-          rounded-full w-16 h-16 center text-white fixed bottom-8 right-4 md:right-14 md:top-12"
-            >
-              {clasa ? (
-                <i className="fa-solid fa-check self-center text-2xl"></i>
-              ) : (
-                <i className="fa-solid fa-pen self-center text-xl"></i>
-              )}
             </button>
           </div>
         </div>

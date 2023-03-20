@@ -47,7 +47,7 @@ function Sidebar({ links }) {
         )}
         <div
           onClick={() => setOpenModal(true)}
-          className="bg-white text-black w-12 h-12 rounded-br-xl p-2 flex flex-col items-center justify-center text-3xl ml-2 mt-2 shadow-3xl absolute  md:hidden z-40"
+          className="bg-white text-black w-12 h-12 rounded-br-xl p-2 flex flex-col items-center justify-center text-3xl ml-2 mt-2 shadow-4xl absolute  md:hidden z-40 cursor-pointer"
         >
           <i className="fa-solid fa-bars"></i>
         </div>
@@ -58,13 +58,13 @@ function Sidebar({ links }) {
                 <i className="fa-solid fa-notes-medical"></i>
               </Link>
             </div>
-            <div className="flex flex-col items-center bg-c5 text-white w-14 py-10 rounded-2xl">
+            <div className="flex flex-col items-center bg-c5 text-white w-14 py-10 rounded-2xl justify-around h-64">
               {/* <i className="fa-solid fa-stethoscope mb-10"></i> */}
               <Link href="/calendar">
-                <i className="fa-solid fa-calendar-days mb-10"></i>
+                <i className="fa-solid fa-calendar-days"></i>
               </Link>
               <Link href="/harta">
-                <i className="fa-solid fa-map-location-dot mb-10"></i>
+                <i className="fa-solid fa-map-location-dot"></i>
               </Link>
               <Link href="/setari">
                 <i className="fa-solid fa-gear"></i>
@@ -100,7 +100,7 @@ function Sidebar({ links }) {
         )}
         <div
           onClick={() => setOpenModal(true)}
-          className="bg-white text-black w-12 h-12 rounded-br-xl p-2 flex flex-col items-center justify-center text-3xl ml-2 mt-2 shadow-3xl absolute  md:hidden z-40"
+          className="bg-white text-black w-12 h-12 rounded-br-xl p-2 flex flex-col items-center justify-center text-3xl ml-2 mt-2 shadow-3xl absolute  md:hidden z-40 cursor-pointer"
         >
           <i className="fa-solid fa-bars"></i>
         </div>
@@ -111,10 +111,10 @@ function Sidebar({ links }) {
                 <i className="fa-solid fa-notes-medical"></i>
               </Link>
             </div>
-            <div className="flex flex-col items-center bg-c2 text-white w-14 py-10 rounded-2xl">
+            <div className="flex flex-col items-center bg-c2 text-white w-14 py-10 rounded-2xl justify-around h-56">
               {/* <i className="fa-solid fa-stethoscope mb-10"></i> */}
               <Link href="/calendar">
-                <i className="fa-solid fa-calendar-days mb-10"></i>
+                <i className="fa-solid fa-calendar-days"></i>
               </Link>
 
               <Link href="/setari">

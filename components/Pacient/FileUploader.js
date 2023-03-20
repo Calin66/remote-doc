@@ -128,7 +128,7 @@ function FileUploader({ handlePage, id, handlePageF, nume_to }) {
 
   return (
     <div className=" min-h-hatz">
-      <div className="w-full flex flex-col">
+      <div className="w-full flex flex-col md:w-96">
         <h1 className=" text-xl font-medium duration-300 text-black w-full mb-10">
           Adauga fisier
         </h1>
@@ -136,8 +136,8 @@ function FileUploader({ handlePage, id, handlePageF, nume_to }) {
           <label
             className={
               errors.fisier
-                ? "cursor-pointer shadow-4xl border border-c5 hover:text-c3 w-full p-4  h-52 relative bg-white rounded-2xl flex flex-col justify-center"
-                : "cursor-pointer shadow-3xl border border-c1 hover:text-c3 w-full p-4  h-52 relative bg-white rounded-2xl flex flex-col justify-center"
+                ? "cursor-pointer shadow-4xl border border-c5 hover:text-c3 w-full p-4  h-52 relative bg-white rounded-2xl flex flex-col justify-center "
+                : "cursor-pointer shadow-3xl border border-c1 hover:text-c3 w-full p-4  h-52 relative bg-white rounded-2xl flex flex-col justify-center "
             }
           >
             {/* {console.log(valuesLocal.fisier)} */}

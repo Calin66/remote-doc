@@ -35,6 +35,7 @@ export default function useFetchForMap() {
               const querySnapshot = await getDocs(collection(db, "markers"));
               const m = [];
               querySnapshot.forEach((doc) => {
+                // console.log("m.push", doc.data());
                 m.push(doc.data());
               });
               setMarkers(m);

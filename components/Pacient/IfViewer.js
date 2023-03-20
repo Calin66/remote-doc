@@ -28,9 +28,9 @@ function IfViewer({ openFile, handleBack, handleDeleteFisier }) {
   }
 
   return (
-    <div className=" min-h-hatz w-full">
+    <div className=" min-h-hatz w-full max-w-lg">
       <div className="w-full flex flex-col mt-10">
-        <div className="relative h-96 rounded-md overflow-hidden">
+        <div className="relative h-96 rounded-md overflow-hidden md:h-[500px]">
           {openFile.type.includes("pdf") ? (
             <iframe
               src={`${openFile.fisier}#view=fitH`}
@@ -56,8 +56,8 @@ function IfViewer({ openFile, handleBack, handleDeleteFisier }) {
               value={openFile.nume_from}
               className={
                 openFile.rol === "medic"
-                  ? "outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2"
-                  : "outline-none w-full max-w-lg font-normal mt-4 border-c4 border-b-2 p-2"
+                  ? "outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2 block"
+                  : "outline-none w-full max-w-lg font-normal mt-4 border-c4 border-b-2 p-2 block"
               }
             />
           </label>
@@ -72,8 +72,8 @@ function IfViewer({ openFile, handleBack, handleDeleteFisier }) {
               value={openFile.titlu}
               className={
                 openFile.rol === "medic"
-                  ? "outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2"
-                  : "outline-none w-full max-w-lg font-normal mt-4 border-c4 border-b-2 p-2"
+                  ? "outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2 block"
+                  : "outline-none w-full max-w-lg font-normal mt-4 border-c4 border-b-2 p-2 block"
               }
             />
           </label>
@@ -88,8 +88,8 @@ function IfViewer({ openFile, handleBack, handleDeleteFisier }) {
               value={openFile.observatii}
               className={
                 openFile.rol === "medic"
-                  ? "outline-none w-full max-w-lg mt-4 bg-blue-50 border-c2 h-28 border-b-2 p-2 font-normal text-base"
-                  : "outline-none w-full max-w-lg mt-4 bg-orange-50 border-c4 h-28 border-b-2 p-2 font-normal text-base"
+                  ? "outline-none w-full max-w-lg mt-4 bg-blue-50 border-c2 h-28 border-b-2 p-2 font-normal text-base block"
+                  : "outline-none w-full max-w-lg mt-4 bg-orange-50 border-c4 h-28 border-b-2 p-2 font-normal text-base block"
               }
             />
           </label>
@@ -99,7 +99,7 @@ function IfViewer({ openFile, handleBack, handleDeleteFisier }) {
         <button
           onClick={() => handleBack()}
           className=" bg-c5 text-lg flex align-middle justify-center
-  rounded-full w-12 h-12 center text-white mr-3"
+  rounded-full w-12 h-12 center text-white"
         >
           <i className="fa-solid fa-arrow-left self-center"></i>
         </button>
@@ -107,7 +107,7 @@ function IfViewer({ openFile, handleBack, handleDeleteFisier }) {
           <button
             onClick={() => handleDeleteFisier(openFile)}
             className=" bg-red-500 text-lg flex align-middle justify-center
-        rounded-full w-12 h-12 center text-white"
+        rounded-full w-12 h-12 center text-white ml-3"
           >
             <i className="fa-solid fa-trash self-center"></i>
           </button>

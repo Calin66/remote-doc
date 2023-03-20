@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { doc, setDoc, deleteField } from "firebase/firestore";
+import { doc, setDoc, deleteField, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import useFetchPacienti from "../hooks/fetchPacienti";
 import { validateNewPacientInfo } from "@/pages/validateInfo";
 import { v4 as uuid } from "uuid";
 import PacientCard from "./PacientCard";
 import emailjs from "@emailjs/browser";
+import { useRouter } from "next/router";
 
 export default function DashboardMedici() {
   const { currentUser } = useAuth();
+  const router = useRouter();
+
   const [pas, setPas] = useState(false);
   const { pacienti, setPacienti, loading, error } = useFetchPacienti();
   const [errors, setErrors] = useState({});
@@ -104,16 +107,45 @@ export default function DashboardMedici() {
     setPas(!pas);
   };
 
+  const handleDelete = async (link) => {
+    // console.log("pacienti", pacienti);
+    // console.log("link", link);
+    let index = 0;
+    Object.keys(pacienti).findIndex((pacient) => {
+      if (pacienti[pacient].link === link) {
+        index = pacient;
+        return true;
+      } else return false;
+    });
+    try {
+      const pacientRef = doc(db, "medici", currentUser.uid);
+
+      await setDoc(
+        pacientRef,
+        {
+          pacienti: { [index]: deleteField() },
+        },
+        { merge: true }
+      );
+      router.reload();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  let i;
+  let j;
+
   return (
-    <div className=" md:w-1/2 self-center md:border border-c2 rounded-lg md:p-16 md:relative md:pb-20 w-full">
+    <div className=" md:w-1/2 self-center  rounded-lg md:p-16 md:relative md:pb-20 w-full">
       {!loading && !pas && (
         <>
           <div>
             <h2 className="text-xl">Pacienti confirmati</h2>
             <div>
               {Object.keys(pacienti).map((pacient, i) => {
-                // console.log(pacienti[pacient]);
-                if (pacienti[pacient].activate)
+                // console.log("pp", pacienti[pacient]);
+                if (pacienti[pacient].activate) {
+                  i = true;
                   return (
                     <PacientCard
                       activate={pacienti[pacient].activate}
@@ -123,22 +155,39 @@ export default function DashboardMedici() {
                       {pacienti[pacient]}
                     </PacientCard>
                   );
-                else return <div key={i}></div>;
+                } else return <div key={i}></div>;
               })}
+              {!i && (
+                <h1 className="mt-4">
+                  Momentan nu ai nici un pacient confirmat.
+                </h1>
+              )}
             </div>
           </div>
           <div className="mt-16">
             <h2 className="text-xl">Pacienti neconfirmati</h2>
             <div>
               {Object.keys(pacienti).map((pacient, i) => {
-                if (!pacienti[pacient].activate)
+                if (!pacienti[pacient].activate) {
+                  j = true;
                   return (
-                    <PacientCard activate={pacienti[pacient].activate} key={i}>
+                    <PacientCard
+                      activate={pacienti[pacient].activate}
+                      key={i}
+                      handleDelete={handleDelete}
+                      link={pacienti[pacient].link}
+                      pacient={pacienti[pacient]}
+                    >
                       {pacienti[pacient]}
                     </PacientCard>
                   );
-                else return <div key={i}></div>;
+                } else return <div key={i}></div>;
               })}
+              {!j && (
+                <h1 className="mt-4">
+                  Momentan nu ai nici un pacient neconfirmat.
+                </h1>
+              )}
             </div>
           </div>
         </>
@@ -181,13 +230,19 @@ export default function DashboardMedici() {
           </button>
         </div>
       )}
-      <button
-        onClick={handlePas}
-        className=" bg-c2 font-bold text-2xl flex align-middle justify-center
-        rounded-full w-14 h-14 center text-white absolute bottom-4 right-4 md:right-14 md:top-12"
-      >
-        <i className="fa-solid fa-plus self-center"></i>
-      </button>
+      <div className="fixed bottom-4 right-4 md:right-14 md:top-12 flex">
+        <button
+          onClick={handlePas}
+          className=" bg-c2 text-lg flex align-middle justify-center
+            rounded-full w-12 h-12 center text-white"
+        >
+          {pas ? (
+            <i className="fa-solid fa-check self-center"></i>
+          ) : (
+            <i className="fa-solid fa-plus self-center"></i>
+          )}
+        </button>
+      </div>
     </div>
   );
 }

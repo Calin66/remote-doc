@@ -5,6 +5,7 @@ import mapboxgl from "!mapbox-gl"; // or "const mapboxgl = require('mapbox-gl');
 function Harta({ coordinatesUser, coords }) {
   useEffect(() => {
     const addToMap = (map, coord, color, home) => {
+      // console.log("coord", coord);
       if (home) {
         const marker = new mapboxgl.Marker({ color: color })
           .setLngLat(coord)
@@ -20,16 +21,14 @@ function Harta({ coordinatesUser, coords }) {
           .setLngLat(coord.coordinates)
           .setPopup(
             new mapboxgl.Popup({ closeButton: false }).setHTML(`<div>
-              <h1 style="font-weight:500; font-size:18px; text-align:center; margin-bottom:10px">Dr. ${
-                coord.nume
-              }</h1>
-              <p style="font-size:15px">Email: ${coord.email}</p>
-              <p style="font-size:15px">Nr. Telefon: ${coord.telefon}</p>
-              <p style="font-size:15px">Program: ${coord.program.toString()}</p>
-              <p style="font-size:15px">Nr. pacienți: ${coord.nr_pacienti}</p>
-              <p style="font-size:15px">Durata de acasă până la medic: ${
-                coord.distance
-              } minute cu mașina </p>
+              <h1 style="font-weight:500; font-size:18px; text-align:center; margin-bottom:10px">Dr. ${coord.nume}</h1>
+              <p style="font-size:15px; font-weight:500; margin-bottom:2px">Id utilizator: <span style="font-weight:400; font-size:14px">${coord.id}<span/> </p>
+
+              <p style="font-size:15px; font-weight:500; margin-bottom:2px">Email: <span style="font-weight:400; font-size:14px">${coord.email}<span/></p>
+              <p style="font-size:15px; font-weight:500; margin-bottom:2px">Nr. Telefon: <span style="font-weight:400; font-size:14px">${coord.telefon}<span/></p>
+              <p style="font-size:15px; font-weight:500; margin-bottom:2px">Program la clinică: <span style="font-weight:400; font-size:14px">${coord.program_clinica}<span/></p>
+              <p style="font-size:15px; font-weight:500; margin-bottom:2px">Nr. pacienți: <span style="font-weight:400; font-size:14px">${coord.nr_pacienti}<span/></p>
+              <p style="font-size:15px; font-weight:500; margin-bottom:2px">Durata de acasă până la medic: <span style="font-weight:400; font-size:14px">${coord.distance} minute cu mașina <span/></p>
             </div>`)
           )
           .addTo(map);
@@ -77,7 +76,7 @@ function Harta({ coordinatesUser, coords }) {
           coord.distance = Math.round(data.routes[0].duration / 60);
         });
 
-      console.log("coord.distance", coord.distance);
+      // console.log("coord.distance", coord.distance);
 
       if (coord.distance < 45) addToMap(map, coord, "#219EBC");
       //   console.log("coord", coord);

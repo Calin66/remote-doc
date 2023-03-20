@@ -17,7 +17,10 @@ function index() {
   const [values, setValues] = useState({
     nume: "",
     email: "",
+    telefon: "",
     password: "",
+    program_clinica: "",
+    program_domiciliu: "",
     dovada: "",
   });
   const [selectedImage, setSelectedImage] = useState();
@@ -29,6 +32,7 @@ function index() {
   const { signup } = useAuth();
 
   const handleNext = (nr) => {
+    console.log("handle Next");
     setErrors(validateInfo(values));
     setNext(nr);
   };
@@ -61,6 +65,9 @@ function index() {
           await setDoc(doc(db, "medici", user.uid), {
             nume: values.nume,
             email: values.email,
+            telefon: values.telefon,
+            program_clinica: values.program_clinica,
+            program_domiciliu: values.program_domiciliu,
             uid: user.uid,
             pacienti: {},
           });
@@ -107,7 +114,7 @@ function index() {
           setIsSubmitting(false);
 
           Cookies.set("role", "medic");
-          router.push("/");
+          router.push("/harta");
         } catch (error) {
           let errorCode = error.code;
           if (errorCode == "auth/email-already-in-use") {
@@ -124,7 +131,24 @@ function index() {
   }, [errors]);
 
   useEffect(() => {
-    if (!errors.nume && !errors.email && !errors.password && next) {
+    if (
+      !errors.nume &&
+      !errors.email &&
+      !errors.telefon &&
+      !errors.password &&
+      next === 2
+    ) {
+      console.log("handlePas");
+      setPas(next);
+    } else if (
+      !errors.nume &&
+      !errors.email &&
+      !errors.telefon &&
+      !errors.password &&
+      !errors.dovada &&
+      next === 3
+    ) {
+      console.log("handlePas");
       setPas(next);
     }
   }, [errors]);
@@ -169,7 +193,19 @@ function index() {
               {errors.email}
             </p>
           )}
-
+          <input
+            name="telefon"
+            type="text"
+            value={values.telefon}
+            onChange={handleChange}
+            placeholder="Nr. telefon"
+            className=" mt-14 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg"
+          />
+          {errors.telefon && (
+            <p className="text-base text-c2 w-full p-2 max-w-lg">
+              {errors.telefon}
+            </p>
+          )}
           <input
             name="password"
             value={values.password}
@@ -218,15 +254,49 @@ function index() {
           )}
           <button
             className="text-center bg-white text-c2 font-medium px-10 py-3 rounded-lg mt-10 w-5/6 self-center max-w-xs"
-            onClick={handleSubmit}
+            onClick={() => handleNext(3)}
           >
-            Submit
+            Următorul pas
           </button>
           {errors.dovada && (
-            <p className="mt-4 text-base w-full text-center max-w-lg">
+            <p className="my-4 text-base w-full text-center max-w-lg">
               {errors.dovada}
             </p>
           )}
+          <p className="text-center">
+            Atenție! Pacientul va putea vedea această dovadă pentru a se asigura
+            că sunteți un medic real
+          </p>
+        </div>
+      )}
+      {pas === 3 && (
+        <div className="flex flex-col justify-center items-center text-xl text-black">
+          <h1 className="text-2xl font-medium mb-10">Program de lucru</h1>
+
+          <input
+            type="text"
+            name="program_clinica"
+            value={values.program_clinica}
+            onChange={handleChange}
+            placeholder="Program la clinică"
+            className=" mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg"
+          />
+
+          <input
+            name="program_domiciliu"
+            type="text"
+            value={values.program_domiciliu}
+            onChange={handleChange}
+            placeholder="Program domiciliu"
+            className=" mt-14 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg"
+          />
+
+          <button
+            className="text-center bg-c2 text-white font-medium px-10 py-3 rounded-lg mt-10 w-5/6 self-center max-w-xs"
+            onClick={handleSubmit}
+          >
+            Următorul pas
+          </button>
         </div>
       )}
     </div>

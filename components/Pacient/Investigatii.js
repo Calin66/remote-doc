@@ -327,8 +327,8 @@ function Investigatii({ investigatii, handlePage, handlePageCI }) {
               onClick={() => handlePageCI(investigatii[val])}
               className={
                 role === "medic"
-                  ? "w-full text-center border border-c1 mt-4 rounded-xl p-2"
-                  : "w-full text-center border border-c4 mt-4 rounded-xl p-2"
+                  ? "w-full text-center border border-c1 mt-4 rounded-xl p-2 cursor-pointer"
+                  : "w-full text-center border border-c4 mt-4 rounded-xl p-2 cursor-pointer"
               }
               key={i}
             >

@@ -88,8 +88,8 @@ export default function AutofillInMap({ setCoordinates2 }) {
             coordinates: coordinates,
             nume: data.nume,
             email: data.email,
-            telefon: data.telefon || "",
-            program: data.program || "",
+            telefon: data.telefon,
+            program_clinica: data.program_clinica,
             nr_pacienti: nr_pacienti,
             id: user.uid,
           });

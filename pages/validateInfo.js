@@ -6,6 +6,9 @@ export default function validateInfo(values) {
   if (!values.email) {
     errors.email = "Câmp obligatoriu";
   }
+  if (!values.telefon) {
+    errors.telefon = "Câmp obligatoriu";
+  }
   if (!values.password) {
     errors.password = "Câmp obligatoriu";
   } else if (values.password.length < 6) {
@@ -56,7 +59,12 @@ export function validateNewPacientInfoJOURNEY(values) {
   if (!values.nume) {
     errors.nume = "Câmp obligatoriu";
   }
-
+  if (!values.cnp) {
+    errors.cnp = "Câmp obligatoriu";
+  }
+  if (!values.sexul) {
+    errors.sexul = "Câmp obligatoriu";
+  }
   if (!values.telefon) {
     errors.telefon = "Câmp obligatoriu";
   }
