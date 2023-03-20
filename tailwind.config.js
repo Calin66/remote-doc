@@ -6,10 +6,10 @@ module.exports = {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        poppins: ["var(--font-poppins)"],
-        edu_NSW_ACT_Foundation: ["var(--font-edu_NSW_ACT_Foundation)"],
-      },
+      // fontFamily: {
+      //   poppins: ["var(--font-poppins)"],
+      //   edu_NSW_ACT_Foundation: ["var(--font-edu_NSW_ACT_Foundation)"],
+      // },
       colors: {
         c1: "#8ECAE6",
         c2: "#219EBC",
