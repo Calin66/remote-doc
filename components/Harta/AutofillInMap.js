@@ -169,7 +169,10 @@ export default function AutofillInMap({ setCoordinates2 }) {
         </div>
         <div className="col col--auto-mm">
           {/* Visual confirmation map */}
-          <div id="minimap-container" className=" h-96 w-screen relative mt-18">
+          <div
+            id="minimap-container"
+            className=" h-96 w-screen max-w-2xl relative mt-18 flex items-center justify-center"
+          >
             <AddressMinimap
               keepMarkerCentered={true}
               canAdjustMarker={true}
