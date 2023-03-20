@@ -6,6 +6,8 @@ function middleware(req) {
   let url = req.url;
   if (role !== "medic" && url.includes("/pacienti"))
     return NextResponse.redirect("http://localhost:3000/");
+  if (role !== "medic" && url.includes("/qrcode"))
+    return NextResponse.redirect("http://localhost:3000/");
   if (role === "medic" && url === "http://localhost:3000/")
     return NextResponse.redirect("http://localhost:3000/pacienti");
   if (role && url.includes("/login"))
