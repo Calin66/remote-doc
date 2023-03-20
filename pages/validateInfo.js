@@ -6,6 +6,9 @@ export default function validateInfo(values) {
   if (!values.email) {
     errors.email = "Câmp obligatoriu";
   }
+  if (!values.telefon) {
+    errors.telefon = "Câmp obligatoriu";
+  }
   if (!values.password) {
     errors.password = "Câmp obligatoriu";
   } else if (values.password.length < 6) {
@@ -56,7 +59,12 @@ export function validateNewPacientInfoJOURNEY(values) {
   if (!values.nume) {
     errors.nume = "Câmp obligatoriu";
   }
-
+  if (!values.cnp) {
+    errors.cnp = "Câmp obligatoriu";
+  }
+  if (!values.sexul) {
+    errors.sexul = "Câmp obligatoriu";
+  }
   if (!values.telefon) {
     errors.telefon = "Câmp obligatoriu";
   }
@@ -140,6 +148,48 @@ export function validateDatePacient(values) {
   }
   if (!values.cnp) {
     errors.cnp = "Câmp obligatoriu";
+  }
+
+  return errors;
+}
+
+export function validateDatePacientInPacienti(values) {
+  let errors = {};
+
+  return errors;
+}
+
+export function validateDateConsultatie(values) {
+  let errors = {};
+  if (!values.data) {
+    errors.data = "Câmp obligatoriu";
+  }
+  if (!values.locul) {
+    errors.locul = "Câmp obligatoriu";
+  }
+  if (!values.simptome) {
+    errors.simptome = "Câmp obligatoriu";
+  }
+  if (!values.diagnostic) {
+    errors.diagnostic = "Câmp obligatoriu";
+  }
+  if (!values.cod) {
+    errors.cod = "Câmp obligatoriu";
+  }
+  if (!values.prescriptie) {
+    errors.prescriptie = "Câmp obligatoriu";
+  }
+
+  return errors;
+}
+
+export function validateNewDocument(values) {
+  let errors = {};
+  if (!values.fisier) {
+    errors.fisier = "Câmp obligatoriu";
+  }
+  if (!values.titlu) {
+    errors.titlu = "Câmp obligatoriu";
   }
 
   return errors;

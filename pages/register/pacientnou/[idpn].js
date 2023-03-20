@@ -36,6 +36,8 @@ const Post = () => {
     email: "",
     password: "",
     telefon: "",
+    cnp: "",
+    sexul: "masculin",
     actIdentitate: "",
     doc_uid: doc_uid,
   });
@@ -78,7 +80,8 @@ const Post = () => {
               nume: values.nume,
               email: values.email,
               telefon: values.telefon,
-              cnp: "",
+              cnp: values.cnp,
+              sexul: values.sexul,
               uid: user.uid,
               doc_uid: doc_uid,
             },
@@ -128,10 +131,7 @@ const Post = () => {
   };
   const forImage = async (user) => {
     const unique_id = uuid();
-    const imageRef = ref(
-      storage,
-      "acteIdentitate_pacienti/" + unique_id + ".png"
-    );
+    const imageRef = ref(storage, "acteIdentitate_pacienti/" + unique_id);
     const snapI = await uploadBytes(imageRef, values.actIdentitate);
     const iURL = await getDownloadURL(imageRef);
     const infoRef = doc(db, "pacienti", user.uid);
@@ -153,7 +153,6 @@ const Post = () => {
           Cookies.set("role", "pacient");
 
           setIsSubmitting(false);
-
           console.log("Contul a fost creat");
           router.push("/");
         } catch (error) {
@@ -222,6 +221,36 @@ const Post = () => {
                   {errors.nume && (
                     <p className="text-base text-c2 w-full p-2 select-none max-w-lg">
                       {errors.nume}
+                    </p>
+                  )}
+
+                  <input
+                    type="text"
+                    name="cnp"
+                    value={values.cnp}
+                    onChange={handleChange}
+                    placeholder="CNP"
+                    className=" mt-16 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg"
+                  />
+                  {errors.cnp && (
+                    <p className="text-base text-c2 w-full p-2 select-none max-w-lg">
+                      {errors.cnp}
+                    </p>
+                  )}
+
+                  <select
+                    value={values.sexul}
+                    onChange={handleChange}
+                    name="sexul"
+                    className="mt-16 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg"
+                  >
+                    <option value="masculin">Masculin</option>
+                    <option value="feminin">Feminin</option>
+                  </select>
+
+                  {errors.sexul && (
+                    <p className="text-base text-c2 w-full p-2 select-none max-w-lg">
+                      {errors.sexul}
                     </p>
                   )}
 

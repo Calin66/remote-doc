@@ -14,6 +14,7 @@ import {
 import Cookies from "js-cookie";
 import _ from "lodash";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import {
@@ -23,7 +24,7 @@ import {
   validateNewAsistentInfo,
 } from "../validateInfo";
 
-function NewAsistent({ handlePas, valuesLocal }) {
+function NewAsistent({ handlePas, valuesLocal, handleChangeA }) {
   const [valoriAsistent, setValoriAsistent] = useState({
     nume: "",
     program_clinica: "",
@@ -65,7 +66,7 @@ function NewAsistent({ handlePas, valuesLocal }) {
       },
       { merge: true }
     );
-    handleChangeA();
+    handleChangeA(valoriAsistent);
     handlePas();
 
     console.log("Update done");
@@ -151,7 +152,7 @@ function NewAsistent({ handlePas, valuesLocal }) {
 function AsistentCard({ asistent, handleSetPag, cheie }) {
   return (
     <div
-      className="border-2 border-c1 px-3 py-2 mb-3 rounded-lg flex justify-between items-center"
+      className="border-2 border-c1 px-3 py-2 mb-3 rounded-lg flex justify-between items-center cursor-pointer"
       onClick={() => handleSetPag(asistent, cheie)}
     >
       {/* <Image
@@ -268,13 +269,16 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
   if (asistent)
     return (
       <div className="w-full flex flex-col mt-14">
-        <div className="w-full">
+        <div className="w-full flex flex-col">
           {Object.keys(valuesLocal).map((val, i) => {
             // console.log("val", val);
             if (val !== "cheie")
               return (
-                <div key={i} className="flex w-full justify-between mb-20">
-                  <label className=" text-xl font-medium duration-300 text-black self-center">
+                <div
+                  key={i}
+                  className="flex flex-col w-full justify-between mb-20 self-center"
+                >
+                  <label className=" text-xl font-medium duration-300 text-black self-center max-w-lg w-full">
                     {labels[val]}
                     {clasa ? (
                       <input
@@ -285,8 +289,8 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
                         onChange={handleChange}
                         className={
                           errorsEditAsistent[val]
-                            ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-blue-100 border-b-2 p-2"
-                            : "outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2"
+                            ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-blue-100 border-b-2 p-2 block"
+                            : "outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2 block"
                         }
                       />
                     ) : (
@@ -296,7 +300,7 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
                         type="text"
                         name={val}
                         value={valuesLocal[val]}
-                        className="outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2"
+                        className="outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2 block"
                       />
                     )}
                   </label>
@@ -340,20 +344,18 @@ export default function index() {
 
   const labels = {
     nume: "Nume complet",
-    email: "Adresa email",
-    nume_clinica: "Nume clinică",
+    email: "Adresă de email",
+    telefon: "Nr. telefon",
     program_clinica: "Program la clinică",
     program_domiciliu: "Program la domiciliu",
-    locatie_clinica: "Adresa clinicii",
   };
 
   const [valuesLocal, setValuesLocal] = useState({
     nume: "",
     email: "",
-    nume_clinica: "",
+    telefon: "",
     program_clinica: "",
     program_domiciliu: "",
-    locatie_clinica: "",
     asistenti: {},
   });
 
@@ -361,20 +363,23 @@ export default function index() {
   const [valoriDb, setValoriDb] = useState({
     nume: "",
     email: "",
-    nume_clinica: "",
+    telefon: "",
+
     program_clinica: "",
     program_domiciliu: "",
-    locatie_clinica: "",
     asistenti: {},
   });
   const { date, handleEditDate, errorD, loadingD } =
     useFetchDateMedic(valuesLocal);
+
   const [errors, setErrors] = useState({});
   const [clasa, setClasa] = useState(false);
   const [isSubmittingAici, setIsSubmittingAici] = useState(false);
+
   const handlePas = () => {
     setPas(!pas);
   };
+
   const handleSetPag = (asistent, cheie, valoriA, del) => {
     if (valoriA) {
       setValuesLocal({
@@ -387,8 +392,6 @@ export default function index() {
     } else if (del) {
       const copie = valuesLocal;
       delete copie.asistenti[del];
-      // console.log("copie", copie);
-      // console.log("del", del);
       setValuesLocal(copie);
     }
     if (asistent) {
@@ -406,7 +409,6 @@ export default function index() {
 
   const handleClasa = async () => {
     if (clasa === true) {
-      //AAAA
       setIsSubmittingAici(true);
       setErrors(validateDateMedic(valuesLocal));
     } else {
@@ -415,14 +417,26 @@ export default function index() {
   };
 
   const handleChangeA = (asistent) => {
-    setValuesLocal(valoriDb);
+    const costel = valuesLocal;
+
+    const newKey =
+      Object.keys(valuesLocal.asistenti).length === 0
+        ? 1
+        : Math.max(...Object.keys(valuesLocal.asistenti)) + 1;
+
+    costel.asistenti = {
+      ...costel.asistenti,
+      [newKey]: asistent,
+    };
+
+    setValuesLocal(costel);
+    setValoriDb(costel);
   };
 
   //   const handleNewAsistentImageChange = () => {};
   useEffect(() => {
     // console.log("errors", errors);
     if (Object.keys(errors).length === 0 && isSubmittingAici) {
-      console.log("AM INCEPUT");
       const asasdasda = async () => {
         await handleEditDate(valuesLocal, valoriDb);
         setValoriDb(valuesLocal);
@@ -496,14 +510,15 @@ export default function index() {
                     </div>
                   );
               })}
+
               <div>
                 <div className="flex flex-col text-xl font-medium">
-                  <p>Asistenti</p>
+                  <p>Asistenți</p>
                   <button
                     className=" bg-c1 p-2 px-6 mt-4 rounded-xl font-normal text-lg"
                     onClick={handlePas}
                   >
-                    Adauga asistent
+                    Adaugă asistent
                   </button>
                 </div>
                 <div className="flex flex-col mt-4">
@@ -520,17 +535,19 @@ export default function index() {
                     })}
                 </div>
               </div>
-              <button
-                onClick={handleClasa}
-                className=" bg-c2 font-bold text-2xl flex align-middle justify-center
-            rounded-full w-16 h-16 center text-white fixed bottom-8 right-4 md:right-14 md:top-12"
-              >
-                {clasa ? (
-                  <i className="fa-solid fa-check self-center text-2xl"></i>
-                ) : (
-                  <i className="fa-solid fa-pen self-center text-xl"></i>
-                )}
-              </button>
+              <div className="fixed bottom-4 right-4 md:right-14 md:top-12 flex">
+                <button
+                  onClick={handleClasa}
+                  className=" bg-c2 text-lg flex align-middle justify-center
+            rounded-full w-12 h-12 center text-white"
+                >
+                  {clasa ? (
+                    <i className="fa-solid fa-check self-center"></i>
+                  ) : (
+                    <i className="fa-solid fa-pen self-center"></i>
+                  )}
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -547,28 +564,38 @@ const SetariPacient = () => {
     email: "Adresă email",
     telefon: "Nr. telefon",
     cnp: "CNP",
+    locatie: "Adresa acasa",
     uid: "Id utilizator",
-    doc_uid: "Id medic",
   };
 
   const [idMedic, setIdMedic] = useState("");
 
   const [valuesLocal, setValuesLocal] = useState({
+    doc_uid: "",
     nume: "",
     email: "",
     telefon: "",
     cnp: "",
+    locatie: {
+      nume: "",
+      lat: "",
+      long: "",
+    },
     uid: "",
-    doc_uid: "",
   });
 
   const [valoriDb, setValoriDb] = useState({
+    doc_uid: "",
     nume: "",
     email: "",
     telefon: "",
     cnp: "",
+    locatie: {
+      nume: "",
+      lat: "",
+      long: "",
+    },
     uid: "",
-    doc_uid: "",
   });
 
   const { date, handleEditDate, errorP, loadingP } =
@@ -786,35 +813,74 @@ const SetariPacient = () => {
 
     if (!changeMedic) {
       return (
-        <div className="mt-14 min-h-hatz">
+        <div className="mt-20 min-h-hatz">
           <div className=" w-full flex flex-col ">
             {Object.keys(valuesLocal).map((val, i) => {
-              if (val !== "doc_uid")
+              if (val === "locatie")
+                return (
+                  <div key={i}></div>
+                  // <div key={i} className="w-full mb-20">
+                  //   <label className=" text-xl font-medium duration-300 text-black w-full">
+                  //     {labels[val]}
+                  //     <div
+                  //       className={
+                  //         " w-full max-w-lg font-normal mt-4  border-c3 border-b-2 p-2 flex justify-between items-center"
+                  //       }
+                  //     >
+                  //       <input
+                  //         readOnly
+                  //         type="text"
+                  //         name={val}
+                  //         value={valuesLocal[val].nume}
+                  //         onClick={() => router.push("/harta")}
+                  //         className="outline-none bg-inherit"
+                  //       />
+                  //       <i className="fa-solid fa-map-location-dot text-c5"></i>
+                  //     </div>
+                  //   </label>
+                  // </div>
+                );
+              else if (val === "uid") {
+                return (
+                  <div key={i} className="w-full mb-20">
+                    <label className=" text-xl font-medium duration-300 text-black w-full">
+                      {labels[val]}
+                      <input
+                        readOnly
+                        type="text"
+                        name={val}
+                        value={valuesLocal[val]}
+                        className="outline-none w-full max-w-lg font-normal mt-4 border-c3 border-b-2 p-2"
+                      />
+                    </label>
+
+                    {/* <i className="fa-solid fa-pen-to-square"></i> */}
+                  </div>
+                );
+              } else if (val !== "doc_uid")
                 return (
                   <div key={i} className="w-full mb-20">
                     <label className=" text-xl font-medium duration-300 text-black w-full">
                       {labels[val]}
                       {clasa ? (
                         <input
-                          key={i}
                           type="text"
                           name={val}
                           value={valuesLocal[val]}
                           onChange={handleChange}
                           className={
                             errors[val]
-                              ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-blue-100 border-b-2 p-2"
-                              : "outline-none w-full max-w-lg font-normal mt-4  border-c2 bg-blue-100 border-b-2 p-2"
+                              ? "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-orange-100 border-b-2 p-2"
+                              : "outline-none w-full max-w-lg font-normal mt-4  border-c5 bg-orange-50 border-b-2 p-2"
                           }
                         />
                       ) : (
                         <input
                           readOnly
-                          key={i}
                           type="text"
                           name={val}
                           value={valuesLocal[val]}
-                          className="outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2"
+                          className="outline-none w-full max-w-lg font-normal mt-4 border-c5 border-b-2 p-2"
                         />
                       )}
                     </label>
@@ -824,22 +890,25 @@ const SetariPacient = () => {
                 );
               else return <div className="hidden" key={i}></div>;
             })}
+            <div className="fixed bottom-4 right-4 md:right-14 md:top-12 flex">
+              <button
+                onClick={handleClasa}
+                className=" bg-c5 text-lg flex align-middle justify-center
+            rounded-full w-12 h-12 center text-white"
+              >
+                {clasa ? (
+                  <i className="fa-solid fa-check self-center"></i>
+                ) : (
+                  <i className="fa-solid fa-pen self-center"></i>
+                )}
+              </button>
+            </div>
+
             <button
               className="text-center text-c5 font-medium p-3 rounded-lg w-3/6 self-center max-w-xs border mb-3 border-c5"
               onClick={handleChangeMedic}
             >
               Vreau să mă transfer la alt medic de familie
-            </button>
-            <button
-              onClick={handleClasa}
-              className=" bg-c2 font-bold text-2xl flex align-middle justify-center
-          rounded-full w-16 h-16 center text-white fixed bottom-8 right-4 md:right-14 md:top-12"
-            >
-              {clasa ? (
-                <i className="fa-solid fa-check self-center text-2xl"></i>
-              ) : (
-                <i className="fa-solid fa-pen self-center text-xl"></i>
-              )}
             </button>
           </div>
         </div>
