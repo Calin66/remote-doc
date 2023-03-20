@@ -54,6 +54,14 @@ export default function Modal(props) {
                 <i className="fa-solid fa-calendar-days text-c2"></i>
                 Calendar
               </Link>
+              <Link
+                href="/calendar"
+                className="flex flex-col mb-14"
+                onClick={() => setOpenModal(false)}
+              >
+                <i className="fa-solid fa-qrcode text-c2"></i>
+                Cod QR
+              </Link>
 
               <Link
                 href="/setari"

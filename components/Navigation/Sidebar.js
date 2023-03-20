@@ -111,10 +111,13 @@ function Sidebar({ links }) {
                 <i className="fa-solid fa-notes-medical"></i>
               </Link>
             </div>
-            <div className="flex flex-col items-center bg-c2 text-white w-14 py-10 rounded-2xl justify-around h-56">
+            <div className="flex flex-col items-center bg-c2 text-white w-14 py-10 rounded-2xl justify-around h-64">
               {/* <i className="fa-solid fa-stethoscope mb-10"></i> */}
               <Link href="/calendar">
                 <i className="fa-solid fa-calendar-days"></i>
+              </Link>
+              <Link href="/qrcode">
+                <i className="fa-solid fa-qrcode"></i>
               </Link>
 
               <Link href="/setari">
