@@ -105,10 +105,12 @@ const Search = ({ info, setCombinedId }) => {
   }, [vb]);
 
   return (
-    <div className=" z-20 fixed top-5 bg-white border border-c6 w-6/12 max-w-lg self-center items-center px-2 md:px-20  rounded-2xl mb-5 flex flex-col">
+    <div className=" z-20 fixed top-5 bg-white border border-c6 w-7/12 max-w-lg self-center items-center px-2 md:px-20  rounded-2xl mb-5 flex flex-col">
       {role === "pacient" && (
         <div>
-          <h1>Nume medic: {info.numeMedic}</h1>
+          <h1 className="my-2 text-center">
+            Nume medic: <br /> Ciobanu Calin ANdrei{info.numeMedic}
+          </h1>
         </div>
       )}
       {role === "medic" && (
