@@ -114,6 +114,8 @@ const Post = () => {
                 {
                   pacienti: {
                     [ij]: {
+                      nume: values.nume,
+                      email: values.email,
                       activate: true,
                       link: "",
                       uid: user.uid,

@@ -54,6 +54,23 @@ export default function Modal(props) {
                 <i className="fa-solid fa-calendar-days text-c2"></i>
                 Calendar
               </Link>
+              <Link
+                href="/chat"
+                className="flex flex-col mb-14"
+                onClick={() => setOpenModal(false)}
+              >
+                <i className="fa-solid fa-comments text-c2"></i>
+                Chat
+              </Link>
+
+              <Link
+                href="/qrcode"
+                className="flex flex-col mb-14"
+                onClick={() => setOpenModal(false)}
+              >
+                <i className="fa-solid fa-qrcode text-c2"></i>
+                Cod QR
+              </Link>
 
               <Link
                 href="/setari"
@@ -104,8 +121,16 @@ export default function Modal(props) {
                 className="flex flex-col mb-14"
                 onClick={() => setOpenModal(false)}
               >
-                <i className="fa-solid fa-map-location-dot text-c5"></i>
+                <i className="fa-solid fa-calendar-days text-c5"></i>
                 Calendar
+              </Link>
+              <Link
+                href="/chat"
+                className="flex flex-col mb-14"
+                onClick={() => setOpenModal(false)}
+              >
+                <i className="fa-solid fa-comments text-c5"></i>
+                Chat
               </Link>
 
               <Link
@@ -113,7 +138,7 @@ export default function Modal(props) {
                 className="flex flex-col mb-14"
                 onClick={() => setOpenModal(false)}
               >
-                <i className="fa-solid fa-calendar-days text-c5"></i>
+                <i className="fa-solid fa-map-location-dot text-c5"></i>
                 Harta
               </Link>
 

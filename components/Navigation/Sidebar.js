@@ -58,10 +58,13 @@ function Sidebar({ links }) {
                 <i className="fa-solid fa-notes-medical"></i>
               </Link>
             </div>
-            <div className="flex flex-col items-center bg-c5 text-white w-14 py-10 rounded-2xl justify-around h-64">
+            <div className="flex flex-col items-center bg-c5 text-white w-14 py-10 rounded-2xl justify-around h-80">
               {/* <i className="fa-solid fa-stethoscope mb-10"></i> */}
               <Link href="/calendar">
                 <i className="fa-solid fa-calendar-days"></i>
+              </Link>
+              <Link href="/chat">
+                <i className="fa-solid fa-comments"></i>
               </Link>
               <Link href="/harta">
                 <i className="fa-solid fa-map-location-dot"></i>
@@ -71,6 +74,7 @@ function Sidebar({ links }) {
               </Link>
             </div>
           </div>
+
           <div
             className="bg-red-600 w-14 h-14 flex flex-col items-center justify-center p-2 rounded-2xl text-white cursor-pointer"
             onClick={() => {
@@ -111,10 +115,16 @@ function Sidebar({ links }) {
                 <i className="fa-solid fa-notes-medical"></i>
               </Link>
             </div>
-            <div className="flex flex-col items-center bg-c2 text-white w-14 py-10 rounded-2xl justify-around h-56">
+            <div className="flex flex-col items-center bg-c2 text-white w-14 py-10 rounded-2xl justify-around h-80">
               {/* <i className="fa-solid fa-stethoscope mb-10"></i> */}
               <Link href="/calendar">
                 <i className="fa-solid fa-calendar-days"></i>
+              </Link>
+              <Link href="/chat">
+                <i className="fa-solid fa-comments"></i>
+              </Link>
+              <Link href="/qrcode">
+                <i className="fa-solid fa-qrcode"></i>
               </Link>
 
               <Link href="/setari">

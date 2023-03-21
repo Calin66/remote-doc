@@ -23,6 +23,10 @@ export default function Register() {
       <Link href="/login" className="mt-10 text-lg">
         Ai deja cont? Login <span className="text-c2 font-semibold">aici</span>
       </Link>
+      <Link href="/reset-password" className="mt-2 text-lg">
+        Ți-ai uitat parola? Apasă{" "}
+        <span className="text-c6 font-semibold">aici</span>
+      </Link>
     </div>
   );
 }
