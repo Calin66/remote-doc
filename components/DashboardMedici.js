@@ -46,6 +46,7 @@ export default function DashboardMedici() {
           Object.keys(pacienti).length === 0
             ? 1
             : Math.max(...Object.keys(pacienti)) + 1;
+
         setPacienti({
           ...pacienti,
           [newKey]: {
@@ -138,8 +139,6 @@ export default function DashboardMedici() {
       console.log(e);
     }
   };
-  let i;
-  let j;
 
   return (
     <div className=" md:w-1/2 self-center  rounded-lg md:p-16 md:relative md:pb-20 w-full">
@@ -151,7 +150,6 @@ export default function DashboardMedici() {
               {Object.keys(pacienti).map((pacient, i) => {
                 // console.log("pp", pacienti[pacient]);
                 if (pacienti[pacient].activate) {
-                  i = true;
                   return (
                     <PacientCard
                       activate={pacienti[pacient].activate}
@@ -163,11 +161,6 @@ export default function DashboardMedici() {
                   );
                 } else return <div key={i}></div>;
               })}
-              {!i && (
-                <h1 className="mt-4">
-                  Momentan nu ai nici un pacient confirmat.
-                </h1>
-              )}
             </div>
           </div>
           <div className="mt-16">
@@ -175,7 +168,6 @@ export default function DashboardMedici() {
             <div>
               {Object.keys(pacienti).map((pacient, i) => {
                 if (!pacienti[pacient].activate) {
-                  j = true;
                   return (
                     <PacientCard
                       activate={pacienti[pacient].activate}
@@ -189,11 +181,6 @@ export default function DashboardMedici() {
                   );
                 } else return <div key={i}></div>;
               })}
-              {!j && (
-                <h1 className="mt-4">
-                  Momentan nu ai nici un pacient neconfirmat.
-                </h1>
-              )}
             </div>
           </div>
         </>

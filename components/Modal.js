@@ -55,6 +55,15 @@ export default function Modal(props) {
                 Calendar
               </Link>
               <Link
+                href="/chat"
+                className="flex flex-col mb-14"
+                onClick={() => setOpenModal(false)}
+              >
+                <i className="fa-solid fa-comments text-c2"></i>
+                Chat
+              </Link>
+
+              <Link
                 href="/qrcode"
                 className="flex flex-col mb-14"
                 onClick={() => setOpenModal(false)}
@@ -114,6 +123,14 @@ export default function Modal(props) {
               >
                 <i className="fa-solid fa-calendar-days text-c5"></i>
                 Calendar
+              </Link>
+              <Link
+                href="/chat"
+                className="flex flex-col mb-14"
+                onClick={() => setOpenModal(false)}
+              >
+                <i className="fa-solid fa-comments text-c5"></i>
+                Chat
               </Link>
 
               <Link

@@ -5,11 +5,11 @@ import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import Cookies from "js-cookie";
 
-export default function useFetchForChat() {
+export default function useFetchForChat(combinedId) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState({});
-  const [info, setInfo] = useState("");
+  const [info, setInfo] = useState({});
   const [combinedID, setCombinedID] = useState();
 
   const role = Cookies.get("role");
@@ -19,9 +19,8 @@ export default function useFetchForChat() {
 
   useEffect(() => {
     async function fetchData() {
-      if (Object.keys(data).length !== 0) {
-        setLoading(false);
-      } else if (user) {
+      console.log("INCA UN FETCH");
+      if (user) {
         try {
           if (role === "pacient") {
             // const collection = role === "pacient" ? "pacienti" : "medici";
@@ -54,10 +53,23 @@ export default function useFetchForChat() {
           } else if (role === "medic") {
             const docRef = doc(db, "medici", user.uid);
             const docSnap = await getDoc(docRef);
+            const dat = docSnap.data();
+            setInfo(dat);
 
-            if (docSnap.exists()) {
-              const dat = docSnap.data();
-              setInfo(dat);
+            if (docSnap.exists() && combinedId) {
+              console.log("BAI TOTUSI AICI AJUNG");
+
+              const docRef2 = doc(db, "chats", combinedId);
+              const docSnap2 = await getDoc(docRef2);
+
+              if (docSnap2.exists()) {
+                setData(docSnap2);
+              } else {
+                await setDoc(doc(db, "chats", combinedId), {
+                  messages: {},
+                });
+              }
+
               // const combinedId =
               //   user.uid > dat.doc_uid
               //     ? user.uid + dat.doc_uid
@@ -87,7 +99,6 @@ export default function useFetchForChat() {
       }
     }
     fetchData();
-  }, [user]);
-  console.log("in fetch", data);
+  }, [user, combinedId]);
   return { data, error, loading, combinedID, info };
 }

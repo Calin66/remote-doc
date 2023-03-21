@@ -3,6 +3,7 @@ import React from "react";
 
 function middleware(req) {
   let role = req.cookies.get("role")?.value;
+
   let url = req.url;
   if (role !== "medic" && url.includes("/pacienti"))
     return NextResponse.redirect("http://localhost:3000/");

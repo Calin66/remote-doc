@@ -9,9 +9,11 @@ import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 
 const index = () => {
-  const { data, error, loading, combinedID, info } = useFetchForChat();
   const [combinedId, setCombinedId] = useState();
   const [messages, setMessages] = useState({});
+
+  const { data, error, loading, combinedID, info } =
+    useFetchForChat(combinedId);
 
   const auth = getAuth();
   const user = auth.currentUser;
@@ -27,6 +29,7 @@ const index = () => {
         unsub();
       };
     } else if (!loading && combinedId && role === "medic") {
+      console.log("combinedId in index.js", combinedId);
       const unsub = onSnapshot(doc(db, "chats", combinedId), (doc) => {
         setMessages(doc.data().messages);
       });

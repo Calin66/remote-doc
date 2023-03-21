@@ -17,7 +17,7 @@ import { db } from "@/firebase";
 const Search = ({ info, setCombinedId }) => {
   const [username, setUsername] = useState("");
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
   const [err, setErr] = useState(false);
 
   const [vb, setVb] = useState("");
@@ -86,8 +86,6 @@ const Search = ({ info, setCombinedId }) => {
 
   useEffect(() => {
     if (vb) {
-      console.log("vb", vb);
-
       const index = Object.keys(info.pacienti).find((ind) => {
         return info.pacienti[ind].nume === vb && info.pacienti[ind].activate;
       });
@@ -100,7 +98,6 @@ const Search = ({ info, setCombinedId }) => {
           : pacient.uid + currentUser.uid;
 
       setCombinedId(combinedId);
-      console.log("CI", combinedId);
     }
   }, [vb]);
 
