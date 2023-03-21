@@ -20,7 +20,7 @@ function Sidebar({ links }) {
     },
     {
       title: "Calendar",
-      href: "/calendar",
+      href: "/programari",
     },
     {
       title: "Setari",
@@ -30,7 +30,7 @@ function Sidebar({ links }) {
 
   const linksPacient = [
     { title: "Acasa", href: "/" },
-    { title: "Calendar", href: "/calendar" },
+    { title: "Calendar", href: "/programari" },
     { title: "Harta", href: "/harta" },
     { title: "Setari", href: "/setari" },
   ];

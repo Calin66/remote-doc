@@ -1,18 +1,16 @@
-import { auth } from "@/firebase";
-import { async } from "@firebase/util";
-import { db } from "@/firebase";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import React from "react";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import useFetchPacienti from "@/hooks/fetchPacienti";
+import useFetchProgramari from "@/hooks/fetchProgramari";
 
 function ViewAllAppointments() {
   const [appointments, setAppointments] = useState([]);
   const [isMedic, setIsMedic] = useState(Cookies.get("role") == "medic");
-  const [isAuth, setIsAuth] = useState(auth.currentUser);
   const { pacienti } = useFetchPacienti();
+  const { appo } = useFetchProgramari();
+
   const [userToId, setUserToId] = useState(new Map());
 
   useEffect(() => {
@@ -29,22 +27,9 @@ function ViewAllAppointments() {
   }, [pacienti]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const app = [];
-      const q = query(
-        collection(db, "programari"),
-        where(isMedic ? "idMedic" : "idPacient", "==", auth.currentUser.uid)
-      );
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        const el = doc.data();
-        el.id = doc.id;
-        app.push(el);
-      });
-      setAppointments(app);
-    };
-    if (isAuth) fetchData();
-  }, []);
+    setAppointments(appo);
+    console.log(appointments);
+  }, [appo]);
 
   const getPriorityElement = (pr) => {
     let word, style;
@@ -91,7 +76,9 @@ function ViewAllAppointments() {
               )}
               <th className="p-3 text-md font-semibold tracking-wide">Note</th>
               {isMedic && (
-                <th className="p-3 text-md font-semibold tracking-wide"></th>
+                <th className="p-3 text-md font-semibold tracking-wide">
+                  Modifică
+                </th>
               )}
             </tr>
           </thead>
@@ -122,7 +109,7 @@ function ViewAllAppointments() {
                 )}
                 <td className="p-3 text-lg text-gray-700">{ap.notes}</td>
                 {isMedic && (
-                  <td className="p-3 text-lg text-gray-700 tracking-wider">
+                  <td className="p-3 text-lg text-gray-700 tracking-wider text-center">
                     <Link href="/" className="text-c2 hover:underline">
                       edit
                     </Link>

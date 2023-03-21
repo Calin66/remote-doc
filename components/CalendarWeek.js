@@ -20,24 +20,30 @@ function CalendarWeek(programari) {
   const pixel_per_day = 128;
 
   return (
-    <div className="overflow-hidden box-border">
-      <table className="relative w-fit min-w-[900px]">
-        <tr className="h-8 border-y-2">
-          <td className="w-[64px] border-l-2 px-2 text-center"></td>
-          {daysOfWeek.map((day) => (
-            <td key={day} className="border-x-2 w-[128px] text-center">
-              {day}
-            </td>
-          ))}
-        </tr>
-        {hours.map((hour) => (
-          <tr className="h-24 border-y-2">
-            <td className="border-l-2 px-2 text-center pb-14">{hour}</td>
-            {daysOfWeek.map((day) => (
-              <td key={day} className="border-x-2"></td>
+    <div className="overflow-auto w-full justify-self-end">
+      <div className="relative box-border">
+        <table className="w-fit table-fixed">
+          <thead>
+            <tr className="h-8 border-y-2">
+              <th className="w-[64px] border-l-2 px-2 text-center"></th>
+              {daysOfWeek.map((day) => (
+                <th key={day} className="border-x-2 w-[128px] text-center">
+                  {day}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {hours.map((hour) => (
+              <tr className="h-24 border-y-2">
+                <td className="border-l-2 px-2 text-center pb-14">{hour}</td>
+                {daysOfWeek.map((day) => (
+                  <td key={day} className="border-x-2"></td>
+                ))}
+              </tr>
             ))}
-          </tr>
-        ))}
+          </tbody>
+        </table>
         {programari.map((programare) => (
           <Link
             key={programare.id}
@@ -64,7 +70,7 @@ function CalendarWeek(programari) {
             }
           </Link>
         ))}
-      </table>
+      </div>
     </div>
   );
 }
