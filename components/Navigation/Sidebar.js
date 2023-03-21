@@ -60,7 +60,7 @@ function Sidebar({ links }) {
             </div>
             <div className="flex flex-col items-center bg-c5 text-white w-14 py-10 rounded-2xl justify-around h-80">
               {/* <i className="fa-solid fa-stethoscope mb-10"></i> */}
-              <Link href="/calendar">
+              <Link href="/programari">
                 <i className="fa-solid fa-calendar-days"></i>
               </Link>
               <Link href="/chat">
@@ -117,7 +117,7 @@ function Sidebar({ links }) {
             </div>
             <div className="flex flex-col items-center bg-c2 text-white w-14 py-10 rounded-2xl justify-around h-80">
               {/* <i className="fa-solid fa-stethoscope mb-10"></i> */}
-              <Link href="/calendar">
+              <Link href="/programari">
                 <i className="fa-solid fa-calendar-days"></i>
               </Link>
               <Link href="/chat">

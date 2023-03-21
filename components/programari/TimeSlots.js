@@ -66,7 +66,7 @@ function TimeSlots() {
         }
       }
       slots.push(
-        <div key={i}>
+        <div className="w-full" key={i}>
           <div className="flex flex-row gap-4 items-center">
             <div className={"p-4 rounded-md bg-" + cl}>
               {formatMinutes(i) + "-" + formatMinutes(i + len)}
@@ -117,13 +117,16 @@ function TimeSlots() {
 
   return (
     <React.Fragment>
-      <input
-        className="border-2 border-c3 rounded-md py-1 px-2 mb-16"
-        type="date"
-        min={new Date().toISOString().split("T")[0]}
-        onChange={(e) => setDay(e.target.value)}
-        value={day}
-      ></input>
+      <div className="flex flex-row">
+        <p className="mr-4 mt-1 text-lg">Alege o dată:</p>
+        <input
+          className="border-2 border-c3 rounded-md py-1 px-2 mb-16"
+          type="date"
+          min={new Date().toISOString().split("T")[0]}
+          onChange={(e) => setDay(e.target.value)}
+          value={day}
+        ></input>
+      </div>
       {day && (
         <div className="w-48 text-center flex flex-col gap-4">
           {renderSlots()}
