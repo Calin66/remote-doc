@@ -18,8 +18,12 @@ function index() {
   const { currentUser } = useAuth();
 
   const handleSubmit = () => {
+    console.log("nume", nume);
     setIsSubmitting(true);
-    if (!nume) setErrors("Camp obligatoriu");
+    if (!nume) {
+      setErrors("Camp obligatoriu");
+      setSrc("");
+    } else setErrors("");
   };
 
   async function handleAddPacient() {
@@ -55,6 +59,7 @@ function index() {
       );
       QRCode.toDataURL(link).then(setSrc);
     }
+    setIsSubmitting(false);
   }
 
   useEffect(() => {

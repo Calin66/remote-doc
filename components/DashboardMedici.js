@@ -127,7 +127,13 @@ export default function DashboardMedici() {
         },
         { merge: true }
       );
-      router.reload();
+
+      const copiePacienti = { ...pacienti };
+
+      delete copiePacienti[index];
+      console.log("copiePacienti", copiePacienti);
+
+      setPacienti(copiePacienti);
     } catch (e) {
       console.log(e);
     }

@@ -22,6 +22,8 @@ function middleware(req) {
     return NextResponse.redirect("http://localhost:3000/");
   if (!role && url.includes("/pacienti"))
     return NextResponse.redirect("http://localhost:3000/");
+  if (!role && url.includes("/chat"))
+    return NextResponse.redirect("http://localhost:3000/");
 }
 
 export default middleware;
