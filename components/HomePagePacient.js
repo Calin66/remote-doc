@@ -164,7 +164,7 @@ function HomePagePacient() {
               <button
                 onClick={() => setPage(1)}
                 className=" bg-c5 text-lg flex align-middle justify-center
-            rounded-full w-12 h-12 center text-white mr-3 md:mr-0 "
+            rounded-full w-12 h-12 center text-white mr-3 md:mr-0 hover:scale-110"
               >
                 <i className="fa-solid fa-file self-center"></i>
               </button>

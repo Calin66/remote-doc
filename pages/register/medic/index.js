@@ -221,7 +221,7 @@ function index() {
           )}
 
           <button
-            className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-24 w-5/6 max-w-xs"
+            className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-24 w-5/6 max-w-xs hover:scale-110"
             onClick={() => handleNext(2)}
           >
             Următorul pas
@@ -253,7 +253,7 @@ function index() {
             </div>
           )}
           <button
-            className="text-center bg-white text-c2 font-medium px-10 py-3 rounded-lg mt-10 w-5/6 self-center max-w-xs"
+            className="text-center bg-white text-c2 font-medium px-10 py-3 rounded-lg mt-10 w-5/6 self-center max-w-xs hover:scale-110"
             onClick={() => handleNext(3)}
           >
             Următorul pas
@@ -292,7 +292,7 @@ function index() {
           />
 
           <button
-            className="text-center bg-c2 text-white font-medium px-10 py-3 rounded-lg mt-10 w-5/6 self-center max-w-xs"
+            className="text-center bg-c2 text-white font-medium px-10 py-3 rounded-lg mt-10 w-5/6 self-center max-w-xs hover:scale-110"
             onClick={handleSubmit}
           >
             Următorul pas

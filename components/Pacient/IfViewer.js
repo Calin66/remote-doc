@@ -99,7 +99,7 @@ function IfViewer({ openFile, handleBack, handleDeleteFisier }) {
         <button
           onClick={() => handleBack()}
           className=" bg-c5 text-lg flex align-middle justify-center
-  rounded-full w-12 h-12 center text-white"
+  rounded-full w-12 h-12 center text-white hover:scale-110"
         >
           <i className="fa-solid fa-arrow-left self-center"></i>
         </button>
@@ -107,7 +107,7 @@ function IfViewer({ openFile, handleBack, handleDeleteFisier }) {
           <button
             onClick={() => handleDeleteFisier(openFile)}
             className=" bg-red-500 text-lg flex align-middle justify-center
-        rounded-full w-12 h-12 center text-white ml-3"
+        rounded-full w-12 h-12 center text-white ml-3 hover:scale-110"
           >
             <i className="fa-solid fa-trash self-center"></i>
           </button>

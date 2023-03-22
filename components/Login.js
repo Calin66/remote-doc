@@ -115,7 +115,7 @@ export default function Login() {
         </p>
       )}
       <button
-        className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6 max-w-xs"
+        className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6 max-w-xs hover:scale-110"
         onClick={handleSubmit}
       >
         Submit

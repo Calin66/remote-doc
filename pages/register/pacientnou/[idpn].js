@@ -201,7 +201,7 @@ const Post = () => {
                     formular.
                   </p>
                   <button
-                    className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6 max-w-xs"
+                    className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6 max-w-xs hover:scale-110"
                     onClick={() => setPas(2)}
                   >
                     Următorul pas
@@ -271,7 +271,7 @@ const Post = () => {
                   )}
 
                   <button
-                    className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6 max-w-xs"
+                    className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20 w-5/6 max-w-xs hover:scale-110"
                     onClick={() => handleNext(3)}
                   >
                     Următorul pas
@@ -311,7 +311,7 @@ const Post = () => {
                   )}
 
                   <button
-                    className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-16 w-5/6 max-w-xs"
+                    className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-16 w-5/6 max-w-xs hover:scale-110"
                     onClick={() => handleNext(4)}
                   >
                     Următorul pas
@@ -343,7 +343,7 @@ const Post = () => {
                     </div>
                   )}
                   <button
-                    className="text-center bg-white text-c2 font-medium px-10 py-2 rounded-lg mt-10 w-5/6 self-center max-w-xs"
+                    className="text-center bg-white text-c2 font-medium px-10 py-2 rounded-lg mt-10 w-5/6 self-center hover:scale-110 max-w-xs"
                     onClick={handleSubmit}
                   >
                     Submit

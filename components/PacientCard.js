@@ -32,7 +32,7 @@ export default function PacientCard({
         {/* <i className="fa-solid fa-pen-to-square"></i> */}
         {!activate && (
           <button
-            className="bg-red-600 text-white h-full w-12 absolute top-0 right-0"
+            className="bg-red-600 text-white h-full w-12 absolute top-0 right-0 hover:scale-110"
             onClick={() => handleDelete(link)}
           >
             <i className="fa-solid fa-trash"></i>

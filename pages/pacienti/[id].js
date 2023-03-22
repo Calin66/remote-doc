@@ -261,21 +261,21 @@ const index = (req) => {
               <button
                 onClick={() => router.push("/pacienti")}
                 className=" bg-c4 text-lg flex align-middle justify-center
-            rounded-full w-12 h-12 center text-white mr-3"
+            rounded-full w-12 h-12 center text-white mr-3 hover:scale-110"
               >
                 <i className="fa-solid fa-arrow-left self-center"></i>
               </button>
               <button
                 onClick={() => setPage(1)}
                 className=" bg-c5 text-lg flex align-middle justify-center
-            rounded-full w-12 h-12 center text-white mr-3 "
+            rounded-full w-12 h-12 center text-white mr-3 hover:scale-110"
               >
                 <i className="fa-solid fa-file self-center"></i>
               </button>
               <button
                 onClick={handleClasa}
                 className=" bg-c2 text-lg flex align-middle justify-center
-            rounded-full w-12 h-12 center text-white"
+            rounded-full w-12 h-12 center text-white hover:scale-110"
               >
                 {clasa ? (
                   <i className="fa-solid fa-check self-center"></i>

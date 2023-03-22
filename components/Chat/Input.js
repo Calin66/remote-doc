@@ -58,7 +58,7 @@ const Input = ({ combinedId, messages }) => {
         onClick={handleSend}
         className="bg-c6 text-white md:w-2/12 max-w-xs w-14 h-full ml-10 rounded-3xl py-1 absolute right-0"
       >
-        <i className="fa-sharp fa-solid fa-paper-plane"></i>
+        <i className="fa-sharp fa-solid fa-paper-plane hover:scale-125"></i>
       </button>
     </div>
   );

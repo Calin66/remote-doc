@@ -22,8 +22,6 @@ function Harta({ coordinatesUser, coords }) {
           .setPopup(
             new mapboxgl.Popup({ closeButton: false }).setHTML(`<div>
               <h1 style="font-weight:500; font-size:18px; text-align:center; margin-bottom:10px">Dr. ${coord.nume}</h1>
-              <p style="font-size:15px; font-weight:500; margin-bottom:2px">Id utilizator: <span style="font-weight:400; font-size:14px">${coord.id}<span/> </p>
-
               <p style="font-size:15px; font-weight:500; margin-bottom:2px">Email: <span style="font-weight:400; font-size:14px">${coord.email}<span/></p>
               <p style="font-size:15px; font-weight:500; margin-bottom:2px">Nr. Telefon: <span style="font-weight:400; font-size:14px">${coord.telefon}<span/></p>
               <p style="font-size:15px; font-weight:500; margin-bottom:2px">Program la clinică: <span style="font-weight:400; font-size:14px">${coord.program_clinica}<span/></p>

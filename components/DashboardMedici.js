@@ -194,7 +194,7 @@ export default function DashboardMedici() {
             value={values.email}
             onChange={handleChange}
             placeholder="Adresa de email"
-            className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg self-center"
+            className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 bg-blue-50 text-slate-900 p-2 w-full max-w-lg self-center"
           />
 
           {errors.email && (
@@ -208,7 +208,7 @@ export default function DashboardMedici() {
             value={values.nume}
             onChange={handleChange}
             placeholder="Nume complet"
-            className="mt-14 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg self-center"
+            className="mt-14 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 bg-blue-50 text-slate-900 p-2 w-full max-w-lg self-center"
           />
           {errors.nume && (
             <p className=" text-base text-c2 w-full p-2 self-center max-w-lg">
@@ -216,7 +216,7 @@ export default function DashboardMedici() {
             </p>
           )}
           <button
-            className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-24 w-5/6 mb-5 self-center max-w-xs"
+            className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20S w-5/6 mb-5 self-center max-w-xs hover:scale-110"
             onClick={handleSubmit}
           >
             Submit
@@ -226,11 +226,11 @@ export default function DashboardMedici() {
       <div className="fixed bottom-4 right-4 md:right-14 md:top-12 flex">
         <button
           onClick={handlePas}
-          className=" bg-c2 text-lg flex align-middle justify-center
+          className=" bg-c2 text-lg flex align-middle justify-center hover:scale-110
             rounded-full w-12 h-12 center text-white"
         >
           {pas ? (
-            <i className="fa-solid fa-check self-center"></i>
+            <i className="fa-solid fa-arrow-left self-center"></i>
           ) : (
             <i className="fa-solid fa-plus self-center"></i>
           )}

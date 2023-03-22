@@ -86,7 +86,7 @@ function NewAsistent({ handlePas, valuesLocal, handleChangeA }) {
       type="file"
       accept="image/*"
       onChange={handleNewAsistentImageChange}
-      className="mt-2 block w-full text-base rounded-sm cursor-pointer text-white bg-c2 border-c2"
+      className="mt-2 block w-full text-base rounded-sm cursor-pointer text-white bg-c2 border-c2 bg-blue-50"
     /> */}
       <input
         type="text"
@@ -94,7 +94,7 @@ function NewAsistent({ handlePas, valuesLocal, handleChangeA }) {
         value={valoriAsistent.nume}
         onChange={handleNewAsistentChange}
         placeholder="Nume complet"
-        className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg self-center"
+        className="mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 bg-blue-50 text-slate-900 p-2 w-full max-w-lg self-center"
       />
 
       {errorsNewAsistent.nume && (
@@ -109,7 +109,7 @@ function NewAsistent({ handlePas, valuesLocal, handleChangeA }) {
         value={valoriAsistent.program_clinica}
         onChange={handleNewAsistentChange}
         placeholder="Program la clinica"
-        className="mt-14 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg self-center"
+        className="mt-14 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 bg-blue-50 text-slate-900 p-2 w-full max-w-lg self-center"
       />
 
       {errorsNewAsistent.program_clinica && (
@@ -124,7 +124,7 @@ function NewAsistent({ handlePas, valuesLocal, handleChangeA }) {
         value={valoriAsistent.program_domiciliu}
         onChange={handleNewAsistentChange}
         placeholder="Program la domiciliu"
-        className="mt-14 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg self-center"
+        className="mt-14 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 bg-blue-50 text-slate-900 p-2 w-full max-w-lg self-center"
       />
 
       {errorsNewAsistent.program_domiciliu && (
@@ -134,13 +134,13 @@ function NewAsistent({ handlePas, valuesLocal, handleChangeA }) {
       )}
 
       <button
-        className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-24 w-5/6 mb-5 self-center max-w-xs"
+        className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-24 w-5/6 mb-5 self-center max-w-xs hover:scale-110"
         onClick={handleNewAsistent}
       >
         Submit
       </button>
       <button
-        className="text-center text-c5 font-medium py-3 rounded-lg w-5/6 mb-5 self-center max-w-xs border border-c5"
+        className="text-center text-c5 font-medium py-3 rounded-lg w-5/6 mb-5 self-center max-w-xs border border-c5 hover:scale-110"
         onClick={handlePas}
       >
         Cancel
@@ -300,7 +300,7 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
                         type="text"
                         name={val}
                         value={valuesLocal[val]}
-                        className="outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2 block"
+                        className="outline-none w-full max-w-lg font-normal mt-4 border-c2 bg-blue-50 border-b-2 p-2 block"
                       />
                     )}
                   </label>
@@ -310,14 +310,14 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
         </div>
         <div className="flex w-screen border-t border-c2 py-4 justify-center fixed bottom-0 left-0 text-lg bg-white">
           <button
-            className="text-center text-c5 rounded-full w-14 h-14 border border-c5 mr-8"
+            className="text-center text-c5 rounded-full w-14 h-14 border border-c5 mr-8 hover:scale-110"
             onClick={() => handleSetPag()}
           >
             <i className="fa-solid fa-arrow-left"></i>
           </button>
           <button
             onClick={handleClasa}
-            className=" text-center text-c2 rounded-full w-14 h-14 border border-c2 mr-8"
+            className=" text-center text-c2 rounded-full w-14 h-14 border border-c2 bg-blue-50 mr-8"
           >
             {clasa ? (
               <i className="fa-solid fa-check"></i>
@@ -328,7 +328,7 @@ const PaginaAsistent = ({ asistent, handleSetPag, valuesBig }) => {
 
           <button
             onClick={deleteAsistent}
-            className="text-center text-c5 rounded-full w-14 h-14 border border-c5"
+            className="text-center text-c5 rounded-full w-14 h-14 border border-c5 hover:scale-110"
           >
             <i className="fa-solid fa-trash"></i>
           </button>
@@ -501,7 +501,7 @@ export default function index() {
                             type="text"
                             name={val}
                             value={valuesLocal[val]}
-                            className="outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2"
+                            className="outline-none w-full max-w-lg font-normal mt-4 border-c2 bg-blue-50 border-b-2 p-2"
                           />
                         )}
                       </label>
@@ -515,7 +515,7 @@ export default function index() {
                 <div className="flex flex-col text-xl font-medium">
                   <p>Asistenți</p>
                   <button
-                    className=" bg-c1 p-2 px-6 mt-4 rounded-xl font-normal text-lg"
+                    className=" bg-c1 p-2 px-6 mt-4 rounded-xl font-normal text-lg hover:scale-110"
                     onClick={handlePas}
                   >
                     Adaugă asistent
@@ -539,7 +539,7 @@ export default function index() {
                 <button
                   onClick={handleClasa}
                   className=" bg-c2 text-lg flex align-middle justify-center
-            rounded-full w-12 h-12 center text-white"
+            rounded-full w-12 h-12 center text-white hover:scale-110"
                 >
                   {clasa ? (
                     <i className="fa-solid fa-check self-center"></i>
@@ -751,8 +751,8 @@ const SetariPacient = () => {
 
     if (confirmare) {
       return (
-        <div className="w-full flex flex-col text-justify">
-          <label className=" text-xl font-medium duration-300 text-black w-full">
+        <div className="w-full flex flex-col max-w-xl justify-center items-center">
+          <label className=" text-xl font-medium duration-300 text-black w-full flex flex-col items-center justify-center text-center">
             Id-ul medicului la care vrei să te transferi{" "}
             <span className="text-c5 font-normal text-lg">
               <span>&#40;</span>
@@ -776,7 +776,13 @@ const SetariPacient = () => {
             </p>
           )}
           <button
-            className="text-center text-xl bg-white border border-c5 text-c5 font-medium py-3 rounded-lg mt-14 w-5/6 mb-5 self-center max-w-xs"
+            className="text-center text-xl bg-white border border-c5 text-c5 font-medium py-2 rounded-lg mt-14 w-5/6 mb-2 self-center hover:scale-110 max-w-xs"
+            onClick={() => setConfirmare(false)}
+          >
+            Cancel
+          </button>
+          <button
+            className="text-center text-xl bg-c5 border text-white font-medium py-2 rounded-lg w-5/6 mb-5 self-center max-w-xs hover:scale-110"
             onClick={handleChangeMedicF}
           >
             Submit
@@ -787,21 +793,21 @@ const SetariPacient = () => {
 
     if (changeMedic) {
       return (
-        <div className="w-full flex flex-col text-center text-xl">
-          <p>
+        <div className="w-full flex flex-col text-center text-xl items-center justify-center">
+          <p className=" max-w-xl">
             <span className="font-medium text-c5">ATENȚIE!</span> Medicul de
             familie nu poate fi schimbat decât o dată la 6 luni în afara
             circumstanțelor excepționale.
           </p>
-          <div className="w-full mt-10 flex">
+          <div className="max-w-xl w-full mt-10 flex">
             <button
-              className="text-center text-c5 font-medium py-3 rounded-lg w-1/2  self-center max-w-xs border border-c5 mr-4"
+              className="text-center text-c5 font-medium py-3 rounded-lg w-1/2  self-center max-w-xs border border-c5 mr-4 block hover:scale-110"
               onClick={handleChangeMedic}
             >
               Cancel
             </button>
             <button
-              className="text-center text-white bg-c5 font-medium py-3 rounded-lg w-1/2 self-center max-w-xs border border-c5"
+              className="text-center text-white bg-c5 font-medium py-3 rounded-lg w-1/2 self-center max-w-xs border border-c5 block hover:scale-110"
               onClick={handleConfirmare}
             >
               Next
@@ -894,7 +900,7 @@ const SetariPacient = () => {
               <button
                 onClick={handleClasa}
                 className=" bg-c5 text-lg flex align-middle justify-center
-            rounded-full w-12 h-12 center text-white"
+            rounded-full w-12 h-12 center text-white hover:scale-110"
               >
                 {clasa ? (
                   <i className="fa-solid fa-check self-center"></i>
@@ -905,7 +911,7 @@ const SetariPacient = () => {
             </div>
 
             <button
-              className="text-center text-c5 font-medium p-3 rounded-lg w-3/6 self-center max-w-xs border mb-3 border-c5"
+              className="text-center text-c5 font-medium p-3 rounded-lg w-3/6 self-center max-w-xs border mb-3 border-c5 hover:scale-110"
               onClick={handleChangeMedic}
             >
               Vreau să mă transfer la alt medic de familie

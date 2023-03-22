@@ -165,7 +165,7 @@ export function NewInvestigatie({ handlePage, id, newKey, handleChangeSus }) {
         <button
           onClick={() => handlePage(0)}
           className=" bg-c5 text-lg flex align-middle justify-center
-            rounded-full w-12 h-12 center text-white mr-3"
+            rounded-full w-12 h-12 center text-white mr-3 hover:scale-110"
         >
           <i className="fa-solid fa-arrow-left self-center"></i>
         </button>
@@ -179,7 +179,7 @@ export function NewInvestigatie({ handlePage, id, newKey, handleChangeSus }) {
         <button
           onClick={handleClasa}
           className=" bg-c2 text-lg flex align-middle justify-center
-            rounded-full w-12 h-12 center text-white"
+            rounded-full w-12 h-12 center text-white hover:scale-110"
         >
           <i className="fa-solid fa-check self-center"></i>
         </button>
@@ -283,7 +283,7 @@ export function Investigatie({ investigatie, handlePageCI }) {
         <button
           onClick={() => handlePageCI()}
           className=" bg-c5 text-lg flex align-middle justify-center
-            rounded-full w-12 h-12 center text-white"
+            rounded-full w-12 h-12 center text-white hover:scale-110"
         >
           <i className="fa-solid fa-arrow-left self-center"></i>
         </button>
@@ -315,7 +315,7 @@ function Investigatii({ investigatii, handlePage, handlePageCI }) {
       <div className="">
         {role === "medic" && (
           <button
-            className=" bg-c1 p-2 mt-4 rounded-xl font-normal text-lg w-full"
+            className=" bg-c1 p-2 mt-4 rounded-xl font-normal text-lg w-full hover:scale-110"
             onClick={() => handlePage(3)}
           >
             Adauga investigatie / consultatie

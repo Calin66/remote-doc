@@ -100,13 +100,13 @@ function index() {
         placeholder="Nume complet pacient"
         className={
           errors
-            ? "mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c5 text-slate-900 p-2 w-full max-w-lg self-center"
-            : "mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg self-center"
+            ? "mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c5 bg-orange-50 text-slate-900 p-2 w-full max-w-lg self-center"
+            : "mt-10 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 bg-blue-50 text-slate-900 p-2 w-full max-w-lg self-center"
         }
       />
       <button
         onClick={handleSubmit}
-        className="w-4/5 py-3 bg-c2 text-white rounded-xl mt-10"
+        className="w-4/5 py-3 bg-c2 text-white rounded-xl mt-10 hover:scale-110"
       >
         Generează codul QR
       </button>

@@ -51,32 +51,32 @@ function Sidebar({ links }) {
         >
           <i className="fa-solid fa-bars"></i>
         </div>
-        <div className="flex-col items-center py-20 left-0 h-screen bg-white w-24 shadow-2xl z-50 fixed text-2xl justify-between hidden md:flex">
+        <div className="flex-col items-center py-20 left-0 h-screen bg-white w-20 shadow-2xl z-50 fixed text-2xl justify-between hidden md:flex">
           <div>
-            <div className=" bg-c5 w-14 h-14 flex flex-col items-center justify-center p-2 rounded-2xl text-white cursor-pointer mb-20 ">
+            <div className=" bg-c5 w-14 h-14 flex flex-col items-center justify-center p-2 rounded-2xl text-white cursor-pointer mb-20 hover:scale-110">
               <Link href="/">
                 <i className="fa-solid fa-notes-medical"></i>
               </Link>
             </div>
             <div className="flex flex-col items-center bg-c5 text-white w-14 py-10 rounded-2xl justify-around h-80">
               {/* <i className="fa-solid fa-stethoscope mb-10"></i> */}
-              <Link href="/calendar">
+              <Link href="/calendar" className="hover:scale-110">
                 <i className="fa-solid fa-calendar-days"></i>
               </Link>
-              <Link href="/chat">
+              <Link href="/chat" className="hover:scale-110">
                 <i className="fa-solid fa-comments"></i>
               </Link>
-              <Link href="/harta">
+              <Link href="/harta" className="hover:scale-110">
                 <i className="fa-solid fa-map-location-dot"></i>
               </Link>
-              <Link href="/setari">
+              <Link href="/setari" className="hover:scale-110">
                 <i className="fa-solid fa-gear"></i>
               </Link>
             </div>
           </div>
 
           <div
-            className="bg-red-600 w-14 h-14 flex flex-col items-center justify-center p-2 rounded-2xl text-white cursor-pointer"
+            className="bg-red-600 w-14 h-14 flex flex-col items-center justify-center p-2 rounded-2xl text-white cursor-pointer hover:scale-110"
             onClick={() => {
               console.log("logout");
               logout();
@@ -110,30 +110,30 @@ function Sidebar({ links }) {
         </div>
         <div className="flex-col items-center py-20 left-0 h-screen bg-white w-20 shadow-2xl z-50 fixed text-2xl justify-between hidden md:flex">
           <div>
-            <div className=" bg-c2 w-14 h-14 flex flex-col items-center justify-center p-2 rounded-2xl text-white cursor-pointer mb-20 ">
+            <div className=" bg-c2 w-14 h-14 flex flex-col items-center justify-center p-2 rounded-2xl text-white cursor-pointer mb-20 hover:scale-110">
               <Link href="/pacienti">
                 <i className="fa-solid fa-notes-medical"></i>
               </Link>
             </div>
             <div className="flex flex-col items-center bg-c2 text-white w-14 py-10 rounded-2xl justify-around h-80">
               {/* <i className="fa-solid fa-stethoscope mb-10"></i> */}
-              <Link href="/calendar">
+              <Link href="/calendar" className="hover:scale-110">
                 <i className="fa-solid fa-calendar-days"></i>
               </Link>
-              <Link href="/chat">
+              <Link href="/chat" className="hover:scale-110">
                 <i className="fa-solid fa-comments"></i>
               </Link>
-              <Link href="/qrcode">
+              <Link href="/qrcode" className="hover:scale-110">
                 <i className="fa-solid fa-qrcode"></i>
               </Link>
 
-              <Link href="/setari">
+              <Link href="/setari" className="hover:scale-110">
                 <i className="fa-solid fa-gear"></i>
               </Link>
             </div>
           </div>
           <div
-            className="bg-red-600 w-14 h-14 flex flex-col items-center justify-center p-2 rounded-2xl text-white cursor-pointer"
+            className="bg-red-600 w-14 h-14 flex flex-col items-center justify-center p-2 rounded-2xl text-white cursor-pointer hover:scale-110"
             onClick={() => {
               console.log("logout");
               logout();

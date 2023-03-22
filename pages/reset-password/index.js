@@ -36,7 +36,7 @@ function index() {
             }
           />
           <button
-            className="bg-c2 rounded-lg py-3 w-full max-w-xs text-white font-medium mt-10"
+            className="bg-c2 rounded-lg py-3 w-full max-w-xs text-white font-medium mt-10 hover:scale-110"
             onClick={handleSubmit}
           >
             {" "}
