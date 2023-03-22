@@ -22,6 +22,44 @@ function index() {
     program_clinica: "",
     program_domiciliu: "",
     dovada: "",
+    durata_programare: 30,
+    program: {
+      [0]: {
+        active: true,
+        start: "10:00",
+        end: "14:00",
+      },
+      [1]: {
+        active: true,
+        start: "10:00",
+        end: "14:00",
+      },
+      [2]: {
+        active: true,
+        start: "10:00",
+        end: "14:00",
+      },
+      [3]: {
+        active: true,
+        start: "10:00",
+        end: "14:00",
+      },
+      [4]: {
+        active: true,
+        start: "10:00",
+        end: "14:00",
+      },
+      [5]: {
+        active: false,
+        start: "10:00",
+        end: "14:00",
+      },
+      [6]: {
+        active: false,
+        start: "10:00",
+        end: "14:00",
+      },
+    },
   });
   const [selectedImage, setSelectedImage] = useState();
 
@@ -69,7 +107,8 @@ function index() {
             program_clinica: values.program_clinica,
             program_domiciliu: values.program_domiciliu,
             uid: user.uid,
-            pacienti: {},
+            pacienti: values.program,
+            durata_programare: values.durata_programare,
           });
         } catch (error) {
           setIsEroare(true);
@@ -161,6 +200,80 @@ function index() {
       return () => URL.revokeObjectURL(objectUrl);
     }
   }, [values.dovada]);
+
+  const daysOfWeek = [
+    "Luni",
+    "Marți",
+    "Miercuri",
+    "Joi",
+    "Vineri",
+    "Sâmbătă",
+    "Duminică",
+  ];
+  const zeroSase = [0, 1, 2, 3, 4, 5, 6];
+
+  const handleChangeOra = (e, zi, isFirst) => {
+    const { value } = e.target;
+    const newZi = { ...values.program[zi] };
+    if (isFirst) newZi.start = value;
+    else newZi.end = value;
+    setValues({
+      ...values,
+      program: {
+        ...values.program,
+        [zi]: newZi,
+      },
+    });
+  };
+
+  const handleChangeActive = (e, zi) => {
+    const { checked } = e.target;
+    const newZi = { ...values.program[zi] };
+    newZi.active = checked;
+    setValues({
+      ...values,
+      program: {
+        ...values.program,
+        [zi]: newZi,
+      },
+    });
+  };
+
+  const renderDaySchedule = (day) => {
+    const ds = day.toString();
+    return (
+      <div
+        className="flex flex-row gap-4 ml-2 items-center justify-between"
+        key={day}
+      >
+        <input
+          type="checkbox"
+          onChange={(e) => handleChangeActive(e, day)}
+          checked={values.program ? values.program[ds].active : false}
+        ></input>
+        <p className="text-lg font-normal w-1/4 text-center">
+          {daysOfWeek[day]}
+        </p>
+        <input
+          className={
+            "w-1/3 border-c2 border-b-2 p-2 text-sm font-normal bg-white"
+          }
+          type="time"
+          onChange={(e) => handleChangeOra(e, day, true)}
+          value={values.program ? values.program[ds].start : ""}
+        ></input>
+        <input
+          className={
+            "w-1/3 border-c2 border-b-2 p-2 text-sm font-normal bg-white"
+          }
+          type="time"
+          onChange={(e) => handleChangeOra(e, day, false)}
+          value={values.program ? values.program[ds].end : ""}
+        ></input>
+      </div>
+    );
+  };
+
   return (
     <div className="md:w-1/2 self-center md:border border-c2 rounded-lg md:py-20 md:flex flex-col w-full">
       {pas === 1 && (
@@ -273,7 +386,10 @@ function index() {
         <div className="flex flex-col justify-center items-center text-xl text-black">
           <h1 className="text-2xl font-medium mb-10">Program de lucru</h1>
 
-          <input
+          <div className="flex flex-col text-xl font-medium mb-20 gap-4">
+            {zeroSase.map((d) => renderDaySchedule(d))}
+          </div>
+          {/*<input
             type="text"
             name="program_clinica"
             value={values.program_clinica}
@@ -289,7 +405,7 @@ function index() {
             onChange={handleChange}
             placeholder="Program domiciliu"
             className=" mt-14 outline-none duration-300 border-b-2 border-solid  focus:border-c3 border-c2 text-slate-900 p-2 w-full max-w-lg"
-          />
+      />*/}
 
           <button
             className="text-center bg-c2 text-white font-medium px-10 py-3 rounded-lg mt-10 w-5/6 self-center max-w-xs"

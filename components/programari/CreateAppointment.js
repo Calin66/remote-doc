@@ -116,7 +116,7 @@ function CreateAppointment({ day, start_t, end_t }) {
                 onChange={(e) => {
                   setAdHoc(e.target.checked);
                 }}
-                value={adHoc}
+                checked={adHoc}
                 type="checkbox"
               ></input>
             </div>
