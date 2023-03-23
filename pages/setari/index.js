@@ -357,6 +357,8 @@ export default function index() {
     program_clinica: "",
     program_domiciliu: "",
     asistenti: {},
+    program: {},
+    durata_programare: 15,
   });
 
   const [pag, setPag] = useState({});
@@ -368,7 +370,21 @@ export default function index() {
     program_clinica: "",
     program_domiciliu: "",
     asistenti: {},
+    program: {},
   });
+
+  const daysOfWeek = [
+    "Luni",
+    "Marți",
+    "Miercuri",
+    "Joi",
+    "Vineri",
+    "Sâmbătă",
+    "Duminică",
+  ];
+
+  const zeroSase = [0, 1, 2, 3, 4, 5, 6];
+
   const { date, handleEditDate, errorD, loadingD } =
     useFetchDateMedic(valuesLocal);
 
@@ -404,6 +420,33 @@ export default function index() {
     setValuesLocal({
       ...valuesLocal,
       [name]: value,
+    });
+  };
+
+  const handleChangeOra = (e, zi, isFirst) => {
+    const { value } = e.target;
+    const newZi = { ...valuesLocal.program[zi] };
+    if (isFirst) newZi.start = value;
+    else newZi.end = value;
+    console.log(newZi);
+    setValuesLocal({
+      ...valuesLocal,
+      program: {
+        ...valuesLocal.program,
+        [zi]: newZi,
+      },
+    });
+  };
+  const handleChangeActive = (e, zi) => {
+    const { checked } = e.target;
+    const newZi = { ...valuesLocal.program[zi] };
+    newZi.active = checked;
+    setValuesLocal({
+      ...valuesLocal,
+      program: {
+        ...valuesLocal.program,
+        [zi]: newZi,
+      },
     });
   };
 
@@ -450,6 +493,7 @@ export default function index() {
   useEffect(() => {
     setValoriDb(date);
     setValuesLocal(date);
+    console.log(date);
   }, [date]);
 
   if (!loadingD && role === "medic" && pas)
@@ -469,6 +513,46 @@ export default function index() {
       />
     );
 
+  const renderDaySchedule = (day) => {
+    const ds = day.toString();
+    return (
+      <div
+        className="flex flex-row gap-4 ml-2 items-center justify-between"
+        key={day}
+      >
+        <input
+          disabled={!clasa}
+          type="checkbox"
+          onChange={(e) => handleChangeActive(e, day)}
+          checked={valuesLocal.program ? valuesLocal.program[ds].active : false}
+        ></input>
+        <p className="text-lg font-normal w-1/4 text-center">
+          {daysOfWeek[day]}
+        </p>
+        <input
+          disabled={!clasa}
+          className={
+            "w-1/3 border-c2 border-b-2 p-2 text-sm font-normal " +
+            (clasa ? " bg-blue-100" : " bg-white")
+          }
+          type="time"
+          onChange={(e) => handleChangeOra(e, day, true)}
+          value={valuesLocal.program ? valuesLocal.program[ds].start : ""}
+        ></input>
+        <input
+          disabled={!clasa}
+          className={
+            "w-1/3 border-c2 border-b-2 p-2 text-sm font-normal " +
+            (clasa ? " bg-blue-100" : " bg-white")
+          }
+          type="time"
+          onChange={(e) => handleChangeOra(e, day, false)}
+          value={valuesLocal.program ? valuesLocal.program[ds].end : ""}
+        ></input>
+      </div>
+    );
+  };
+
   return (
     <>
       {!loadingD && (
@@ -476,6 +560,8 @@ export default function index() {
           {role === "medic" && Object.keys(pag).length === 0 && !pas && (
             <div className=" w-full">
               {Object.keys(valuesLocal).map((val, i) => {
+                if (val == "program") return;
+                if (val == "durata_programare") return;
                 if (val !== "asistenti")
                   return (
                     <div key={i} className="w-full mb-20">
@@ -510,6 +596,50 @@ export default function index() {
                     </div>
                   );
               })}
+
+              <div>
+                <div className="flex flex-col text-xl font-medium mb-20 gap-4">
+                  <p className="mb-4">Durată programare</p>
+                  <select
+                    disabled={!clasa}
+                    className={
+                      "outline-none w-full max-w-lg font-normal mt-4 border-c2 border-b-2 p-2 " +
+                      (clasa ? " bg-blue-100" : " bg-white")
+                    }
+                    value={valuesLocal["durata_programare"]}
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      setValuesLocal({
+                        ...valuesLocal,
+                        durata_programare: value,
+                      });
+                    }}
+                  >
+                    <option className="bg-white" value="10">
+                      10 minute
+                    </option>
+                    <option className="bg-white" value="15">
+                      15 minute
+                    </option>
+                    <option className="bg-white" value="20">
+                      20 minute
+                    </option>
+                    <option className="bg-white" value="25">
+                      25 minute
+                    </option>
+                    <option className="bg-white" value="30">
+                      30 minute
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex flex-col text-xl font-medium mb-20 gap-4">
+                  <p className="mb-4">Program</p>
+                  {zeroSase.map((d) => renderDaySchedule(d))}
+                </div>
+              </div>
 
               <div>
                 <div className="flex flex-col text-xl font-medium">

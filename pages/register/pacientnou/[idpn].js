@@ -10,6 +10,8 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
+import { GetUserData } from "@/hooks/fetchUser";
+import { async } from "@firebase/util";
 
 const Post = () => {
   const router = useRouter();
@@ -40,6 +42,7 @@ const Post = () => {
     sexul: "masculin",
     actIdentitate: "",
     doc_uid: doc_uid,
+    numeMedic: "",
   });
 
   const handleNext = (nr) => {
@@ -78,6 +81,7 @@ const Post = () => {
             doc(db, "pacienti", user.uid),
             {
               nume: values.nume,
+              numeMedic: values.numeMedic,
               email: values.email,
               telefon: values.telefon,
               cnp: values.cnp,
@@ -139,6 +143,17 @@ const Post = () => {
     const infoRef = doc(db, "pacienti", user.uid);
     await updateDoc(infoRef, { actIdentitate: iURL });
   };
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (!doc_uid) return;
+      const medic_data = await GetUserData("medic", doc_uid);
+      const new_vals = values;
+      new_vals.numeMedic = medic_data.nume;
+      setValues(new_vals);
+    };
+    fetch();
+  }, [doc_uid]);
 
   useEffect(() => {
     if (Object.keys(errors).length === 0 && isSubmitting) {
