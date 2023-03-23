@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { db } from "@/firebase";
 import { useRouter } from "next/router";
 import { async } from "@firebase/util";
+import { isEqual } from "lodash";
 
 function ViewProgramare({ a }) {
   const [isMedic, setIsMedic] = useState(Cookies.get("role") == "medic");
@@ -21,9 +22,8 @@ function ViewProgramare({ a }) {
   };
 
   useEffect(() => {
-    console.log(a);
     if (!isEditing) {
-      if (oldState != app) {
+      if (!isEqual(oldState, app) && !isEqual(oldState, {})) {
         const updateProg = async () => {
           const { id } = app;
           const d = { ...app };
@@ -89,7 +89,7 @@ function ViewProgramare({ a }) {
             </React.Fragment>
           )}
 
-          <div className="flex flex-row gap-2 relative left-16 mt-6 ">
+          <div className="flex flex-row gap-2 relative left-8 mt-6 ">
             <div
               className="w-10 h-10 bg-c2 p-2 text-sm text-white rounded-full center flex align-middle justify-center"
               onClick={() => {

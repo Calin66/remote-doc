@@ -7,6 +7,7 @@ export const formatMinutes = (time) => {
 };
 
 export const convertTimeToMinutes = (x) => {
+  if (!x) return 0;
   return (
     x.charAt(0) * 600 +
     x.charAt(1) * 60 +

@@ -8,6 +8,9 @@ import { useRouter } from "next/router";
 import ViewProgramare from "./ViewProgramare";
 import Cookies from "js-cookie";
 import { useAuth } from "@/context/AuthContext";
+import { GetUserData } from "@/hooks/fetchUser";
+import { convertTimeToMinutes } from "../utils";
+import { async } from "@firebase/util";
 
 function TimeSlots() {
   const [day, setDay] = useState("");
@@ -15,15 +18,14 @@ function TimeSlots() {
   const [startTimes, setStartTimes] = useState(new Map());
   const [opened, setOpened] = useState(new Map());
   const [isMedic] = useState(Cookies.get("role") == "medic");
-  const start_h = 8,
-    start_m = 0,
-    start_t = start_h * 60 + start_m;
-  const end_h = 14,
-    end_m = 0,
-    end_t = end_h * 60 + end_m;
-  const [len, setLen] = useState();
+  const [start_t, setStart_t] = useState(0);
+  const [end_t, setEnd_t] = useState(0);
+  const [active, setActive] = useState(0);
+  const [appLen, setAppLen] = useState(0);
+  const [len, setLen] = useState(0);
   const router = useRouter();
   const { currentUser } = useAuth();
+  const [programMedic, setProgramMedic] = useState({});
 
   const { appo, docAppo } = useFetchProgramari();
 
@@ -46,10 +48,52 @@ function TimeSlots() {
         newStartTimes.set(p.startTime, p);
       });
       setStartTimes(newStartTimes);
-    } else setLen(30);
+    } else {
+      setStartTimes(new Map());
+    }
 
     setUserApp(programari);
   }, [appo, day, docAppo]);
+
+  useEffect(() => {
+    async function getM() {
+      if (!isMedic) pacient = await GetUserData("Pacient", currentUser.uid);
+    }
+    getM().then(() => {
+      let medic;
+      let id;
+      if (isMedic) id = currentUser.uid;
+      else id = pacient.doc_uid;
+
+      async function f() {
+        medic = await GetUserData("medic", id);
+      }
+
+      f().then(() => {
+        const program = medic["program"];
+        setProgramMedic(program);
+        setAppLen(medic["durata_programare"]);
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    if (userApp.length == 0) {
+      setLen(+appLen);
+    }
+  }, [appLen, userApp]);
+
+  useEffect(() => {
+    let dayOfWeek = new Date(day).getDay();
+    dayOfWeek--;
+    if (dayOfWeek < 0) dayOfWeek = 6;
+    const program = programMedic[dayOfWeek];
+    if (program) {
+      setActive(program.active);
+      setStart_t(convertTimeToMinutes(program.start));
+      setEnd_t(convertTimeToMinutes(program.end));
+    }
+  }, [programMedic, day]);
 
   const renderSlots = () => {
     const slots = [];
@@ -127,11 +171,12 @@ function TimeSlots() {
           value={day}
         ></input>
       </div>
-      {day && (
+      {day && active && (
         <div className="w-48 text-center flex flex-col gap-4">
           {renderSlots()}
         </div>
       )}
+      {!active && day && <p>Medicul nu este disponibil în această zi</p>}
     </React.Fragment>
   );
 }
