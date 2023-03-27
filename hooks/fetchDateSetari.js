@@ -27,6 +27,8 @@ export default function useFetchDateMedic(valuesLocal) {
             program_clinica: valoriLocal.program_clinica,
             program_domiciliu: valoriLocal.program_domiciliu,
             asistenti: valoriLocal.asistenti,
+            program: valoriLocal.program,
+            durata_programare: valoriLocal.durata_programare,
           },
           { merge: true }
         );

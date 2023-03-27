@@ -20,7 +20,7 @@ function Sidebar({ links }) {
     },
     {
       title: "Calendar",
-      href: "/calendar",
+      href: "/programari",
     },
     {
       title: "Setari",
@@ -30,7 +30,7 @@ function Sidebar({ links }) {
 
   const linksPacient = [
     { title: "Acasa", href: "/" },
-    { title: "Calendar", href: "/calendar" },
+    { title: "Calendar", href: "/programari" },
     { title: "Harta", href: "/harta" },
     { title: "Setari", href: "/setari" },
   ];
@@ -60,7 +60,7 @@ function Sidebar({ links }) {
             </div>
             <div className="flex flex-col items-center bg-c5 text-white w-14 py-10 rounded-2xl justify-around h-80">
               {/* <i className="fa-solid fa-stethoscope mb-10"></i> */}
-              <Link href="/calendar" className="hover:scale-110">
+              <Link href="/programari">
                 <i className="fa-solid fa-calendar-days"></i>
               </Link>
               <Link href="/chat" className="hover:scale-110">
@@ -117,7 +117,7 @@ function Sidebar({ links }) {
             </div>
             <div className="flex flex-col items-center bg-c2 text-white w-14 py-10 rounded-2xl justify-around h-80">
               {/* <i className="fa-solid fa-stethoscope mb-10"></i> */}
-              <Link href="/calendar" className="hover:scale-110">
+              <Link href="/calendar">
                 <i className="fa-solid fa-calendar-days"></i>
               </Link>
               <Link href="/chat" className="hover:scale-110">
