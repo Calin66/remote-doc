@@ -23,6 +23,7 @@ function index() {
     program_domiciliu: "",
     dovada: "",
     durata_programare: 30,
+    confirmed: false,
     program: {
       [0]: {
         active: true,
@@ -67,7 +68,7 @@ function index() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEroare, setIsEroare] = useState(false);
-  const { signup } = useAuth();
+  const { signup, logout } = useAuth();
 
   const handleNext = (nr) => {
     console.log("handle Next");
@@ -109,6 +110,7 @@ function index() {
             uid: user.uid,
             pacienti: values.program,
             durata_programare: values.durata_programare,
+            confirmed: values.confirmed,
           });
         } catch (error) {
           setIsEroare(true);
@@ -152,8 +154,9 @@ function index() {
 
           setIsSubmitting(false);
 
-          Cookies.set("role", "medic");
-          router.push("/harta");
+          //Cookies.set("role", "medic");
+          logout();
+          router.push("/");
         } catch (error) {
           let errorCode = error.code;
           if (errorCode == "auth/email-already-in-use") {

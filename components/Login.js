@@ -18,7 +18,7 @@ export default function Login() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEroare, setIsEroare] = useState(false);
-  const { login, currentUser } = useAuth();
+  const { login, currentUser, logout } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,6 +40,13 @@ export default function Login() {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
+        const medic = docSnap.data();
+        if (!medic.confirmed) {
+          logout();
+          router.push("/");
+          alert("cont neconfirmat");
+          return;
+        }
         Cookies.set("role", "medic");
       } else {
         const docRef2 = doc(db, "pacienti", user.uid);
