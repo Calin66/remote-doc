@@ -217,7 +217,7 @@ export default function DashboardMedici() {
             </p>
           )}
           <button
-            className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-20S w-5/6 mb-5 self-center max-w-xs hover:scale-110"
+            className="text-center bg-c2 text-white font-medium py-3 rounded-lg mt-16 mt-20S w-5/6 mb-5 self-center max-w-xs hover:scale-110"
             onClick={handleSubmit}
           >
             Submit
