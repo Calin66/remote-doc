@@ -8,7 +8,7 @@ import { GetUserData } from "@/hooks/fetchUser";
 import Cookies from "js-cookie";
 
 function Calendar() {
-  const [appointments, setAppointments] = useState([]);
+  /*const [appointments, setAppointments] = useState([]);
   const [isMedic, setIsMedic] = useState(Cookies.get("role") == "medic");
   const { appo } = useFetchProgramari();
   const { currentUser } = useAuth();
@@ -58,7 +58,7 @@ function Calendar() {
     },
   ];
 
-  return CalendarDay(appointments);
+  return CalendarDay(appointments);*/
 }
 
 const convertTimeToMinutes = (x) => {

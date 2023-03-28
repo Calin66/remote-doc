@@ -7,6 +7,7 @@ import {
   setDoc,
   doc,
   getDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -68,6 +69,9 @@ function index() {
     const index = newState.indexOf(m);
     newState.splice(index, 1);
     setMedici(newState);
+
+    const update = async () => await deleteDoc(doc(db, "medici", m.uid));
+    update();
   };
 
   return (

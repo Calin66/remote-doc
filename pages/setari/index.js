@@ -23,6 +23,7 @@ import {
   validateEditAsistentInfo,
   validateNewAsistentInfo,
 } from "../validateInfo";
+import useFetchForMap from "@/hooks/fetchForMap";
 
 function NewAsistent({ handlePas, valuesLocal, handleChangeA }) {
   const [valoriAsistent, setValoriAsistent] = useState({
@@ -385,6 +386,8 @@ export default function index() {
 
   const zeroSase = [0, 1, 2, 3, 4, 5, 6];
 
+  const { coordinatesUser } = useFetchForMap();
+
   const { date, handleEditDate, errorD, loadingD } =
     useFetchDateMedic(valuesLocal);
 
@@ -599,6 +602,14 @@ export default function index() {
 
               <div>
                 <div className="flex flex-col text-xl font-medium mb-20 gap-4">
+                  {coordinatesUser.length === 0 && (
+                    <a
+                      href="/harta"
+                      className="bg-c2 text-white text-center p-4 rounded-lg mb-12"
+                    >
+                      Alege adresa cabinetului
+                    </a>
+                  )}
                   <p className="mb-4">Durată programare</p>
                   <select
                     disabled={!clasa}

@@ -108,9 +108,10 @@ function index() {
             program_clinica: values.program_clinica,
             program_domiciliu: values.program_domiciliu,
             uid: user.uid,
-            pacienti: values.program,
+            program: values.program,
             durata_programare: values.durata_programare,
             confirmed: values.confirmed,
+            pacienti: {},
           });
         } catch (error) {
           setIsEroare(true);

@@ -20,6 +20,7 @@ const Harta = dynamic(() => import("@/components/harta/Harta"), {
 function index() {
   const role = Cookies.get("role");
   const router = useRouter();
+  const [maxDist, setMaxDist] = useState(10);
 
   const { coordinatesUser, markers, setCoordinatesUser, loading, error } =
     useFetchForMap();
@@ -66,11 +67,31 @@ function index() {
           <AutofillInMap setCoordinates2={setCoordinatesUser} />
         )}
         {coordinatesUser.length && role === "pacient" ? (
-          <Harta
-            coordinatesUser={coordinatesUser}
-            coords={markers}
-            setCoordinates2={setCoordinatesUser}
-          />
+          <>
+            <label className="text-lg font-medium">
+              Distanță maximă față de medic
+            </label>
+            <select
+              value={maxDist}
+              onChange={(e) => {
+                setMaxDist(e.target.value);
+              }}
+              className="mb-8"
+            >
+              <option value={10}>10 minute</option>
+              <option value={15}>15 minute</option>
+              <option value={20}>20 minute</option>
+              <option value={30}>30 minute</option>
+              <option value={45}>45 minute</option>
+              <option value={10000}>Nelimitat</option>
+            </select>
+            <Harta
+              coordinatesUser={coordinatesUser}
+              coords={markers}
+              setCoordinates2={setCoordinatesUser}
+              maxDist={maxDist}
+            />
+          </>
         ) : (
           <div></div>
         )}

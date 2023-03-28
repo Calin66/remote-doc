@@ -164,10 +164,11 @@ export default function DashboardMedici() {
             </div>
           </div>
           <div className="mt-16">
-            <h2 className="text-xl">Pacienti neconfirmati</h2>
+            <h2 className="text-xl">Pacienti neconfirmați</h2>
             <div>
               {Object.keys(pacienti).map((pacient, i) => {
                 if (!pacienti[pacient].activate) {
+                  console.log(pacienti);
                   return (
                     <PacientCard
                       activate={pacienti[pacient].activate}
@@ -179,7 +180,7 @@ export default function DashboardMedici() {
                       {pacienti[pacient]}
                     </PacientCard>
                   );
-                } else return <div key={i}></div>;
+                } else return ""; //<div key={i}></div>;
               })}
             </div>
           </div>

@@ -30,7 +30,10 @@ function TimeSlots() {
   const { appo, docAppo } = useFetchProgramari();
 
   useEffect(() => {
-    if (!currentUser) router.push("/");
+    if (!currentUser) {
+      router.push("/");
+      return;
+    }
     let programari;
     if (isMedic) programari = appo;
     else programari = docAppo;
@@ -56,8 +59,15 @@ function TimeSlots() {
   }, [appo, day, docAppo]);
 
   useEffect(() => {
+    let pacient;
+    if (!currentUser) {
+      router.push("/");
+      return;
+    }
+
     async function getM() {
-      if (!isMedic) pacient = await GetUserData("Pacient", currentUser.uid);
+      if (!isMedic && currentUser)
+        pacient = await GetUserData("Pacient", currentUser.uid);
     }
     getM().then(() => {
       let medic;
